@@ -11,7 +11,8 @@ import {
   InputAdornment,
   Paper,
   useTheme,
-  useMediaQuery
+  useMediaQuery,
+  CircularProgress
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 import { getAllUserProfiles } from "../../api/Admin";
@@ -225,7 +226,7 @@ const UserTable = () => {
             </Typography>
           }
           progressPending={isLoading}
-          progressComponent={<LoadingComponent />}
+          progressComponent={ <CircularProgress />}
           persistTableHead
           highlightOnHover
         />

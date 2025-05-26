@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Typography } from "@mui/material";
 import { ModeComment } from "@mui/icons-material";
+import { getRelativeTime } from "./common/date";
 
 
 export const customStyles = {
@@ -366,7 +367,7 @@ export const getUserTableColumns = (formatUserRole) =>  [
     },
     {
       name: "Last Login",
-      selector: row => row.last_loggedin ? new Date(row.last_loggedin).toLocaleDateString() : 'Never',
+      selector: row => row.last_loggedin ? getRelativeTime(row.last_loggedin) : 'Never',
       sortable: true,
     },
   ];
