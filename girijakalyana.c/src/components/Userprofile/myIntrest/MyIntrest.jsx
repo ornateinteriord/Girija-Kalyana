@@ -4,7 +4,7 @@ import Accepted from "./insidepage/accepted/Accepted";
 import Requests from "./insidepage/requests/Request";
 import Sent from "./sent/Sent";
 import TokenService from "../../token/tokenService";
-import { useGetAcceptedInterests, useGetReceivedInterests, useGetSentInterests } from "../../api/User/useGetProfileDetails";
+import { useGetInterestCounts,} from "../../api/User/useGetProfileDetails";
 
 
 
@@ -18,32 +18,23 @@ const MyInterest = () => {
     sent: 0
   });
 
-  const { data: acceptedData } = useGetAcceptedInterests(registrationNo);
-  const { data: receivedData } = useGetReceivedInterests(registrationNo);
-  const { data: sentData } = useGetSentInterests(registrationNo);
+  const { data: countsData } = useGetInterestCounts(registrationNo);
+  
  
 
-  useEffect(() => {
-    if (acceptedData) {
-      setCounts(prev => ({ ...prev, accepted: acceptedData.length || 0 }));
-    }
-  }, [acceptedData]);
+ useEffect(() => {
+  if (countsData) {
+    setCounts({
+      requests: countsData.received || 0,
+      sent: countsData.sent || 0,
+      accepted: countsData.accepted || 0
+    });
+  }
+}, [countsData]);
 
-  useEffect(() => {
-    if (receivedData) {
-      setCounts(prev => ({ ...prev, requests: receivedData.length || 0 }));
-    }
-  }, [receivedData]);
-
-  useEffect(() => {
-    if (sentData) {
-      setCounts(prev => ({ ...prev, sent: sentData.totalCount || 0 }));
-    }
-  }, [sentData]);
-
-  const handleTabChange = (event, newValue) => {
-    setTabValue(newValue);
-  };
+const handleTabChange = (event, newValue) => {
+  setTabValue(newValue);
+};
 
  
 

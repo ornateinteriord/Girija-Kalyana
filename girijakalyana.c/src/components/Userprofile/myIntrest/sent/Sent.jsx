@@ -16,7 +16,6 @@ import {
 } from "@mui/material";
 import { FaBriefcase, FaMapMarkerAlt } from "react-icons/fa";
 import { toast } from "react-toastify";
-import profileimg from "../../../../assets/profile.jpg";
 import TokenService from "../../../token/tokenService";
 import { useCancelSentInterest, useGetSentInterests } from "../../../api/User/useGetProfileDetails";
 
