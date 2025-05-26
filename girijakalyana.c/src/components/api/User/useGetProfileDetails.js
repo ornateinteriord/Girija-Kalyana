@@ -205,3 +205,13 @@ export const useChangePassword = () => {
     mutationFn: changePasswordAPI,
   });
 };
+
+export const useGetInterestCounts = (reg_No) => {
+  return useSuspenseQuery({
+    queryKey: ["sentInterests","acceptedInterests","receivedInterests", reg_No],
+    queryFn: async () => {
+      const data = await get(`/api/user/interest-counts/${reg_No}`);
+      return data;
+    },
+  });
+};
