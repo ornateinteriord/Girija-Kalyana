@@ -40,6 +40,14 @@ const AdminDashboard = () => {
     setActivePath(location.pathname);
   }, [location.pathname]);
 
+const closeAllDropdowns = () => {
+  setOpenUserManagement(false);
+  setOpenAssistanceService(false);
+  setOpenPromoterManagement(false);
+  setOpenPromoterReceipts(false);
+  setOpenPromoterReports(false);
+};
+
   // Toggle Sidebar
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -47,20 +55,25 @@ const AdminDashboard = () => {
 
   // Handle dropdown toggles
   const toggleUserManagement = () => {
+      closeAllDropdowns();
     setOpenUserManagement(!openUserManagement);
   };
 
   const toggleAssistanceService = () => {
+      closeAllDropdowns();
     setOpenAssistanceService(!openAssistanceService);
   };
 
   const togglePromoterManagement = () => {
+      closeAllDropdowns();
     setOpenPromoterManagement(!openPromoterManagement);
   };
   const toggleReceiptsManagement = () => {
+      closeAllDropdowns();
     setOpenPromoterReceipts(!openPromoterReceipts);
   };
   const toggleReportManagement = () => {
+      closeAllDropdowns();
     setOpenPromoterReports(!openPromoterReports);
   };
   
@@ -68,6 +81,7 @@ const AdminDashboard = () => {
     navigate('/admin/user-table');
   };
   const handleDashboard=()=>{
+      closeAllDropdowns();
     navigate('/admin/dashboard');
   }
   const navigateUserUpgrade=()=>{
@@ -124,6 +138,7 @@ const AdminDashboard = () => {
     navigate('/admin/receiptsreports');
   }
   const navigateNotification=()=>{
+      closeAllDropdowns();
     navigate('/admin/notification');
   }
   
@@ -178,7 +193,6 @@ const handleConfirmLogout = () => {
     }));
   };
 
-
   return (
     <div>
     <div className={`Dash-app-container ${isSidebarOpen ? 'sidebar-open' : ''}`}>
@@ -188,10 +202,10 @@ const handleConfirmLogout = () => {
           <IconButton onClick={toggleSidebar}>
             <FaBars style={{ color: '#fff', fontSize: '1.8rem' }} />
           </IconButton>
-          <Link to="/"  style={{ textDecoration: "none", color: "inherit" }}><h2 className="navtxt">Admin Dashboard</h2></Link>
+          <Link to="/" style={{ textDecoration: "none", color: "inherit" }}><h2 className="navtxt">Admin Dashboard</h2></Link>
         </div>
         <div className="nav-right">
-        <Badge color="error" variant="dot"  >
+        <Badge color="error" variant="dot">
         <IoMdNotifications fontSize={40} cursor={'pointer'}/>
         </Badge>
          
@@ -203,7 +217,16 @@ const handleConfirmLogout = () => {
             open={Boolean(anchorEl)}
             onClose={handleMenuClose}
           >
-      <MenuItem onClick={handleLogoutDialogOpen}>Logout</MenuItem>
+            <MenuItem 
+              onClick={handleLogoutDialogOpen}
+              sx={{
+                '&:hover': {
+                  color: 'aqua'
+                }
+              }}
+            >
+              Logout
+            </MenuItem>
           </Menu>
           <Typography style={{ color: '#fff', marginRight: '10px',fontSize:'22px',fontWeight:'bold',fontFamily:'Outfit sans-serif' }}>
             {adminName}
@@ -229,7 +252,8 @@ const handleConfirmLogout = () => {
               padding: '10px',
               backgroundColor: isActive('/admin/profile') ? '#1976d2' : 'transparent',
               '&:hover': {
-                backgroundColor: isActive('/admin/profile') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)'
+                backgroundColor: isActive('/admin/profile') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)',
+                color: 'aqua'
               }
             }}
           >
@@ -241,24 +265,31 @@ const handleConfirmLogout = () => {
               sx={{ 
                 cursor: 'pointer',
                 padding: '14px',
-                    borderRadius:'2px',
+                borderRadius:'4px',
                 backgroundColor: isActive('/admin/dashboard') ? '#1976d2' : 'transparent',
                 '&:hover': {
-                  backgroundColor: isActive('/admin/dashboard') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)'
+                  backgroundColor: isActive('/admin/dashboard') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)',
+                  color: 'aqua'
                 }
               }}
             >
-              <FaDashcube/> Dashboard
+              <FaDashcube /> Dashboard
             </ListItem>
 
             {/* User Management Dropdown */}
-            <ListItem 
+           <ListItem 
               button 
               onClick={toggleUserManagement}
               sx={{ 
                 cursor: 'pointer',
                 padding: '10px',
-              
+                borderRadius: '4px',
+                backgroundColor: openUserManagement ? '#1976d2' : 'transparent',
+                color: openUserManagement ? '#fff' : 'inherit',
+                '&:hover': {
+                  backgroundColor: openUserManagement ? '#1565c0' : 'transparent',
+                  color: 'aqua'
+                },
               }}
             >
               <FaUser />
@@ -266,32 +297,33 @@ const handleConfirmLogout = () => {
               {openUserManagement ? <FaChevronUp /> : <FaChevronDown />}
             </ListItem>
             <Collapse in={openUserManagement} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding sx={{ width: '100%' }}>
+              <List component="div" disablePadding sx={{ width: '100%',marginLeft:'20px' }}>
                 <ListItem 
                   button 
                   onClick={navigateUserTable}
                   sx={{
-                  padding: '7px 10px',
-                  borderRadius:'2px',
-                    backgroundColor: isActive('/admin/user-table') ? '#1976d2' : 'transparent',
+                    padding: '0',
+                    borderRadius:'2px',
+                    color: isActive('/admin/user-table') ? 'aqua' : '',
                     '&:hover': {
-                      backgroundColor: isActive('/admin/user-table') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)'
+                    color: isActive('/admin/user-table') ? 'aqua' : '',
+                      color: 'aqua'
                     }
- 
                   }}
                 >
-                  <ListItemText primary="User" />
+                  <ListItemText primary="User Table" />
                 </ListItem>
           
                 <ListItem 
                   button 
                   onClick={navigateUserUpgrade}
                   sx={{
-                 padding: '7px 10px',
-                  borderRadius:'2px',
-                    backgroundColor: isActive('/admin/userData') ? '#1976d2' : 'transparent',
+                    padding: '0px ',
+                    borderRadius:'2px',
+                    color: isActive('/admin/userData') ? 'aqua' : '',
                     '&:hover': {
-                      backgroundColor: isActive('/admin/userData') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)'
+                      color: isActive('/admin/userData') ? 'aqua' : '',
+                      color: 'aqua'
                     }
                   }}
                 >
@@ -302,11 +334,12 @@ const handleConfirmLogout = () => {
                   button 
                   onClick={navigateRenewals}
                   sx={{
-                  padding: '7px 10px',
-                  borderRadius:'2px',
-                    backgroundColor: isActive('/admin/renewals') ? '#1976d2' : 'transparent',
+                 padding: '0',
+                    borderRadius:'2px',
+                    color: isActive('/admin/renewals') ? 'aqua' : '',
                     '&:hover': {
-                      backgroundColor: isActive('/admin/renewals') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)'
+                      color: isActive('/admin/renewals') ? 'aqua' : '',
+                      color: 'aqua'
                     }
                   }}
                 >
@@ -317,11 +350,12 @@ const handleConfirmLogout = () => {
                   button 
                   onClick={navigateresetpass}
                   sx={{
-                padding: '7px 10px',
-                  borderRadius:'2px',
-                    backgroundColor: isActive('/admin/resetpass') ? '#1976d2' : 'transparent',
+                   padding: '0',
+                    borderRadius:'2px',
+                    color: isActive('/admin/resetpass') ? 'aqua' : '',
                     '&:hover': {
-                      backgroundColor: isActive('/admin/resetpass') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)'
+                      color: isActive('/admin/resetpass') ? 'aqua' : '',
+                      color: 'aqua'
                     }
                   }}
                 >
@@ -332,11 +366,12 @@ const handleConfirmLogout = () => {
                   button 
                   onClick={navigateImageVerify}
                   sx={{
-                   padding: '7px 10px',
-                  borderRadius:'2px',
-                    backgroundColor: isActive('/admin/imageverify') ? '#1976d2' : 'transparent',
+                    padding: '0',
+                    borderRadius:'2px',
+                    color: isActive('/admin/imageverify') ? 'aqua' : '',
                     '&:hover': {
-                      backgroundColor: isActive('/admin/imageverify') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)'
+                      color: isActive('/admin/imageverify') ? 'aqua' : '',
+                      color: 'aqua'
                     }
                   }}
                 >
@@ -352,7 +387,13 @@ const handleConfirmLogout = () => {
               sx={{ 
                 cursor: 'pointer',
                 padding: '10px',
-               
+                borderRadius: '4px',
+                backgroundColor: openAssistanceService ? '#1976d2' : 'transparent',
+                color: openAssistanceService ? '#fff' : 'inherit',
+                '&:hover': {
+                  backgroundColor: openAssistanceService ? '#1565c0' : 'rgba(0, 0, 0, 0.04)',
+                  color: 'aqua'
+                }
               }}
             >
               <FaServer />
@@ -360,16 +401,17 @@ const handleConfirmLogout = () => {
               {openAssistanceService ? <FaChevronUp /> : <FaChevronDown />}
            </ListItem>
             <Collapse in={openAssistanceService} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding sx={{ width: '100%' }}>
+              <List component="div" disablePadding sx={{ width: '100%',marginLeft:'20px' }}>
                 <ListItem 
                   button 
                   onClick={navigatePendingdata}
                   sx={{
-                   padding: '7px 10px',
-                  borderRadius:'2px',
-                    backgroundColor: isActive('/admin/pendingdata') ? '#1976d2' : 'transparent',
+                    padding: '0',
+                    borderRadius:'2px',
+                  color: isActive('/admin/pendingdata') ? 'aqua' : '',
                     '&:hover': {
-                      backgroundColor: isActive('/admin/pendingdata') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)'
+                     color: isActive('/admin/pendingdata') ? 'aqua' : '',
+                      color: 'aqua'
                     }
                   }}
                 >
@@ -380,11 +422,12 @@ const handleConfirmLogout = () => {
                   button 
                   onClick={navigateSuccessdata}
                   sx={{
-                  padding: '7px 10px',
-                  borderRadius:'2px',
-                    backgroundColor: isActive('/admin/successdata') ? '#1976d2' : 'transparent',
+                  padding: '0',
+                    borderRadius:'2px',
+                  color: isActive('/admin/successdata') ? 'aqua' : '',
                     '&:hover': {
-                      backgroundColor: isActive('/admin/successdata') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)'
+                      color: isActive('/admin/successdata') ? 'aqua' : '',
+                      color: 'aqua'
                     }
                   }}
                 >
@@ -395,11 +438,12 @@ const handleConfirmLogout = () => {
                   button 
                   onClick={navigatePromoterdata}
                   sx={{
-                    padding: '7px 10px',
-                  borderRadius:'2px',
-                    backgroundColor: isActive('/admin/promotersdata') ? '#1976d2' : 'transparent',
+                   padding: '0',
+                    borderRadius:'2px',
+                    color: isActive('/admin/promotersdata') ? 'aqua' : '',
                     '&:hover': {
-                      backgroundColor: isActive('/admin/promotersdata') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)'
+                   color: isActive('/admin/promotersdata') ? 'aqua' : '',
+                      color: 'aqua'
                     }
                   }}
                 >
@@ -415,7 +459,13 @@ const handleConfirmLogout = () => {
               sx={{ 
                 cursor: 'pointer',
                 padding: '10px',
-              
+                borderRadius: '4px',
+                backgroundColor: openPromoterManagement ? '#1976d2' : 'transparent',
+                color: openPromoterManagement ? '#fff' : 'inherit',
+                '&:hover': {
+                  backgroundColor: openPromoterManagement ? '#1565c0' : 'rgba(0, 0, 0, 0.04)',
+                  color: 'aqua'
+                }
               }}
             >
               <FaUsers />
@@ -423,16 +473,17 @@ const handleConfirmLogout = () => {
               {openPromoterManagement ? <FaChevronUp /> : <FaChevronDown />}
             </ListItem>
             <Collapse in={openPromoterManagement} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding sx={{ width: '100%' }}>
+              <List component="div" disablePadding sx={{ width: '100%',marginLeft:'20px' }}>
                 <ListItem 
                   button 
                   onClick={navigatePromotersData}
                   sx={{
-                   padding: '7px 10px',
-                  borderRadius:'2px',
-                    backgroundColor: isActive('/admin/promoters') ? '#1976d2' : 'transparent',
+                   padding: '0',
+                    borderRadius:'2px',
+                    color: isActive('/admin/promoters') ? 'aqua' : '',
                     '&:hover': {
-                      backgroundColor: isActive('/admin/promoters') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)'
+                  color: isActive('/admin/promoters') ? 'aqua' : '',
+                      color: 'aqua'
                     }
                   }}
                 >
@@ -443,11 +494,12 @@ const handleConfirmLogout = () => {
                   button 
                   onClick={navigatePromotersUsers}
                   sx={{
-               padding: '7px 10px',
-                  borderRadius:'2px',
-                    backgroundColor: isActive('/admin/promotersusers') ? '#1976d2' : 'transparent',
+                  padding: '0',
+                    borderRadius:'2px',
+                    color: isActive('/admin/promotersusers') ? 'aqua' : '',
                     '&:hover': {
-                      backgroundColor: isActive('/admin/promotersusers') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)'
+                      color: isActive('/admin/promotersusers') ? 'aqua' : '',
+                      color: 'aqua'
                     }
                   }}
                 >
@@ -458,11 +510,12 @@ const handleConfirmLogout = () => {
                   button 
                   onClick={navigatePromotersEarn}
                   sx={{
-                padding: '7px 10px',
-                  borderRadius:'2px',
-                    backgroundColor: isActive('/admin/promoterearn') ? '#1976d2' : 'transparent',
+                   padding: '0',
+                    borderRadius:'2px',
+                    color: isActive('/admin/promoterearn') ? 'aqua' : '',
                     '&:hover': {
-                      backgroundColor: isActive('/admin/promoterearn') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)'
+                      color: isActive('/admin/promoterearn') ? 'aqua' : '',
+                      color: 'aqua'
                     }
                   }}
                 >
@@ -473,11 +526,12 @@ const handleConfirmLogout = () => {
                   button 
                   onClick={navigatePaytopromoters}
                   sx={{
-                 padding: '7px 10px',
-                  borderRadius:'2px',
-                    backgroundColor: isActive('/admin/paytopromoters') ? '#1976d2' : 'transparent',
+                   padding: '0',
+                    borderRadius:'2px',
+                   color: isActive('/admin/paytopromoters') ? 'aqua' : '',
                     '&:hover': {
-                      backgroundColor: isActive('/admin/paytopromoters') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)'
+                     color: isActive('/admin/paytopromoters') ? 'aqua' : '',
+                      color: 'aqua'
                     }
                   }}
                 >
@@ -493,7 +547,13 @@ const handleConfirmLogout = () => {
               sx={{ 
                 cursor: 'pointer',
                 padding: '10px',
-               
+                borderRadius: '4px',
+                backgroundColor: openPromoterReceipts ? '#1976d2' : 'transparent',
+                color: openPromoterReceipts ? '#fff' : 'inherit',
+                '&:hover': {
+                  backgroundColor: openPromoterReceipts ? '#1565c0' : 'rgba(0, 0, 0, 0.04)',
+                  color: 'aqua'
+                }
               }}
             >
               <FaReceipt />
@@ -501,16 +561,17 @@ const handleConfirmLogout = () => {
               {openPromoterReceipts ? <FaChevronUp /> : <FaChevronDown />}
             </ListItem>
             <Collapse in={openPromoterReceipts} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding sx={{ width: '100%' }}>
+              <List component="div" disablePadding sx={{ width: '100%',marginLeft:'20px' }}>
                 <ListItem 
                   button 
                   onClick={navigateOnlineTransaction}
                   sx={{
-                  padding: '7px 10px',
-                  borderRadius:'2px',
-                    backgroundColor: isActive('/admin/onlinetransaction') ? '#1976d2' : 'transparent',
+                   padding: '0',
+                    borderRadius:'2px',
+                  color: isActive('/admin/onlinetransaction') ? 'aqua' : '',
                     '&:hover': {
-                      backgroundColor: isActive('/admin/onlinetransaction') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)'
+                      color: isActive('/admin/onlinetransaction') ? 'aqua' : '',
+                      color: 'aqua'
                     }
                   }}
                 >
@@ -521,11 +582,12 @@ const handleConfirmLogout = () => {
                   button 
                   onClick={navigateAssistanceData}
                   sx={{
-                   padding: '7px 10px',
-                  borderRadius:'2px',
-                    backgroundColor: isActive('/admin/assistance') ? '#1976d2' : 'transparent',
+                   padding: '0',
+                    borderRadius:'2px',
+                color: isActive('/admin/assistance') ? 'aqua' : '',
                     '&:hover': {
-                      backgroundColor: isActive('/admin/assistance') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)'
+                    color: isActive('/admin/assistance') ? 'aqua' : '',
+                      color: 'aqua'
                     }
                   }}
                 >
@@ -536,11 +598,12 @@ const handleConfirmLogout = () => {
                   button 
                   onClick={navigateReceiptsvocher}
                   sx={{
-                padding: '7px 10px',
-                  borderRadius:'2px',
-                    backgroundColor: isActive('/admin/receiptsvocher') ? '#1976d2' : 'transparent',
+                   padding: '0',
+                    borderRadius:'2px',
+                   color: isActive('/admin/receiptsvocher') ? 'aqua' : '',
                     '&:hover': {
-                      backgroundColor: isActive('/admin/receiptsvocher') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)'
+                      color: isActive('/admin/receiptsvocher') ? 'aqua' : '',
+                      color: 'aqua'
                     }
                   }}
                 >
@@ -556,6 +619,13 @@ const handleConfirmLogout = () => {
                sx={{ 
                  cursor: 'pointer',
                  padding: '10px',
+                 borderRadius: '4px',
+                 backgroundColor: openPromoterReports ? '#1976d2' : 'transparent',
+                 color: openPromoterReports ? '#fff' : 'inherit',
+                 '&:hover': {
+                   backgroundColor: openPromoterReports ? '#1565c0' : 'rgba(0, 0, 0, 0.04)',
+                   color: 'aqua'
+                 }
                }}
              >
                <TbMessageReportFilled /> 
@@ -563,16 +633,17 @@ const handleConfirmLogout = () => {
               {openPromoterReports ? <FaChevronUp /> : <FaChevronDown />}
             </ListItem>
             <Collapse in={openPromoterReports} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding sx={{ width: '100%' }}>
+              <List component="div" disablePadding sx={{ width: '100%',marginLeft:'20px' }}>
                 <ListItem 
                   button 
                   onClick={navigateUserReports}
                   sx={{
-                    padding: '7px 10px',
-                  borderRadius:'2px',
-                    backgroundColor: isActive('/admin/userreports') ? '#1976d2' : 'transparent',
+                    padding: '0',
+                    borderRadius:'2px',
+                  color: isActive('/admin/userreports') ? 'aqua' : '',
                     '&:hover': {
-                      backgroundColor: isActive('/admin/userreports') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)'
+                      color: isActive('/admin/userreports') ? 'aqua' : '',
+                      color: 'aqua'
                     }
                   }}
                 >
@@ -583,11 +654,12 @@ const handleConfirmLogout = () => {
                   button 
                   onClick={navigateRenewalReports}
                   sx={{
-                  padding: '7px 10px',
-                  borderRadius:'2px',
-                    backgroundColor: isActive('/admin/renewalreports') ? '#1976d2' : 'transparent',
+                    padding: '0',
+                    borderRadius:'2px',
+                    color: isActive('/admin/renewalreports') ? 'aqua' : '',
                     '&:hover': {
-                      backgroundColor: isActive('/admin/renewalreports') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)'
+                   color: isActive('/admin/renewalreports') ? 'aqua' : '',
+                      color: 'aqua'
                     }
                   }}
                 >
@@ -598,11 +670,12 @@ const handleConfirmLogout = () => {
                   button 
                   onClick={navigateReceiptsReportsdata}
                   sx={{
-                padding: '7px 10px',
-                  borderRadius:'2px',
-                    backgroundColor: isActive('/admin/receiptsreports') ? '#1976d2' : 'transparent',
+                  padding: '0',
+                    borderRadius:'2px',
+                 color: isActive('/admin/receiptsreports') ? 'aqua' : '',
                     '&:hover': {
-                      backgroundColor: isActive('/admin/receiptsreports') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)'
+                     color: isActive('/admin/receiptsreports') ? 'aqua' : '',
+                      color: 'aqua'
                     }
                   }}
                 >
@@ -617,10 +690,11 @@ const handleConfirmLogout = () => {
               sx={{ 
                 cursor: 'pointer',
                 padding: '10px',
-                borderRadius:'2px',
+                borderRadius:'4px',
                 backgroundColor: isActive('/admin/notification') ? '#1976d2' : 'transparent',
                 '&:hover': {
-                  backgroundColor: isActive('/admin/notification') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)'
+                  backgroundColor: isActive('/admin/notification') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)',
+                  color: 'aqua'
                 }
               }}
             >
@@ -639,10 +713,29 @@ const handleConfirmLogout = () => {
     </Typography>
   </DialogContent>
   <DialogActions>
-    <Button onClick={handleLogoutDialogClose} color="primary">
+    <Button 
+      onClick={handleLogoutDialogClose} 
+      color="primary"
+      sx={{
+        '&:hover': {
+          color: 'aqua',
+          backgroundColor: 'transparent'
+        }
+      }}
+    >
       Cancel
     </Button>
-    <Button onClick={handleConfirmLogout} color="error" variant="contained">
+    <Button 
+      onClick={handleConfirmLogout} 
+      color="error" 
+      variant="contained"
+      sx={{
+        '&:hover': {
+          color: 'aqua',
+          backgroundColor: '#d32f2f'
+        }
+      }}
+    >
       Logout
     </Button>
   </DialogActions>
@@ -652,8 +745,7 @@ const handleConfirmLogout = () => {
       <Dialog open={profileDialogOpen} onClose={handleProfileDialogClose}>
       <DialogTitle color='black' fontWeight={700} display={'flex'} 
       justifyContent={'center'} mt={1} fontSize={24}>Edit Profile</DialogTitle>
-      <DialogContent >
-
+      <DialogContent>
         <TextField
           label="Name"
           name="name"
@@ -678,22 +770,28 @@ const handleConfirmLogout = () => {
           fullWidth
           margin="normal"
         />
-     <Button
-  variant="contained"
-  component="label"
-  style={{
-    marginTop: "10px",
-    textTransform: "capitalize",
-    background: "#34495e",
-  }}
->
-  Upload Profile Picture
-  <input
-    type="file"
-    hidden
-    onChange={handleImageUpload}
-  />
-</Button>
+        <Button
+          variant="contained"
+          component="label"
+          style={{
+            marginTop: "10px",
+            textTransform: "capitalize",
+            background: "#34495e",
+          }}
+          sx={{
+            '&:hover': {
+              color: 'aqua',
+              backgroundColor: '#34495e'
+            }
+          }}
+        >
+          Upload Profile Picture
+          <input
+            type="file"
+            hidden
+            onChange={handleImageUpload}
+          />
+        </Button>
 
         {userProfile.profilePicture && (
           <img
@@ -704,19 +802,27 @@ const handleConfirmLogout = () => {
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleProfileDialogClose}sx={{color:'#34495e',
+        <Button 
+          onClick={handleProfileDialogClose}
+          sx={{
+            color: '#34495e',
             "&:hover": {
-              backgroundColor: "transparent", 
-            
-              },
-        }}>
+              backgroundColor: "transparent",
+              color: 'aqua'
+            },
+          }}
+        >
           Cancel
         </Button>
-        <Button onClick={handleProfileDialogClose} color="success"
-        sx={{"&:hover": {
-                  backgroundColor: "transparent", 
-                
-                  },}}
+        <Button 
+          onClick={handleProfileDialogClose} 
+          color="success"
+          sx={{
+            "&:hover": {
+              backgroundColor: "transparent",
+              color: 'aqua'
+            },
+          }}
         >
           Save
         </Button>
@@ -727,7 +833,7 @@ const handleConfirmLogout = () => {
         <div
           className="main-content"
           style={{
-            paddingLeft: isSidebarOpen ? '280px' : '0px', // Adjust paddingLeft
+            paddingLeft: isSidebarOpen ? '280px' : '0px',
             paddingTop: isSidebarOpen ? '10px' : '10px',
             transition: 'padding-left 0.3s ease',
           }}
