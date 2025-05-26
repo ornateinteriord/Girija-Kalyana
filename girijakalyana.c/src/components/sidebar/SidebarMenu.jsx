@@ -1,18 +1,10 @@
+// SidebarMenu.js
 import React from "react";
-import {
-  FaTachometerAlt,
-  FaUser,
-  FaUsers,
-  FaHeart,
-  FaSearch,
-  FaSignOutAlt,
-  FaCog,
-} from "react-icons/fa";
 import { List, ListItem, Box, Button, Typography } from "@mui/material";
-import { FaDashcube, FaUsersViewfinder } from "react-icons/fa6";
+import { getMenuItems } from "../../utils/menudata/MenuData"; 
 
-const SidebarMenu = ({ 
-  selectedItem, 
+const SidebarMenu = ({
+  selectedItem,
   setSelectedItem,
   handleDashboardClick,
   handleProfileClick,
@@ -21,57 +13,33 @@ const SidebarMenu = ({
   handleViewAllClick,
   handleSearchClick,
   handleOpenLogoutDialog,
-  userProfile
+  userProfile,
 }) => {
-  const menuItems = [
-    {
-      text: "Dashboard",
-      icon: <FaDashcube />,
-      onClick: handleDashboardClick,
-    },
-    {
-      text: "Profile",
-      icon: <FaUser />,
-      onClick: handleProfileClick,
-    },
-    {
-      text: "My Matches",
-      icon: <FaUsers />,
-      onClick: handleMatchesClick,
-    },
-    {
-      text: "My Interest",
-      icon: <FaHeart />,
-      onClick: handleInterestClick,
-    },
-    {
-      text: "View All",
-      icon: <FaUsersViewfinder />,
-      onClick: handleViewAllClick,
-    },
-    {
-      text: "Search",
-      icon: <FaSearch />,
-      onClick: handleSearchClick,
-    },
-    {
-      text: "Logout",
-      icon: <FaSignOutAlt />,
-      onClick: handleOpenLogoutDialog,
-    },
-  ];
+  const menuItems = getMenuItems({
+    handleDashboardClick,
+    handleProfileClick,
+    handleMatchesClick,
+    handleInterestClick,
+    handleViewAllClick,
+    handleSearchClick,
+    handleOpenLogoutDialog,
+  });
 
   return (
     <Box sx={{ overflow: "auto" }}>
       <List>
         <ListItem>
           <Box sx={{ textAlign: "center", py: 0 }}>
-            <Typography variant="h5" marginLeft={2} textTransform={"capitalize"}>
+            <Typography
+              variant="h5"
+              marginLeft={2}
+              textTransform={"capitalize"}
+            >
               {userProfile?.first_name}
             </Typography>
           </Box>
         </ListItem>
-        
+
         {menuItems.map((item, index) => (
           <ListItem
             key={index}
@@ -81,9 +49,11 @@ const SidebarMenu = ({
               setSelectedItem(item.text);
             }}
             sx={{
-              backgroundColor: selectedItem === item.text ? "#1976d2" : "transparent",
+              backgroundColor:
+                selectedItem === item.text ? "#1976d2" : "transparent",
               "&:hover": {
-                backgroundColor: selectedItem === item.text ? "#1976d2" : "transparent",
+                backgroundColor:
+                  selectedItem === item.text ? "#1976d2" : "transparent",
               },
               borderRadius: "2px",
               mx: 0,

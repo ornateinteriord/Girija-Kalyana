@@ -40,7 +40,8 @@ import TokenService from "../../token/tokenService";
 import { useChangePassword, useGetMemberDetails } from "../../api/User/useGetProfileDetails";
 import { toast } from "react-toastify";
 import { LoadingComponent } from "../../../App";
-import SidebarMenu from "../../../utils/sidebar/SidebarMenu";
+import SidebarMenu from "../../sidebar/SidebarMenu";
+
 
 
 
