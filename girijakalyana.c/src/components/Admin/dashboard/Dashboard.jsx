@@ -4,7 +4,7 @@ import { MdCurrencyRupee } from "react-icons/md";
 import { Link } from "react-router-dom";
 import "./dashboard.scss";
 import { getAllUserProfiles } from "../../api/Admin";
-import { LoadingComponent } from "../../../App";
+import {  TableLoadingComponent } from "../../../App";
 import { toast } from "react-toastify";
 
 // Reusable Card Component
