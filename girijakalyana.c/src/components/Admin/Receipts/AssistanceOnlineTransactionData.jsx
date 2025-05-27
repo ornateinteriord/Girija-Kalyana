@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 import { getAllAssistanceTransactions } from "../../api/Admin";
-import { LoadingComponent } from "../../../App";
+import {  TableLoadingComponent } from "../../../App";
 import DataTable from "react-data-table-component";
 import {
   customStyles,
@@ -109,7 +109,7 @@ const AssistanceOnlineTransactionData = () => {
             </Typography>
           }
           progressPending={isLoading}
-          progressComponent={<LoadingComponent />}
+          progressComponent={<TableLoadingComponent />}
           persistTableHead
           highlightOnHover
         />

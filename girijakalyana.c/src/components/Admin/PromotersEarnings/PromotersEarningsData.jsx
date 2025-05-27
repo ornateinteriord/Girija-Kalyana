@@ -12,7 +12,7 @@ import {
   customStyles,
   getPromotersEarningsColumns,
 } from "../../../utils/DataTableColumnsProvider";
-import { LoadingComponent } from "../../../App";
+import {  TableLoadingComponent } from "../../../App";
 import { usePromotersEarnings } from "../../api/Admin";
 
 const PromotersEarningsData = () => {
@@ -88,7 +88,9 @@ const PromotersEarningsData = () => {
         }
         customStyles={customStyles}
         progressPending={isLoading}
-        progressComponent={<LoadingComponent />}
+        progressComponent={<TableLoadingComponent />}
+        persistTableHead
+          highlightOnHover
       />
     </Box>
   );

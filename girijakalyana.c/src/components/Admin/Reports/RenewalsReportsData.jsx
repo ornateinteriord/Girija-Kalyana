@@ -14,7 +14,7 @@ import {
   customStyles,
   getRenewalsReportColumns,
 } from "../../../utils/DataTableColumnsProvider";
-import { LoadingComponent } from "../../../App";
+import { LoadingComponent, TableLoadingComponent } from "../../../App";
 
 const RenewalsReportsData = () => {
   const [records, setRecords] = useState([]);
@@ -152,7 +152,9 @@ const RenewalsReportsData = () => {
         }
         customStyles={customStyles}
         progressPending={false}
-        progressComponent={<LoadingComponent />}
+        progressComponent={<TableLoadingComponent />}
+        persistTableHead
+        highlightOnHover
       />
     </Box>
   );

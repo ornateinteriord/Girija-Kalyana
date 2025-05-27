@@ -8,13 +8,14 @@ import {
   Typography,
   InputAdornment,
   Paper,
+  CircularProgress,
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 import "./UserData.css";
 import { getAllUserProfiles, UpgradeUserStatus } from "../../api/Admin";
-import { LoadingComponent } from "../../../App";
 import toast from "react-hot-toast";
 import { customStyles, getUserDataColumns } from "../../../utils/DataTableColumnsProvider";
+import { TableLoadingComponent } from "../../../App";
 
 
 const UserData = () => {
@@ -161,7 +162,9 @@ const UserData = () => {
           }}
           noDataComponent={<Typography padding={3}>No data available</Typography>}
           progressPending={isLoading}
-          progressComponent={<LoadingComponent />}
+          progressComponent={<TableLoadingComponent/>}
+           persistTableHead
+          highlightOnHover
         />
       </Paper>
     </div>

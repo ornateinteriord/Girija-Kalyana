@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 import { getAllUserProfiles, UserResetPassword } from "../../api/Admin";
-import { LoadingComponent } from "../../../App";
+import { LoadingComponent, TableLoadingComponent } from "../../../App";
 import { toast } from "react-toastify";
 import {
   customStyles,
@@ -132,13 +132,14 @@ const ResetPassword = () => {
             rangeSeparatorText: "of",
           }}
           progressPending={isLoading}
-          progressComponent={<LoadingComponent />}
+          progressComponent={<TableLoadingComponent />}
           noDataComponent={
             <Typography padding={3} textAlign="center">
               No records found
             </Typography>
           }
-          persistTableHead
+           persistTableHead
+          highlightOnHover
         />
       </Paper>
 
