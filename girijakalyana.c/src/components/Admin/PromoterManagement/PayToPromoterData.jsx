@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import {
   Box,
   TextField,
@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 
-import { LoadingComponent } from "../../../App";
+import {  TableLoadingComponent } from "../../../App";
 import DataTable from "react-data-table-component";
 import { toast } from "react-toastify";
 import { usePromotersTransactions } from "../../api/Admin";
@@ -83,7 +83,9 @@ const PayToPromoterData = () => {
         }}
         customStyles={customStyles}
         progressPending={isLoading}
-        progressComponent={<LoadingComponent />}
+        progressComponent={<TableLoadingComponent />}
+         persistTableHead
+          highlightOnHover
         noDataComponent={
           <Typography padding={3} textAlign="center">
             No records found

@@ -61,7 +61,8 @@ const AssistanceSuccessUsers = users.filter(user => user?.status?.toLowerCase() 
   return (
     <div className="dashboard-content-main">
       {/* Cards Section */}
-      <div className="card-div">
+      {isLoading ? <TableLoadingComponent/> : (
+         <div className="card-div">
         {stats.map((stat, index) => (
           <DashboardCard
             key={index}
@@ -72,7 +73,7 @@ const AssistanceSuccessUsers = users.filter(user => user?.status?.toLowerCase() 
           />
         ))}
       </div>
-      {isLoading && <LoadingComponent/>}
+      )}
     </div>
   );
 }

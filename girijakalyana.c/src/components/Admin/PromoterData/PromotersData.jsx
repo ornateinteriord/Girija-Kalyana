@@ -12,8 +12,9 @@ import { FaSearch } from "react-icons/fa";
 import { toast } from "react-toastify";
 import DataTable from "react-data-table-component";
 import { customStyles, getPromotersDataColumns } from "../../../utils/DataTableColumnsProvider";
-import { LoadingComponent } from "../../../App";
+
 import { usePromoters, useUpdatePromoterStatus } from "../../api/Admin";
+import { TableLoadingComponent } from "../../../App";
 
 
 const PromotersData = () => {
@@ -111,12 +112,15 @@ const PromotersData = () => {
         }}
         customStyles={customStyles}
         progressPending={isLoading || updateStatusMutation.isLoading}
-        progressComponent={<LoadingComponent />}
+        progressComponent={<TableLoadingComponent />}
         noDataComponent={
           <Typography padding={3} textAlign="center">
             No records found
           </Typography>
+          
         }
+        persistTableHead
+          highlightOnHover
       />
     </Box>
   );

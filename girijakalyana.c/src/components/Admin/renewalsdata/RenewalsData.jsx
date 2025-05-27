@@ -9,7 +9,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
-import { LoadingComponent } from "../../../App";
+import {  TableLoadingComponent } from "../../../App";
 import { customStyles, getRenewalsColumns } from "../../../utils/DataTableColumnsProvider";
 import { getAllUserProfiles } from "../../api/Admin";
 import { toast } from "react-toastify";
@@ -97,7 +97,9 @@ const RenewalsData = () => {
           }
         customStyles={customStyles}
         progressPending={isLoading}
-        progressComponent={<LoadingComponent />}
+        progressComponent={<TableLoadingComponent />}
+        persistTableHead
+        highlightOnHover
       />
     </Box>
   );

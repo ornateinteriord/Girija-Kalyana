@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 import { getAllUserProfiles } from "../../api/Admin";
-import { LoadingComponent } from "../../../App";
+import {  TableLoadingComponent } from "../../../App";
 import { toast } from "react-toastify";
 import DataTable from "react-data-table-component";
 import {
@@ -97,7 +97,9 @@ const PendingData = () => {
             <Typography padding={3}>No data available</Typography>
           }
           progressPending={isLoading}
-          progressComponent={<LoadingComponent />}
+          progressComponent={<TableLoadingComponent />}
+           persistTableHead
+          highlightOnHover
         />
       </Paper>
     </Box>

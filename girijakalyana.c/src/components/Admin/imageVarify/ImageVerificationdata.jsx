@@ -7,7 +7,7 @@ import {
   getImageVerificationColumns,
 } from "../../../utils/DataTableColumnsProvider";
 import { getAllUserProfiles, UpgradeUserStatus } from "../../api/Admin";
-import { LoadingComponent } from "../../../App";
+import {  TableLoadingComponent } from "../../../App";
 
 
 
@@ -121,7 +121,9 @@ catch (err) {
         }
         customStyles={customStyles}
         progressPending={isLoading}
-       progressComponent={<LoadingComponent />}
+       progressComponent={<TableLoadingComponent />}
+       persistTableHead
+       highlightOnHover
       />
     </Box>
   );

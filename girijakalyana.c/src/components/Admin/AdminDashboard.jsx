@@ -675,7 +675,7 @@ const handleConfirmLogout = () => {
                  color: isActive('/admin/receiptsreports') ? 'aqua' : '',
                     '&:hover': {
                      color: isActive('/admin/receiptsreports') ? 'aqua' : '',
-                      color: 'aqua'
+                    
                     }
                   }}
                 >
