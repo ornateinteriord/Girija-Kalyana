@@ -219,11 +219,6 @@ const handleConfirmLogout = () => {
           >
             <MenuItem 
               onClick={handleLogoutDialogOpen}
-              sx={{
-                '&:hover': {
-                  color: 'aqua'
-                }
-              }}
             >
               Logout
             </MenuItem>
@@ -306,8 +301,8 @@ const handleConfirmLogout = () => {
                     borderRadius:'2px',
                     color: isActive('/admin/user-table') ? 'aqua' : '',
                     '&:hover': {
-                    color: isActive('/admin/user-table') ? 'aqua' : '',
-                      color: 'aqua'
+                    color: isActive('/admin/user-table') ?  'darkaqua' : 'aqua',
+                   
                     }
                   }}
                 >
@@ -322,8 +317,8 @@ const handleConfirmLogout = () => {
                     borderRadius:'2px',
                     color: isActive('/admin/userData') ? 'aqua' : '',
                     '&:hover': {
-                      color: isActive('/admin/userData') ? 'aqua' : '',
-                      color: 'aqua'
+                      color: isActive('/admin/userData') ? 'darkaqua' : 'aqua',
+                     
                     }
                   }}
                 >
@@ -338,8 +333,8 @@ const handleConfirmLogout = () => {
                     borderRadius:'2px',
                     color: isActive('/admin/renewals') ? 'aqua' : '',
                     '&:hover': {
-                      color: isActive('/admin/renewals') ? 'aqua' : '',
-                      color: 'aqua'
+                      color: isActive('/admin/renewals') ? 'darkaqua' : 'aqua',
+                      
                     }
                   }}
                 >
@@ -354,8 +349,8 @@ const handleConfirmLogout = () => {
                     borderRadius:'2px',
                     color: isActive('/admin/resetpass') ? 'aqua' : '',
                     '&:hover': {
-                      color: isActive('/admin/resetpass') ? 'aqua' : '',
-                      color: 'aqua'
+                      color: isActive('/admin/resetpass') ? 'darkaqua' : 'aqua',
+                   
                     }
                   }}
                 >
@@ -370,8 +365,8 @@ const handleConfirmLogout = () => {
                     borderRadius:'2px',
                     color: isActive('/admin/imageverify') ? 'aqua' : '',
                     '&:hover': {
-                      color: isActive('/admin/imageverify') ? 'aqua' : '',
-                      color: 'aqua'
+                      color: isActive('/admin/imageverify') ?  'darkaqua' : 'aqua',
+                     
                     }
                   }}
                 >
@@ -410,8 +405,8 @@ const handleConfirmLogout = () => {
                     borderRadius:'2px',
                   color: isActive('/admin/pendingdata') ? 'aqua' : '',
                     '&:hover': {
-                     color: isActive('/admin/pendingdata') ? 'aqua' : '',
-                      color: 'aqua'
+                     color: isActive('/admin/pendingdata') ?  'darkaqua' : 'aqua',
+                    
                     }
                   }}
                 >
@@ -426,8 +421,8 @@ const handleConfirmLogout = () => {
                     borderRadius:'2px',
                   color: isActive('/admin/successdata') ? 'aqua' : '',
                     '&:hover': {
-                      color: isActive('/admin/successdata') ? 'aqua' : '',
-                      color: 'aqua'
+                      color: isActive('/admin/successdata') ? 'darkaqua' : 'aqua',
+                      
                     }
                   }}
                 >
@@ -442,8 +437,8 @@ const handleConfirmLogout = () => {
                     borderRadius:'2px',
                     color: isActive('/admin/promotersdata') ? 'aqua' : '',
                     '&:hover': {
-                   color: isActive('/admin/promotersdata') ? 'aqua' : '',
-                      color: 'aqua'
+                   color: isActive('/admin/promotersdata') ?  'darkaqua' : 'aqua',
+                     
                     }
                   }}
                 >
@@ -482,8 +477,8 @@ const handleConfirmLogout = () => {
                     borderRadius:'2px',
                     color: isActive('/admin/promoters') ? 'aqua' : '',
                     '&:hover': {
-                  color: isActive('/admin/promoters') ? 'aqua' : '',
-                      color: 'aqua'
+                  color: isActive('/admin/promoters') ?  'darkaqua' : 'aqua',
+                      
                     }
                   }}
                 >
@@ -498,8 +493,8 @@ const handleConfirmLogout = () => {
                     borderRadius:'2px',
                     color: isActive('/admin/promotersusers') ? 'aqua' : '',
                     '&:hover': {
-                      color: isActive('/admin/promotersusers') ? 'aqua' : '',
-                      color: 'aqua'
+                      color: isActive('/admin/promotersusers') ?  'darkaqua' : 'aqua',
+                     
                     }
                   }}
                 >
@@ -514,8 +509,8 @@ const handleConfirmLogout = () => {
                     borderRadius:'2px',
                     color: isActive('/admin/promoterearn') ? 'aqua' : '',
                     '&:hover': {
-                      color: isActive('/admin/promoterearn') ? 'aqua' : '',
-                      color: 'aqua'
+                      color: isActive('/admin/promoterearn') ?  'darkaqua' : 'aqua',
+                     
                     }
                   }}
                 >
@@ -530,8 +525,8 @@ const handleConfirmLogout = () => {
                     borderRadius:'2px',
                    color: isActive('/admin/paytopromoters') ? 'aqua' : '',
                     '&:hover': {
-                     color: isActive('/admin/paytopromoters') ? 'aqua' : '',
-                      color: 'aqua'
+                     color: isActive('/admin/paytopromoters') ?  'darkaqua' : 'aqua',
+                     
                     }
                   }}
                 >
@@ -570,8 +565,8 @@ const handleConfirmLogout = () => {
                     borderRadius:'2px',
                   color: isActive('/admin/onlinetransaction') ? 'aqua' : '',
                     '&:hover': {
-                      color: isActive('/admin/onlinetransaction') ? 'aqua' : '',
-                      color: 'aqua'
+                      color: isActive('/admin/onlinetransaction') ?  'darkaqua' : 'aqua',
+                     
                     }
                   }}
                 >
@@ -586,8 +581,8 @@ const handleConfirmLogout = () => {
                     borderRadius:'2px',
                 color: isActive('/admin/assistance') ? 'aqua' : '',
                     '&:hover': {
-                    color: isActive('/admin/assistance') ? 'aqua' : '',
-                      color: 'aqua'
+                    color: isActive('/admin/assistance') ? 'darkaqua' : 'aqua',
+                     
                     }
                   }}
                 >
@@ -602,8 +597,8 @@ const handleConfirmLogout = () => {
                     borderRadius:'2px',
                    color: isActive('/admin/receiptsvocher') ? 'aqua' : '',
                     '&:hover': {
-                      color: isActive('/admin/receiptsvocher') ? 'aqua' : '',
-                      color: 'aqua'
+                      color: isActive('/admin/receiptsvocher') ?  'darkaqua' : 'aqua',
+                    
                     }
                   }}
                 >
@@ -642,8 +637,8 @@ const handleConfirmLogout = () => {
                     borderRadius:'2px',
                   color: isActive('/admin/userreports') ? 'aqua' : '',
                     '&:hover': {
-                      color: isActive('/admin/userreports') ? 'aqua' : '',
-                      color: 'aqua'
+                      color: isActive('/admin/userreports') ? 'darkaqua' : 'aqua',
+                     
                     }
                   }}
                 >
@@ -658,8 +653,8 @@ const handleConfirmLogout = () => {
                     borderRadius:'2px',
                     color: isActive('/admin/renewalreports') ? 'aqua' : '',
                     '&:hover': {
-                   color: isActive('/admin/renewalreports') ? 'aqua' : '',
-                      color: 'aqua'
+                   color: isActive('/admin/renewalreports') ?  'darkaqua' : 'aqua',
+                    
                     }
                   }}
                 >
@@ -674,8 +669,8 @@ const handleConfirmLogout = () => {
                     borderRadius:'2px',
                  color: isActive('/admin/receiptsreports') ? 'aqua' : '',
                     '&:hover': {
-                     color: isActive('/admin/receiptsreports') ? 'aqua' : '',
-                      color: 'aqua'
+                     color: isActive('/admin/receiptsreports') ?  'darkaqua' : 'aqua',
+                     
                     }
                   }}
                 >
@@ -716,12 +711,6 @@ const handleConfirmLogout = () => {
     <Button 
       onClick={handleLogoutDialogClose} 
       color="primary"
-      sx={{
-        '&:hover': {
-          color: 'aqua',
-          backgroundColor: 'transparent'
-        }
-      }}
     >
       Cancel
     </Button>
@@ -729,12 +718,6 @@ const handleConfirmLogout = () => {
       onClick={handleConfirmLogout} 
       color="error" 
       variant="contained"
-      sx={{
-        '&:hover': {
-          color: 'aqua',
-          backgroundColor: '#d32f2f'
-        }
-      }}
     >
       Logout
     </Button>
@@ -778,12 +761,7 @@ const handleConfirmLogout = () => {
             textTransform: "capitalize",
             background: "#34495e",
           }}
-          sx={{
-            '&:hover': {
-              color: 'aqua',
-              backgroundColor: '#34495e'
-            }
-          }}
+
         >
           Upload Profile Picture
           <input
@@ -804,25 +782,12 @@ const handleConfirmLogout = () => {
       <DialogActions>
         <Button 
           onClick={handleProfileDialogClose}
-          sx={{
-            color: '#34495e',
-            "&:hover": {
-              backgroundColor: "transparent",
-              color: 'aqua'
-            },
-          }}
         >
           Cancel
         </Button>
         <Button 
           onClick={handleProfileDialogClose} 
           color="success"
-          sx={{
-            "&:hover": {
-              backgroundColor: "transparent",
-              color: 'aqua'
-            },
-          }}
         >
           Save
         </Button>
