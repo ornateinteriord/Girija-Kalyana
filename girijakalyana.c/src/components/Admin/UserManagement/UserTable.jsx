@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 import { getAllUserProfiles } from "../../api/Admin";
-import { LoadingComponent } from "../../../App";
+import {  TableLoadingComponent } from "../../../App";
 import toast from "react-hot-toast";
 import { customStyles, getUserTableColumns } from "../../../utils/DataTableColumnsProvider";
 
@@ -226,7 +226,7 @@ const UserTable = () => {
             </Typography>
           }
           progressPending={isLoading}
-          progressComponent={ <CircularProgress />}
+          progressComponent={ <TableLoadingComponent />}
           persistTableHead
           highlightOnHover
         />

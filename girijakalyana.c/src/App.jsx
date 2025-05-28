@@ -94,12 +94,39 @@ export const LoadingComponent = () => {
     </Dialog>
   );
 };
+
+export const TableLoadingComponent = () => {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: '200px', // Adjust height as needed
+        backgroundColor: 'transparent',
+      }}
+    >
+      <CircularProgress 
+        size={64}  
+        thickness={3.6} 
+        sx={{
+          color: "1a4f72",
+          animationDuration: '800ms', 
+        }} 
+      />
+    </Box>
+  );
+};
+
 const App = () => {
   return (
     <ProfileProvider>
     <QueryClientProvider client={queryClient}>
       <Suspense fallback={
-          <LoadingComponent />
+          
+    <LoadingComponent />
+  
       }>
         <Router>
           <Routes>

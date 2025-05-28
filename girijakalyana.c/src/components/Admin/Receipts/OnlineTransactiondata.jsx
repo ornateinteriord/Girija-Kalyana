@@ -6,7 +6,7 @@ import {
   customStyles,
   getOnlineTransactionColumns,
 } from "../../../utils/DataTableColumnsProvider";
-import { LoadingComponent } from "../../../App";
+import {  TableLoadingComponent } from "../../../App";
 import { useOnlineTransactions } from "../../api/Admin";
 import { toast } from "react-toastify";
 
@@ -90,7 +90,9 @@ const OnlineTransactionData = () => {
         }
         customStyles={customStyles}
         progressPending={isLoading}
-        progressComponent={<LoadingComponent />}
+        progressComponent={<TableLoadingComponent />}
+        persistTableHead
+        highlightOnHover
       />
     </Box>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -9,7 +9,6 @@ import {
   Modal,
   InputAdornment,
   FormControl,
-  InputLabel,
   FormHelperText,
 } from "@mui/material";
 
@@ -19,7 +18,7 @@ import {
   customStyles,
   getNotificationDataColumns,
 } from "../../../utils/DataTableColumnsProvider";
-import { LoadingComponent } from "../../../App";
+import {  TableLoadingComponent } from "../../../App";
 import { getAllNews, useAddNews } from "../../api/Admin";
 import { toast } from "react-toastify";
 
@@ -174,7 +173,9 @@ const NotificationData = () => {
         }
         customStyles={customStyles}
         progressPending={isLoading}
-        progressComponent={<LoadingComponent />}
+        progressComponent={<TableLoadingComponent />}
+        persistTableHead
+        highlightOnHover
       />
 
       <Modal open={showAddNews} onClose={handleClosePopup}>

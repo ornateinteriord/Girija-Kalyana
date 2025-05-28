@@ -3,10 +3,6 @@ import DataTable from "react-data-table-component";
 import {
   Box,
   Typography,
-  Select,
-  MenuItem,
-  Pagination,
-  Stack,
   InputAdornment,
   Paper,
   TextField,
@@ -17,7 +13,7 @@ import {
   customStyles,
   getAssistanceSuccessColumns,
 } from "../../../utils/DataTableColumnsProvider";
-import { LoadingComponent } from "../../../App";
+import {  TableLoadingComponent } from "../../../App";
 
 const SuccessData = () => {
   const { data: users = [], isLoading, isError, error } = getAllUserProfiles();
@@ -122,7 +118,9 @@ const SuccessData = () => {
             <Typography padding={3}>No data available</Typography>
           }
           progressPending={isLoading}
-          progressComponent={<LoadingComponent />}
+          progressComponent={<TableLoadingComponent />}
+            persistTableHead
+          highlightOnHover
         />
       </Paper>
     </div>

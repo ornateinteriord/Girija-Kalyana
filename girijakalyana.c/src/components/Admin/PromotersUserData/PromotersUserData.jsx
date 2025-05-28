@@ -12,7 +12,7 @@ import {
   customStyles,
   getPromotersUserDataColumns,
 } from "../../../utils/DataTableColumnsProvider";
-import { LoadingComponent } from "../../../App";
+import { TableLoadingComponent } from "../../../App";
 
 const PromotersUsersData = () => {
   const [records, setRecords] = useState([]);
@@ -101,7 +101,9 @@ const PromotersUsersData = () => {
         }
         customStyles={customStyles}
         progressPending={false}
-        progressComponent={<LoadingComponent />}
+        progressComponent={<TableLoadingComponent />}
+        persistTableHead
+        highlightOnHover
       />
     </Box>
   );

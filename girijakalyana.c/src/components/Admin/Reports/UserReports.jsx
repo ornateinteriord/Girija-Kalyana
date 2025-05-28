@@ -11,9 +11,12 @@ import axios from "axios";
 import { FaSearch } from "react-icons/fa";
 import { getAllUserProfiles } from "../../api/Admin";
 import { toast } from "react-toastify";
-import { LoadingComponent } from "../../../App";
+import {  TableLoadingComponent } from "../../../App";
 import DataTable from "react-data-table-component";
-import { customStyles, getUserReportsColumns } from "../../../utils/DataTableColumnsProvider";
+import {
+  customStyles,
+  getUserReportsColumns,
+} from "../../../utils/DataTableColumnsProvider";
 
 const UserReports = () => {
   const { data: users = [], isLoading, isError, error } = getAllUserProfiles();
@@ -39,22 +42,28 @@ const UserReports = () => {
     setToDate(event.target.value);
   };
 
-
-
   const filteredRecords = users.filter((record) => {
     return (
       search === "" ||
-      record.registration_date?.toString().toLowerCase().includes(search.toLowerCase()) ||
-      record.registration_no?.toString().toLowerCase().includes(search.toLowerCase()) ||
-      record.first_name?.toString().toLowerCase().includes(search.toLowerCase()) ||
+      record.registration_date
+        ?.toString()
+        .toLowerCase()
+        .includes(search.toLowerCase()) ||
+      record.registration_no
+        ?.toString()
+        .toLowerCase()
+        .includes(search.toLowerCase()) ||
+      record.first_name
+        ?.toString()
+        .toLowerCase()
+        .includes(search.toLowerCase()) ||
       record.gender?.toString().toLowerCase().includes(search.toLowerCase()) ||
-      record.status?.toString().toLowerCase().includes(search.toLowerCase()) 
+      record.status?.toString().toLowerCase().includes(search.toLowerCase())
     );
   });
 
-
   return (
-    <Box padding={2}  marginTop={8}>
+    <Box padding={2} marginTop={8}>
       <Box>
         <Typography
           variant="h4"
@@ -73,29 +82,24 @@ const UserReports = () => {
         flexDirection={"row"}
         justifyContent={"space-between"}
         marginTop={1}
-        
       >
-
-<Grid item xs={12} sm={6} md={3}>
-            <TextField
-              label="Search"
-              variant="outlined"
-              fullWidth
-              value={search}
-              onChange={handleSearchChange}
-              sx={{ width: { xs: "100%", sm: "auto", md: "auto" }, mb: "20px" }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment
-                    position="start"
-                    style={{ marginRight: "8px" }}
-                  >
-                    <FaSearch />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <TextField
+            label="Search"
+            variant="outlined"
+            fullWidth
+            value={search}
+            onChange={handleSearchChange}
+            sx={{ width: { xs: "100%", sm: "auto", md: "auto" }, mb: "20px" }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start" style={{ marginRight: "8px" }}>
+                  <FaSearch />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
 
         <Box
           sx={{
@@ -137,10 +141,6 @@ const UserReports = () => {
             Submit
           </Button>
         </Box>
-
-        
-
-          
       </Grid>
 
       <DataTable
@@ -153,14 +153,16 @@ const UserReports = () => {
           rowsPerPageText: "Rows per page:",
           rangeSeparatorText: "of",
         }}
-          noDataComponent={
-            <Typography padding={3} textAlign="center">
-              No records found
-            </Typography>
-          }
+        noDataComponent={
+          <Typography padding={3} textAlign="center">
+            No records found
+          </Typography>
+        }
         customStyles={customStyles}
         progressPending={isLoading}
-        progressComponent={<LoadingComponent />}
+        progressComponent={<TableLoadingComponent />}
+        persistTableHead
+        highlightOnHover
       />
     </Box>
   );
