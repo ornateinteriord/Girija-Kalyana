@@ -10,43 +10,28 @@ import {
   Chip,
 } from "@mui/material";
 import { FaBriefcase, FaMapMarkerAlt } from "react-icons/fa";
-import { useGetMemberDetails } from "../../api/User/useGetProfileDetails";
-import { LoadingComponent } from "../../../App";
 import { toast } from "react-toastify";
 import { useVerifiedImage } from "../../hook/ImageVerification";
 import TokenService from "../../token/tokenService";
+import { LoadingComponent } from "../../../App";
 
+const ProfileInfo = ({ label, value }) => (
+  <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <Typography variant="body2" color="text.secondary" sx={{ fontWeight: "bold" }}>
+      {label}
+    </Typography>
+    <Typography variant="body2" color="text.secondary">
+      {value}
+    </Typography>
+  </Box>
+);
 
-  const ProfileInfo = ({ label, value }) => (
-    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: "bold" }}>
-        {label}
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        {value}
-      </Typography>
-    </Box>
-  );
+const InterestCard = ({ senderData, handleResponse }) => {
+  const { getVerifiedImage } = useVerifiedImage();
+  const loggedInUserRole = TokenService.getRole();
 
-const InterestCard = ({ senderRefNo, recipientRefNo, handleResponse }) => {
-  const {
-    data: senderDetails,
-    isLoading,
-    isError,
-    error,
-  } = useGetMemberDetails(senderRefNo);
-   const {getVerifiedImage} = useVerifiedImage()
-   const loggedInUserRole = TokenService.getRole()
-
-  useEffect(() => {
-    if (isError) {
-      toast.error(error.message || "Failed to load profile");
-    }
-  }, [isError, error]);
-
-  if (isLoading) return <LoadingComponent />;
-
-  const profile = senderDetails;
+  // No need for separate data fetching since we receive senderData directly
+  if (!senderData) return <LoadingComponent />;
 
   return (
     <Card
@@ -67,7 +52,7 @@ const InterestCard = ({ senderRefNo, recipientRefNo, handleResponse }) => {
         position: "relative",
       }}
     >
-      {profile?.user_role === "PremiumUser" && (
+      {senderData?.user_role === "PremiumUser" && (
         <Chip
           label="PREMIUM"
           color="primary"
@@ -97,8 +82,8 @@ const InterestCard = ({ senderRefNo, recipientRefNo, handleResponse }) => {
         }}
       >
         <Avatar
-          src={getVerifiedImage(profile,loggedInUserRole)}
-          alt={profile?.first_name}
+          src={getVerifiedImage(senderData, loggedInUserRole)}
+          alt={senderData?.first_name}
           sx={{
             width: "100%",
             height: "100%",
@@ -119,24 +104,24 @@ const InterestCard = ({ senderRefNo, recipientRefNo, handleResponse }) => {
         }}
       >
         <Typography fontWeight="bold" sx={{ mb: 0.5 }}>
-          {profile?.first_name} {profile?.last_name}
+          {senderData?.first_name} {senderData?.last_name}
         </Typography>
         <Typography component="span" color="text.secondary" sx={{ ml: 1 }}>
-          {profile?.age || "N/A"} yrs
+          {senderData?.age || "N/A"} yrs
         </Typography>
 
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
-            justifyContent:'center',
+            justifyContent: 'center',
             mb: 0.5,
             fontSize: { xs: "0.8rem", sm: "0.9rem" },
           }}
         >
           <FaBriefcase size={14} color="#777" style={{ marginRight: 6 }} />
           <Typography variant="body2" color="text.secondary">
-            {profile?.occupation || "Not specified"}
+            {senderData?.occupation || "Not specified"}
           </Typography>
         </Box>
 
@@ -144,14 +129,14 @@ const InterestCard = ({ senderRefNo, recipientRefNo, handleResponse }) => {
           sx={{
             display: "flex",
             alignItems: "center",
-             justifyContent:'center',
+            justifyContent: 'center',
             mb: 1,
             fontSize: { xs: "0.8rem", sm: "0.9rem" },
           }}
         >
           <FaMapMarkerAlt size={14} color="#777" style={{ marginRight: 6 }} />
           <Typography variant="body2">
-            {[profile?.city, profile?.state, profile?.country]
+            {[senderData?.city, senderData?.state, senderData?.country]
               .filter(Boolean)
               .join(", ") || "Location not specified"}
           </Typography>
@@ -160,24 +145,23 @@ const InterestCard = ({ senderRefNo, recipientRefNo, handleResponse }) => {
         <Divider sx={{ my: 1 }} />
 
         <Box display="flex" justifyContent="space-around" width="100%" my={2}>
-          <ProfileInfo label="Height" value={profile?.height || "N/A"} />
-          <ProfileInfo label="Religion" value={profile?.religion || "N/A"} />
-          <ProfileInfo label="Caste" value={profile?.caste || "N/A"} />
+          <ProfileInfo label="Height" value={senderData?.height || "N/A"} />
+          <ProfileInfo label="Religion" value={senderData?.religion || "N/A"} />
+          <ProfileInfo label="Caste" value={senderData?.caste || "N/A"} />
         </Box>
 
         <Box display="flex" gap={1} mt={2} width="100%">
           <Button
             fullWidth
             variant="outlined"
-             
             sx={{
               background: "#fff",
               color: "red",
               fontWeight: "bold",
               borderColor: "red",
-              textTransform:"capitalize"
+              textTransform: "capitalize"
             }}
-            onClick={() => handleResponse(senderRefNo, recipientRefNo, false)}
+            onClick={() => handleResponse(senderData.registration_no, false)}
           >
             Reject
           </Button>
@@ -187,18 +171,16 @@ const InterestCard = ({ senderRefNo, recipientRefNo, handleResponse }) => {
             color="primary"
             sx={{
               color: "#fff",
-             textTransform:"capitalize"
+              textTransform: "capitalize"
             }}
-            onClick={() => handleResponse(senderRefNo, recipientRefNo, true)}
+            onClick={() => handleResponse(senderData.registration_no, true)}
           >
             Accept
           </Button>
         </Box>
-        
       </CardContent>
     </Card>
   );
-
 };
 
 export default InterestCard;
