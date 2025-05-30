@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Pagination } from "@mui/material";
-import {
-  useGetReceivedInterests,
-  useUpdateInterestStatus,
-} from "../../../../api/User/useGetProfileDetails";
+import { useGetReceivedInterests, useUpdateInterestStatus } from "../../../../api/User/useGetProfileDetails";
 import TokenService from "../../../../token/tokenService";
 import toast from "react-hot-toast";
 import InterestCard from "../../../intrestCard/IntrestCard";
@@ -31,7 +28,7 @@ const Requests = () => {
     }
   }, [isError, error]);
 
-  const handleInterestResponse = (senderRefNo, recipientRefNo, isAccepted) => {
+  const handleInterestResponse = (senderRefNo, isAccepted) => {
     updateInterest(
       {
         sender: senderRefNo,
@@ -57,11 +54,10 @@ const Requests = () => {
   // Ensure current page stays within valid range
   const validCurrentPage = Math.min(currentPage, Math.max(pageCount, 1));
   
-  const currentUsers = receivedInterests?.slice(
+  const currentInterests = receivedInterests?.slice(
     (validCurrentPage - 1) * itemsPerPage,
     validCurrentPage * itemsPerPage
   );
- 
 
   // Reset to page 1 if data changes and current page becomes invalid
   useEffect(() => {
@@ -77,34 +73,31 @@ const Requests = () => {
           display: "flex",
           flexWrap: "wrap",
           gap: 3,
-          justifyContent: currentUsers?.length > 0 ? "flex-start" : "center",
+          justifyContent: currentInterests?.length > 0 ? "flex-start" : "center",
           marginTop: 1,
         }}
       >
         {isLoading ? (
           <LoadingComponent />
-        ) : currentUsers?.length === 0 ? (
+        ) : currentInterests?.length === 0 ? (
           <Typography variant="h6">No pending requests found</Typography>
         ) : (
-          currentUsers?.map((user) => (
+          currentInterests?.map((interest) => (
             <InterestCard
-              key={user._id}
-              senderRefNo={user.sender}
-              recipientRefNo={recipient}
+              key={interest._id}
+              senderData={interest.sender} // Pass the entire sender profile data // Pass the entire interest data if needed
               handleResponse={handleInterestResponse}
             />
           ))
         )}
       </Box>
 
-      {pageCount >=1 && totalItems > 0 && (
+      {pageCount > 1 && totalItems > 0 && (
         <Box sx={{ display: "flex", justifyContent: "end", marginTop: 4 }}>
           <Pagination
             count={pageCount}
             page={validCurrentPage}
-            onChange={(_, page) => {
-              setCurrentPage(page);
-            }}
+            onChange={(_, page) => setCurrentPage(page)}
             shape="rounded"
             color="primary"
           />
