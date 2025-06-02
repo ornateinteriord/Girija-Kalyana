@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import TokenService from "../../token/tokenService";
-import { post } from "../authHooks";
+import { get, post } from "../authHooks";
 
 
 export const useSignupMutation = ()=>{
@@ -83,5 +83,15 @@ export const useResetpassword = () => {
     onError: (error) => {
       toast.error(error.response.data.message);
     }
+  });
+};
+
+export const useGetDashboardStats = () => {
+  return useQuery({
+    queryKey: ["dashboardstats"],
+    queryFn: async () => {
+      const data = await get("/api/auth/dashboardstats")
+      return data;
+    },
   });
 };
