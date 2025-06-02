@@ -104,12 +104,20 @@ const PrivacySettings = () => {
         Privacy Settings
       </Typography>
 
-      <Typography variant="body1" sx={{ mb: 3, color: "#555" }}>
-        {userProfile?.image_verification === "active"
-          ? "Your photo is verified. Choose who can see it:"
-          : userProfile?.image
-          ? "Please verify your photo to access privacy settings."
-          : "Please upload a profile photo to access privacy settings."}
+      <Typography variant="body1" sx={{ mb: 3 }}>
+        {userProfile?.image_verification === "active" ? (
+          <Box component="span" sx={{ color: "green" }}>
+            Your photo is verified. Choose who can see it:
+          </Box>
+        ) : userProfile?.image ? (
+          <Box component="span" sx={{ color: "orange" }}>
+            Please verify your photo to access privacy settings.
+          </Box>
+        ) : (
+          <Box component="span" sx={{ color: "red" }}>
+            Please upload a profile photo to access privacy settings.
+          </Box>
+        )}
       </Typography>
 
       <Box
