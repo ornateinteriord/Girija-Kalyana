@@ -770,8 +770,57 @@
         "Other"
     ]
 
-    }
-    
+    },
+    {
+  "months": [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ]
+},
+{
+  "cities": [
+    "Bagalkot",
+    "Bangalore",
+    "Belgaum",
+    "Bellary",
+    "Bidar",
+    "Bijapur",
+    "Chamarajanagar",
+    "Chikballapur",
+    "Chikmagalur",
+    "Chitradurga",
+    "Dakshina Kannada",
+    "Davangere",
+    "Gadag",
+    "Gulbarga",
+    "Hassan",
+    "Haveri",
+    "Hubli-Dharwad",
+    "Kodagu",
+    "Kolar",
+    "Koppal",
+    "Mandya",
+    "Mysore",
+    "Raichur",
+    "Ramanagara",
+    "Shimoga",
+    "Tumkur",
+    "Udupi",
+    "Uttara Kannada",
+    "Yadgir"
+  ]
+}
+
     
     
 ]
