@@ -1,32 +1,27 @@
-import React from 'react';
-import { Container, Typography, Box, Paper, useMediaQuery } from '@mui/material';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Autoplay } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/autoplay';
-import './Members.scss';
-import card1 from '../../assets/card1.jpg';
-import card2 from '../../assets/card2.jpg';
-import card3 from '../../assets/card3.jpg';
-import card4 from '../../assets/card4.jpg';
-import card5 from '../../assets/card5.jpg';
-import card6 from '../../assets/card6.jpg';
-import Footer from '../footer/Footer';
+import React from "react";
+import {
+  Container,
+  Typography,
+  Box,
+  Paper,
+  useMediaQuery,
+} from "@mui/material";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/autoplay";
+import "./Members.scss";
+import Footer from "../footer/Footer";
+import { useGetRecentRegisters } from "../api/Auth";
 
 const Members = () => {
-  const isLargeScreen = useMediaQuery('(min-width:1200px)');
-  const isMediumScreen = useMediaQuery('(min-width:900px)');
-  const isSmallScreen = useMediaQuery('(min-width:600px)');
+  const isLargeScreen = useMediaQuery("(min-width:1200px)");
+  const isMediumScreen = useMediaQuery("(min-width:900px)");
+  const isSmallScreen = useMediaQuery("(min-width:600px)");
+  const {data:recentregisters} = useGetRecentRegisters()
 
-  const members = [
-    { id: 1, name: 'Shobhit & Renu', date: 'Marriage Date', image: card1 },
-    { id: 2, name: 'Soni & Pooja', date: 'Marriage Date', image: card2 },
-    { id: 3, name: 'Rishabh & Saumya', date: 'Marriage Date 19, April 2024', image: card3 },
-    { id: 4, name: 'Amit & Neha', date: 'Marriage Date', image: card4 },
-    { id: 5, name: 'Rahul & Priya', date: 'Marriage Date', image: card5 },
-    { id: 6, name: 'Arjun & Meera', date: 'Marriage Date', image: card6 },
-  ];
+  
 
   const getSlidesPerView = () => {
     if (isLargeScreen) return 3;
@@ -37,34 +32,26 @@ const Members = () => {
 
   return (
     <>
-      <Container 
-        sx={{ 
-          textAlign: 'center', 
+      <Container
+        sx={{
+          textAlign: "center",
           marginTop: { xs: 3, sm: 5 },
           marginBottom: { xs: 5, sm: 10 },
-          px: { xs: 2, sm: 3 }
+          px: { xs: 2, sm: 3 },
         }}
       >
-        <Typography 
-          variant="h4" 
-          sx={{ 
-            color: '#606c88', 
-            fontWeight: 'bold',  
+        <Typography
+          variant="h4"
+          sx={{
+            color: "#182848",
+            fontWeight: "bold",
             fontFamily: "Outfit, sans-serif",
-            fontSize: { xs: '1.5rem', sm: '2rem' }
+            fontSize: { xs: "1.5rem", sm: "2rem" },
+            marginBottom: 5,
+            marginTop:3
           }}
         >
-          LAKHS OF HAPPY COUPLES
-        </Typography>
-        <Typography 
-          variant="h5" 
-          sx={{ 
-            marginBottom: 4,
-            fontSize: { xs: '1.2rem', sm: '1.5rem' },
-            fontFamily: "Outfit, sans-serif"
-          }}
-        >
-          Matched by <span style={{ color: '#e53935', fontFamily: "Outfit, sans-serif" }}>GIRIJAKALYANA</span>
+          RECENT REGISTERS
         </Typography>
 
         <Box sx={{ px: { xs: 0, sm: 2 } }}>
@@ -75,71 +62,92 @@ const Members = () => {
             autoplay={{ delay: 2500, disableOnInteraction: false }}
             speed={1000}
             navigation={{
-              nextEl: '.swiper-button-next',
-              prevEl: '.swiper-button-prev',
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
             }}
             loop
           >
-            {members.map((member) => (
-              <SwiperSlide key={member.id}>
-                <Box 
-                  className="member-card" 
+            {recentregisters?.map((member) => (
+              <SwiperSlide >
+                <Box
+                  className="member-card"
                   sx={{
                     fontFamily: "Outfit, sans-serif",
                     px: { xs: 1, sm: 0 },
-                    pb: 2
+                    pb: 2,
                   }}
                 >
                   <Paper
                     elevation={3}
                     sx={{
                       borderRadius: 2,
-                      overflow: 'hidden',
-                      position: 'relative',
-                      height: '100%',
-                      display: 'flex',
-                      flexDirection: 'column'
+                      overflow: "hidden",
+                      position: "relative",
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      p: 3,
+                      background: "linear-gradient(to right, #182848, #4d75d4)",
+                      color: "white",
+                      boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
                     }}
                   >
-                    <img
-                      src={member.image}
-                      alt={member.name}
-                      style={{
-                        width: '100%',
-                        height: '300px',
-                        objectFit: 'cover',
-                      }}
-                    />
-                    <Box 
-                      className="member-details"
+                    <Typography
+                      variant="h4"
                       sx={{
-                        p: 2,
-                        flexGrow: 1,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center'
+                        textAlign: "center",
+                        color: "white",
+                        mb: 2,
+                        fontWeight: "bold",
+                        fontFamily: "Outfit, sans-serif",
+                        textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
                       }}
                     >
-                      <Typography 
-                        variant="h6" 
-                        sx={{ 
-                          fontWeight: 'bold',
-                          fontFamily: "Outfit, sans-serif",
-                          fontSize: { xs: '1rem', sm: '1.1rem' }
-                        }}
-                      >
-                        {member.name}
-                      </Typography>
-                      <Typography 
-                        variant="body2" 
-                        sx={{
-                          fontFamily: "Outfit, sans-serif",
-                          color: 'black',
-                          fontSize: { xs: '0.8rem', sm: '0.9rem' }
-                        }}
-                      >
-                        {member.date}
-                      </Typography>
+                      Girija❤️Kalyana
+                    </Typography>
+
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 1.5,
+              
+                      }}
+                    >
+                      {[
+                        { label: "RegNo:", value: member.registration_no },
+                        { label: "Name:", value: member.name },
+                        { label: "Age:", value: member.age },
+                        { label: "Caste:", value: member.caste },
+                        { label: "Education:", value: member.educational_qualification },
+                        { label: "Occupation:", value: member.occupation },
+                        { label: "City:", value: member.city },
+                      ].map((item, index) => (
+                        <Box key={index} sx={{ display: "flex" }}>
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              ml:3,
+                              fontWeight: "bold",
+                              width: "100px",
+                              fontFamily: "Outfit, sans-serif",
+                              color: "#fff",
+                              display:"flex",
+                            }}
+                          >
+                            {item.label}
+                          </Typography>
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              fontFamily: "Outfit, sans-serif",
+                              color: "#fff",
+                            }}
+                          >
+                            {item.value}
+                          </Typography>
+                        </Box>
+                      ))}
                     </Box>
                   </Paper>
                 </Box>
