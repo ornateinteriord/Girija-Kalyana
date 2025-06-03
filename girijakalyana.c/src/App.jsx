@@ -6,6 +6,8 @@ import './App.css';
 import ProfileProvider from './components/usecontext/ProfileProvider';
 import { ToastContainer } from 'react-toastify';
 import ProtectedRoute from './components/roterProtector/RouterProtector';
+import Register from './components/register/Register';
+import MembershipPlane from './components/membershipplan/MembershipPlane';
 
 // Create a query client with default options
 const queryClient = new QueryClient({
@@ -136,6 +138,8 @@ const App = () => {
             <Route path="/about" element={<AboutUs />} />
             <Route path="/privacy-policy" element={<Privacy />} />
             <Route path="/contact" element={<ContactUs />} />
+            <Route path="/register" element={<Register />} />
+             <Route path="/membership" element={<MembershipPlane />} />
 
             {/* Admin Routes */}
             <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}>
