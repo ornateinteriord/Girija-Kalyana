@@ -95,3 +95,12 @@ export const useGetDashboardStats = () => {
     },
   });
 };
+export const useGetRecentRegisters = () => {
+  return useQuery({
+    queryKey: ["recentregisters"],
+    queryFn: async () => {
+      const data = await get("/api/auth/recentregisters")
+      return data;
+    },
+  });
+};
