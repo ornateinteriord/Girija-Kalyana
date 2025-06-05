@@ -1,4 +1,4 @@
-import  { useState,} from "react";
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -10,10 +10,6 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import MembershipDialog from "../Userprofile/MembershipDailog/MembershipDailog";
-import { membershipOptions } from '../Userprofile/MembershipDailog/MemberShipPlans'
-
-
-
 
 const HomeUserTable = ({ userId }) => {
   const [selectedPlan, setSelectedPlan] = useState(null);
@@ -21,17 +17,18 @@ const HomeUserTable = ({ userId }) => {
   const [currentMembership, setCurrentMembership] = useState(null);
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
- 
-
-  const handleUpgrade = (plan) => {
-    setSelectedPlan(plan);
+  const handleUpgrade = () => {
+    const dummyPlan = {
+      type: "Premium",
+      price: "₹999",
+    };
+    setSelectedPlan(dummyPlan);
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
-
 
   return (
     <Box sx={{ width: "100%", overflowX: "hidden" }}>
@@ -44,14 +41,6 @@ const HomeUserTable = ({ userId }) => {
         }}
       >
         <Box textAlign="center" mb={3}>
-          <Typography
-            variant={isSmallScreen ? "h6" : "h5"}
-            fontWeight={700}
-            color="primary"
-            sx={{ fontSize: isSmallScreen ? "1.5rem" : "2rem" }}
-          >
-            Upgrade Your Membership
-          </Typography>
           <Typography
             variant="subtitle1"
             color="textSecondary"
@@ -108,77 +97,66 @@ const HomeUserTable = ({ userId }) => {
           </Box>
         )}
 
-        <Grid
-          container
-          spacing={isSmallScreen ? 2 : 4}
-          justifyContent="center"
-          sx={{
-            padding: isSmallScreen ? "0 8px" : 0,
-            marginLeft: isSmallScreen ? "-8px" : 0,
-          }}
-        >
-          {membershipOptions.map((option) => (
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={4}
-              key={option.type}
+        <Grid container justifyContent="center">
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              maxWidth: isSmallScreen ? "100%" : "400px",
+            }}
+          >
+            <Card
               sx={{
-                display: "flex",
-                justifyContent: "center",
-                maxWidth: isSmallScreen ? "100%" : "400px",
+                p: 0,
+                textAlign: "center",
+                boxShadow: 6,
+                borderRadius: 3,
+                position: "relative",
+                overflow: "hidden",
+                background: "linear-gradient(135deg,rgb(235, 247, 101) 0%,rgb(136, 126, 8) 100%)",
+                color: "#fff",
+                width:isSmallScreen? "300px": "500px",
+                marginBottom: "15px",
               }}
             >
-              <Card
-                sx={{
-                  p: 0,
-                  textAlign: "center",
-                  boxShadow: 6,
-                  borderRadius: 3,
-                  position: "relative",
-                  overflow: "hidden",
-                  background: option.gradient,
-                  color: "#fff",
-                  width: "300px",
-                  marginBottom: "15px",
-                }}
-              >
-                <CardContent sx={{ p: isSmallScreen ? 2 : 3 }}>
-                  <Typography
-                    variant={isSmallScreen ? "h6" : "h5"}
-                    fontWeight={700}
-                    sx={{ fontSize: isSmallScreen ? "1.25rem" : "1.5rem" }}
-                  >
-                    {option.type} Membership
-                  </Typography>
-                  <Typography
-                    variant={isSmallScreen ? "subtitle1" : "h6"}
-                    sx={{ mt: 0, opacity: 0.9 }}
-                  >
-                    {option.price}
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    sx={{
-                      mt: 2,
-                      backgroundColor: "#fff",
-                      color: "#333",
-                      fontWeight: "bold",
-                      borderRadius: "20px",
-                      textTransform: "capitalize",
-                      fontSize: isSmallScreen ? "0.875rem" : "1rem",
-                      padding: isSmallScreen ? "6px 16px" : "8px 22px",
-                      "&:hover": { backgroundColor: "#eee" },
-                    }}
-                    onClick={() => handleUpgrade(option)}
-                  >
-                    Upgrade to {option.type}
-                  </Button>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
+              <CardContent sx={{ p: isSmallScreen ? 2 : 3 }}>
+                <Typography
+                  variant={isSmallScreen ? "h6" : "h5"}
+                  fontWeight={700}
+                  sx={{ fontSize: isSmallScreen ? "1.25rem" : "1.5rem",color:'#000' }}
+                >
+                  Upgrade Your Membership
+                </Typography>
+                <Typography
+                  variant={isSmallScreen ? "subtitle1" : "h6"}
+                  sx={{ mt: 1, opacity: 0.9 ,color:'#000'}}
+                >
+                  Unlock premium features
+                </Typography>
+                <Button
+                  variant="contained"
+                  sx={{
+                    mt: 2,
+                    backgroundColor: "#fff",
+                    color: "#333",
+                    fontWeight: "bold",
+                    borderRadius: "20px",
+                    textTransform: "capitalize",
+                    fontSize: isSmallScreen ? "0.875rem" : "1rem",
+                    padding: isSmallScreen ? "6px 16px" : "8px 22px",
+                    "&:hover": { backgroundColor: "#eee" },
+                  }}
+                  onClick={handleUpgrade}
+                >
+                  Upgrade Now
+                </Button>
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
       </Container>
 
