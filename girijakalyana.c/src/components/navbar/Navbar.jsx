@@ -151,7 +151,7 @@ const Navbar = () => {
         handleCloseForgotPassword();
       },
       onError: (error) => {
-        toast.error(error.response?.data?.message || "Failed to reset password");
+        toast.error(error.response?.data?.message);
       }
     });
   };

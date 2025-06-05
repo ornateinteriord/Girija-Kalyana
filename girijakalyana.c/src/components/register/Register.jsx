@@ -48,14 +48,9 @@ const Register = () => {
       mutate(formData, {
         onSuccess: () => {
           toast.success(formData.message);
-          // Reset form or navigate
-        },
-        onError: (error) => {
-          toast.error(error.message);
         },
       });
     } catch (error) {
-      toast.error(error.message);
     }
   };
 

@@ -53,12 +53,11 @@ const UserDashboard = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "#f4f6f8",
         minHeight: "100vh",
         padding: {
           xs: "10px 12px",
           sm: "10px 16px",
-          md: "10px 24px",
+          md: "10px ",
         },
         mt: "0",
       }}
@@ -78,7 +77,7 @@ const UserDashboard = () => {
         >
           Welcome {userProfile?.first_name || "User"} {userProfile?.last_name || ""}
         </Typography>
-        <Divider sx={{ mt: 1 }} />
+        <Divider sx={{ mt: 1,height:'1px' }} />
       </Box>
 
       <Stack spacing={3}>
