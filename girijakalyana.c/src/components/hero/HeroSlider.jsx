@@ -10,12 +10,14 @@ import wall2 from '../../assets/wallpaper/wall2.jpg';
 import Navbar from "../navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 import "./HeroSlider.scss";
+import useAuth from "../hook/UseAuth";
 
 const HeroSlider = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
 
   const images = [
     { src: wall1, alt: "Happy Couple 1" },
@@ -129,47 +131,72 @@ const HeroSlider = () => {
               mt: isMobile ? 1 : 2,
             }}
           >
-            <Button
-              variant="contained"
-              size={isMobile ? "small" : "large"}
-              sx={{
-                backgroundColor: '#00796B',
-                '&:hover': {
-                  backgroundColor: '#004D40',
-                },
-                borderRadius: '8px',
-                textTransform: 'capitalize',
-                px: isMobile ? 2 : 4,
-                py: isMobile ? 1.5 : 1.5,
-                fontSize: isMobile ? '1rem' : '1rem',
-                fontFamily: 'Outfit, sans-serif',
-                minWidth: isMobile ? '120px' : '160px',
-              }}
-              onClick={() => navigate('/register')}
-            >
-              Free Register
-            </Button>
+            {isLoggedIn ? (
+              <Button
+                variant="contained"
+                size={isMobile ? "small" : "large"}
+                sx={{
+                  backgroundColor: '#00796B',
+                  '&:hover': {
+                    backgroundColor: '#004D40',
+                  },
+                  borderRadius: '8px',
+                  textTransform: 'capitalize',
+                  px: isMobile ? 2 : 4,
+                  py: isMobile ? 1.5 : 1.5,
+                  fontSize: isMobile ? '1rem' : '1rem',
+                  fontFamily: 'Outfit, sans-serif',
+                  minWidth: isMobile ? '160px' : '200px',
+                }}
+                onClick={() => navigate('/user/userDashboard')}
+              >
+                Get Started
+              </Button>
+            ) : (
+              <>
+                <Button
+                  variant="contained"
+                  size={isMobile ? "small" : "large"}
+                  sx={{
+                    backgroundColor: '#00796B',
+                    '&:hover': {
+                      backgroundColor: '#004D40',
+                    },
+                    borderRadius: '8px',
+                    textTransform: 'capitalize',
+                    px: isMobile ? 2 : 4,
+                    py: isMobile ? 1.5 : 1.5,
+                    fontSize: isMobile ? '1rem' : '1rem',
+                    fontFamily: 'Outfit, sans-serif',
+                    minWidth: isMobile ? '120px' : '160px',
+                  }}
+                  onClick={() => navigate('/register')}
+                >
+                  Free Register
+                </Button>
 
-            <Button
-              variant="contained"
-              size={isMobile ? "small" : "large"}
-              sx={{
-                backgroundColor: '#8E24AA',
-                '&:hover': {
-                  backgroundColor: '#6A1B9A',
-                },
-                borderRadius: '8px',
-                textTransform: 'capitalize',
-                px: isMobile ? 2 : 4,
-                py: isMobile ? 1.5 : 1.5,
-                fontSize: isMobile ? '1rem' : '1rem',
-                fontFamily: 'Outfit, sans-serif',
-                minWidth: isMobile ? '120px' : '160px',
-              }}
-              onClick={() => navigate('/membership')}
-            >
-              Premium
-            </Button>
+                <Button
+                  variant="contained"
+                  size={isMobile ? "small" : "large"}
+                  sx={{
+                    backgroundColor: '#8E24AA',
+                    '&:hover': {
+                      backgroundColor: '#6A1B9A',
+                    },
+                    borderRadius: '8px',
+                    textTransform: 'capitalize',
+                    px: isMobile ? 2 : 4,
+                    py: isMobile ? 1.5 : 1.5,
+                    fontSize: isMobile ? '1rem' : '1rem',
+                    fontFamily: 'Outfit, sans-serif',
+                    minWidth: isMobile ? '120px' : '160px',
+                  }}
+                  onClick={() => navigate('/membership')}
+                >
+                  Premium
+                </Button>
+              </>
+            )}
           </Box>
         </Content>
       </HeroWrapper>
