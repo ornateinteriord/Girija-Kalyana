@@ -105,12 +105,6 @@ const Navbar = () => {
     { text: "Contact Us", path: "/contact" },
   ];
 
-  const handleLogout = () => {
-    navigate("/");
-    TokenService.removeToken();
-    window.dispatchEvent(new Event("storage"));
-  };
-
   const handleSendOtp = () => {
     if (!email) {
       setForgotPasswordError("Email is required");
@@ -225,11 +219,11 @@ const Navbar = () => {
 
           {/* Auth Buttons */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            {isLoggedIn ? (
+            {!isLoggedIn && (
               <Button
                 variant="contained"
                 size={isMobile ? "medium" : "large"}
-                onClick={handleLogout}
+                onClick={handleOpen}
                 sx={{
                   backgroundColor: "black",
                   minWidth: "120px",
@@ -243,30 +237,8 @@ const Navbar = () => {
                   },
                 }}
               >
-                Logout
+                Login
               </Button>
-            ) : (
-              <>
-             <Button
-                  variant="contained"
-                  size={isMobile ? "medium" : "large"}
-                  onClick={handleOpen}
-                  sx={{
-                    backgroundColor: "black",
-                    minWidth: "120px",
-                    color: "#fff",
-                    fontWeight: 700,
-                    height: { xs: "36px", md: "42px" },
-                    textTransform: "capitalize",
-                    display: { xs: "none", sm: "inline-flex" },
-                    "&:hover": {
-                      backgroundColor: "#333333",
-                    },
-                  }}
-                >
-                  Login
-                </Button>
-              </>
             )}
           </Box>
         </div>
@@ -339,12 +311,12 @@ const Navbar = () => {
           </List>
 
           <Box sx={{ padding: "16px", marginTop: "auto" }}>
-            {isLoggedIn ? (
+            {!isLoggedIn && (
               <Button
                 variant="contained"
                 fullWidth
                 onClick={() => {
-                  handleLogout();
+                  handleOpen();
                   toggleMobileMenu();
                 }}
                 sx={{
@@ -358,31 +330,8 @@ const Navbar = () => {
                   },
                 }}
               >
-                Logout
+                Login
               </Button>
-            ) : (
-              <>
-                <Button
-                  variant="contained"
-                  fullWidth
-                  onClick={() => {
-                    handleOpen();
-                    toggleMobileMenu();
-                  }}
-                  sx={{
-                    backgroundColor: "black",
-                    color: "#fff",
-                    fontWeight: 700,
-                    height: "42px",
-                    textTransform: "capitalize",
-                    "&:hover": {
-                      backgroundColor: "#333333",
-                    },
-                  }}
-                >
-                  Login
-                </Button>
-              </>
             )}
           </Box>
         </Box>
