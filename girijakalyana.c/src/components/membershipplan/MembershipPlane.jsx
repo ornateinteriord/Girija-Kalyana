@@ -29,13 +29,15 @@ import {
 import Navbar from '../navbar/Navbar';
 import Footer from '../footer/Footer';
 import { membershipOptions } from "../../assets/memberShipOptions/MemberShipPlans";
+import { useNavigate } from 'react-router-dom';
+
 
 
 const MembershipPlans = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const navigate = useNavigate();
 
-  
 
   const benefits = [
     { icon: <Star color="primary" />, text: 'Premium quality matches' },
@@ -44,6 +46,18 @@ const MembershipPlans = () => {
     { icon: <Public color="info" />, text: 'Nationwide reach' },
     { icon: <PhoneAndroid color="success" />, text: 'Dedicated mobile app' }
   ];
+
+const handlePlanSelection = (planName) => {
+  const planRoles = {
+    'PREMIUM MEMBERSHIP': 'PremiumUser',
+    'SILVER MEMBERSHIP': 'SilverUser'
+  };
+
+  const planType = planRoles[planName] || 'FreeUser';
+  navigate(`/register?type=${planType}`);  
+  
+  console.log(`Navigating with plan type: ${planType}`);  
+};
 
   return (
     <>
@@ -308,24 +322,25 @@ const MembershipPlans = () => {
                 Validity: {plan.duration}
               </Typography>
 
-              <Button
-                variant="contained"
-                fullWidth
-                size="large"
-                sx={{
-                  bgcolor: 'white',
-                  color: plan.color,
-                  '&:hover': {
-                    bgcolor: 'rgba(255,255,255,0.9)',
-                  },
-                  py: 1.5,
-                  fontWeight: 700,
-                  borderRadius: 2,
-                  boxShadow: 2,
-                }}
-              >
-                Get Started
-              </Button>
+             <Button
+  variant="contained"
+  fullWidth
+  size="large"
+  sx={{
+    bgcolor: 'white',
+    color: plan.color,
+    '&:hover': {
+      bgcolor: 'rgba(255,255,255,0.9)',
+    },
+    py: 1.5,
+    fontWeight: 700,
+    borderRadius: 2,
+    boxShadow: 2,
+  }}
+  onClick={() => handlePlanSelection(plan.name)}
+>
+  Get Started
+</Button>
 
               <Typography
                 variant="body2"
