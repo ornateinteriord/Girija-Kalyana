@@ -13,7 +13,6 @@ import {
 import { FaMapMarkerAlt, FaBriefcase } from "react-icons/fa";
 import TokenService from "../../token/tokenService";
 import {
-  useGetAcceptedInterests,
   useGetAllUsersProfiles,
   useGetMemberDetails,
 } from "../../api/User/useGetProfileDetails";
@@ -26,8 +25,8 @@ import LifeStylePop from "../viewAll/popupContent/lifeStylePop/LifeStylePop";
 import PreferencePop from "../viewAll/popupContent/preferencePop/PreferencePop";
 import ProfileDialog from "../ProfileDialog/ProfileDialog";
 import GenderFilter from "../../../utils/Filters/GenderFilter";
-import { useVerifiedImage } from "../../hook/ImageVerification";
-import { useConnectionStatus } from "../../hook/ConnectionStatus";
+
+
 
 const MyMatches = () => {
   const [userCard, setUserCard] = useState([]);
@@ -37,12 +36,9 @@ const MyMatches = () => {
   const [openDialog, setOpenDialog] = useState(null);
   const [currentTab, setCurrentTab] = useState(0);
   const [selectedStatus, setSelectedStatus] = useState("all");
-  const {getVerifiedImage} = useVerifiedImage()
   const itemsPerPage = 8;
   const registerNo = TokenService.getRegistrationNo();
-  const loggedInUserRole = TokenService.getRole()
-  const { data: responseData } = useGetAcceptedInterests(registerNo);
-  const { getConnectionStatus } = useConnectionStatus(responseData);
+
 
   const {
     data: userProfile,
@@ -210,8 +206,6 @@ const MyMatches = () => {
 >
 
           {userCard.map((user) => {
-            const connectionStatus = getConnectionStatus(user.registration_no);
-    const imageSrc = getVerifiedImage(user, loggedInUserRole, connectionStatus);
            return(
             <Card
               key={user.registration_no}
@@ -258,7 +252,7 @@ const MyMatches = () => {
                 }}
               >
                 <Avatar
-                  src={imageSrc}
+                  src={user?.image}
                   alt="Profile"
                   sx={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
