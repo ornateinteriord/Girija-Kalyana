@@ -14,13 +14,11 @@ import {
 } from "@mui/material";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { FaHeart } from "react-icons/fa";
-import { useExpressInterest, useGetAcceptedInterests } from "../../api/User/useGetProfileDetails";
+import { useExpressInterest,} from "../../api/User/useGetProfileDetails";
 import { get } from "../../api/authHooks";
 import TokenService from "../../token/tokenService";
 import MembershipDialog from "../MembershipDailog/MembershipDailog";
 import {membershipOptions} from "../MembershipDailog/MemberShipPlans"
-import { useVerifiedImage } from "../../hook/ImageVerification";
-import { useConnectionStatus } from "../../hook/ConnectionStatus";
 
 const ProfileDialog = ({
   openDialog,
@@ -38,9 +36,6 @@ const ProfileDialog = ({
   const [membershipDialogOpen, setMembershipDialogOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const loggedInUserRole = TokenService.getRole();
-  const {getVerifiedImage} = useVerifiedImage()
-  const { data: responseData } = useGetAcceptedInterests(loggedInUserId);
-  const { getConnectionStatus } = useConnectionStatus(responseData);
 
   const fetchStatus = async () => {
     if (!loggedInUserRole || !loggedInUserId || !selectedUser?.registration_no) {
@@ -70,8 +65,6 @@ const ProfileDialog = ({
     }
   }, [openDialog,loggedInUserRole, loggedInUserId, selectedUser?.registration_no]);
 
-   const connectionStatus = getConnectionStatus(selectedUser?.registration_no);
-   const imageSrc = getVerifiedImage(selectedUser, loggedInUserRole, connectionStatus);
 
   const calculateAge = (dob) => {
     if (!dob) return null;
@@ -222,7 +215,7 @@ const ProfileDialog = ({
           >
             <CardMedia
               component="img"
-              src={imageSrc}
+              src={selectedUser?.image}
               sx={{
                 borderRadius: 2,
                 height: { xs: 200, sm: 250, md: 280 },

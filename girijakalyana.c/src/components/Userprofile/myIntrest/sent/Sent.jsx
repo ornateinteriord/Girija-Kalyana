@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState, useEffect } from "react";
+import  { useCallback, useMemo, useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -25,7 +25,7 @@ import EducationPop from "../../viewAll/popupContent/educationPop/EducationPop";
 import FamilyPop from "../../viewAll/popupContent/familyPop/FamilyPop";
 import AboutPop from "../../viewAll/popupContent/abouPop/AboutPop";
 import ProfileDialog from "../../ProfileDialog/ProfileDialog";
-import { useVerifiedImage } from "../../../hook/ImageVerification";
+
 
 const Sent = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -201,8 +201,7 @@ const InterestCard = ({
   handleOpenDialog,
   handleRequestCancelClick,
 }) =>{
-   const {getVerifiedImage} = useVerifiedImage()
-    const loggedInUserRole = TokenService.getRole()
+  
 
 return (
   <Card
@@ -251,7 +250,7 @@ return (
       }}
     >
       <Avatar
-        src={getVerifiedImage(profile,loggedInUserRole)}
+        src={profile?.image}
         sx={{ width: "100%", height: "100%" }}
       />
     </Box>

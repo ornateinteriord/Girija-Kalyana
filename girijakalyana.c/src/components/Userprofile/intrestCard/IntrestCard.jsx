@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+
 import {
   Card,
   CardContent,
@@ -10,9 +10,6 @@ import {
   Chip,
 } from "@mui/material";
 import { FaBriefcase, FaMapMarkerAlt } from "react-icons/fa";
-import { toast } from "react-toastify";
-import { useVerifiedImage } from "../../hook/ImageVerification";
-import TokenService from "../../token/tokenService";
 import { LoadingComponent } from "../../../App";
 
 const ProfileInfo = ({ label, value }) => (
@@ -27,8 +24,6 @@ const ProfileInfo = ({ label, value }) => (
 );
 
 const InterestCard = ({ senderData, handleResponse }) => {
-  const { getVerifiedImage } = useVerifiedImage();
-  const loggedInUserRole = TokenService.getRole();
 
   // No need for separate data fetching since we receive senderData directly
   if (!senderData) return <LoadingComponent />;
@@ -82,7 +77,7 @@ const InterestCard = ({ senderData, handleResponse }) => {
         }}
       >
         <Avatar
-          src={getVerifiedImage(senderData, loggedInUserRole)}
+          src={senderData?.image}
           alt={senderData?.first_name}
           sx={{
             width: "100%",
