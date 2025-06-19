@@ -124,7 +124,9 @@ const FamilyReligious = () => {
                     maxWidth: { xs: '100px', sm: 180 },
                     padding:{xs:0.6},
                     textTransform: 'capitalize',
-                    fontSize: '16px'
+                    fontSize: '16px',
+                     "&:hover": {
+        backgroundColor: isEditing ?  "transparent" : ""}
                   }}
                 >
                   {isEditing ? 'Cancel' : 'Edit Profile'}
@@ -138,7 +140,7 @@ const FamilyReligious = () => {
           <Typography variant="h6" fontWeight={600} gutterBottom>
             Religious Details
           </Typography>
-          <Divider sx={{ mb: 2 }} />
+
           <Box display="grid" gridTemplateColumns={{ xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' }} gap={2}>
             {[
               { name: 'religion', label: 'Religion' },
@@ -167,7 +169,7 @@ const FamilyReligious = () => {
           <Typography variant="h6" fontWeight={600} gutterBottom>
             Family Details
           </Typography>
-          <Divider sx={{ mb: 2 }} />
+
           <Box display="grid" gridTemplateColumns={{ xs: '1fr', sm: '1fr 1fr' }} gap={2}>
             <TextField
               label="Name of Parent"
@@ -202,27 +204,41 @@ const FamilyReligious = () => {
       </Stack>
 
       {/* Actions */}
-      {isEditing && (
-        <Box display="flex" justifyContent="flex-end" gap={2} mt={4}>
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={handleReset}
-            disabled={isUpdating}
-          >
-            Reset
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSave}
-            disabled={isUpdating}
-            startIcon={isUpdating ? <CircularProgress size={20} /> : null}
-          >
-            {isUpdating ? 'Saving...' : 'Save Changes'}
-          </Button>
-        </Box>
-      )}
+           {isEditing && (
+              <Box
+                display="flex"
+                justifyContent={{ xs: 'space-evenly', sm: 'flex-end' }}
+                gap={2}
+                mt={2}
+               
+              >
+                <Button
+                  variant="outlined"
+                  color="error"
+                  onClick={handleReset}
+                  disabled={isUpdating}
+                  fullWidth={true}
+                  sx={{ maxWidth: { xs: '160px', sm: 180 } ,
+                  textTransform:'capitalize',
+                     "&:hover": {
+              backgroundColor: "transparent"}}}
+                >
+                  Reset
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={handleSave}
+                  disabled={isUpdating}
+                  fullWidth={true}
+                  sx={{ maxWidth: { xs: '160px', sm: 200,textTransform:'capitalize', backgroundColor: "#34495e",
+            color: "#fff","&:hover": {
+              backgroundColor: "#4b6074"} } }}
+                  startIcon={isUpdating ? <CircularProgress size={20} /> : null}
+                >
+                  {isUpdating ? 'Saving...' : 'Save '}
+                </Button>
+              </Box>
+            )}
       {isLoading && <LoadingComponent/>}
     </Box>
   );

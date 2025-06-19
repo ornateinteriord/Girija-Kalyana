@@ -81,8 +81,6 @@ const UserNavBar = () => {
 
 const { mutate: changePassword, isPending } = useChangePassword();
 
-
-
   useEffect(() => {
     if (isError) {
       toast.error(error.message);
@@ -204,6 +202,16 @@ const handleSubmitPasswordChange = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+   useEffect(() => {
+    const savedItem = localStorage.getItem("selectedSidebarItem");
+    if (savedItem) {
+      setSelectedItem(savedItem);
+    }
+  }, []);
+   const handleSetSelectedItem = (item) => {
+    setSelectedItem(item);
+    localStorage.setItem("selectedSidebarItem", item);
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -297,7 +305,7 @@ const handleSubmitPasswordChange = () => {
   <Toolbar />
   <SidebarMenu
     selectedItem={selectedItem}
-    setSelectedItem={setSelectedItem}
+    setSelectedItem={handleSetSelectedItem}
     handleDashboardClick={handleDashboardClick}
     handleProfileClick={handleProfileClick}
     handleMatchesClick={handleMatchesClick}
@@ -335,8 +343,14 @@ const handleSubmitPasswordChange = () => {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseLogoutDialog} sx={{textTransform:'capitalize',fontSize:'18px',fontWeight:'bold'}}>Cancel</Button>
-            <Button onClick={handleConfirmLogout} sx={{textTransform:'capitalize',fontSize:'18px',fontWeight:'bold'}} autoFocus color="error">
+            <Button onClick={handleCloseLogoutDialog} 
+            sx={{textTransform:'capitalize',fontSize:'18px',
+            fontWeight:'bold',"&:hover": {
+        backgroundColor: "transparent"}}}>Cancel</Button>
+            <Button onClick={handleConfirmLogout} 
+            sx={{textTransform:'capitalize',fontSize:'18px',
+            fontWeight:'bold',"&:hover": {
+        backgroundColor: "transparent"}}} autoFocus color="error">
               Logout
             </Button>
           </DialogActions>
@@ -382,10 +396,17 @@ const handleSubmitPasswordChange = () => {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseChangePassword} sx={{textTransform:'capitalize',fontSize:'18px',fontWeight:'bold'}} color="primary">
+            <Button onClick={handleCloseChangePassword} 
+            sx={{textTransform:'capitalize',fontSize:'18px',
+            fontWeight:'bold',
+            "&:hover": {
+        backgroundColor:  "transparent" }}} color="primary">
               Cancel
             </Button>
-           <Button onClick={handleSubmitPasswordChange}  sx={{textTransform:'capitalize',fontSize:'18px',color:'green',fontWeight:'bold'}}  disabled={isPending}>
+           <Button onClick={handleSubmitPasswordChange}  
+           sx={{textTransform:'capitalize',fontSize:'18px',
+           color:'green',fontWeight:'bold',"&:hover": {
+        backgroundColor: "transparent"}}}  disabled={isPending}>
   {isPending ? "Changing..." : "Submit"}
 </Button>
 

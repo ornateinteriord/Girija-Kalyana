@@ -58,21 +58,27 @@ const handleTabChange = (event, newValue) => {
         <Typography variant="h5" fontWeight={900} color="#34495e">
           Interested Profiles
         </Typography>
-        <Divider sx={{ marginTop: 1 }} />
+
       </Box>
 
       {/* Tabs Section */}
-      <Tabs
-        value={tabValue}
-        onChange={handleTabChange}
-        variant="scrollable"
-        scrollButtons="auto"
-        sx={{ marginBottom: 2 }}
-      >
-        <Tab label={`Accepted (${counts.accepted})`} />
-        <Tab label={`Requests (${counts.requests})`} />
-        <Tab label={`Sent (${counts.sent})`} />
-      </Tabs>
+    <Tabs
+  value={tabValue}
+  onChange={handleTabChange}
+  variant="scrollable"
+  scrollButtons="auto"
+  sx={{
+    mb: 2,
+    "& .MuiTab-root:hover": {
+      backgroundColor: "rgba(0, 0, 0, 0.04)", 
+    },
+  }}
+>
+  <Tab label={`Accepted (${counts.accepted})`} />
+  <Tab label={`Requests (${counts.requests})`} />
+  <Tab label={`Sent (${counts.sent})`} />
+</Tabs>
+
 
       {/* Content Section */}
       <Box sx={{ padding: 0, backgroundColor: "#fff", borderRadius: 2, boxShadow: 1, color: "black" }}>

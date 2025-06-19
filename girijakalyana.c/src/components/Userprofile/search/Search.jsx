@@ -26,7 +26,7 @@ const itemsPerPage = 8;
 
 const ProfileInfo = ({ label, value }) => (
   <Box sx={{ textAlign: "center" }}>
-    <Typography variant="body2" fontWeight="bold">
+    <Typography variant="body2" fontWeight="bold" color="#000">
       {label}
     </Typography>
     <Typography variant="body2" color="text.secondary">
@@ -183,27 +183,27 @@ const Search = () => {
           }}
         >
           <Box sx={{ textAlign: "center", mb: 0.5 }}>
-            <Typography fontWeight="bold" fontSize="1rem">
+            <Typography fontWeight="bold" color="#000" fontSize="1rem">
               {user.first_name} {user.last_name}
             </Typography>
             <Typography color="text.secondary">{age || "N/A"} yrs</Typography>
           </Box>
 
           <Box sx={{ display: "flex", alignItems: "center",justifyContent:'center', mb: 0.5 }}>
-            <FaBriefcase size={14} color="#777" style={{ marginRight: 6 }} />
-            <Typography variant="body2" color="text.secondary">
+            <FaBriefcase size={14} color="#000" style={{ marginRight: 6 }} />
+            <Typography variant="body2" color="#000">
               {user.occupation || "Not specified"}
             </Typography>
           </Box>
 
           <Box sx={{ display: "flex", alignItems: "center",justifyContent:'center', mb: 1 }}>
-            <FaMapMarkerAlt size={14} color="#777" style={{ marginRight: 6 }} />
-            <Typography variant="body2">
+            <FaMapMarkerAlt size={14} color="#000" style={{ marginRight: 6 }} />
+            <Typography variant="body2" color="#000">
               {[user.city, user.state].filter(Boolean).join(", ") || "Location not specified"}
             </Typography>
           </Box>
 
-          <Divider sx={{ my: 1}} />
+          <Divider sx={{ my: 1, height:'1px'}} />
 
           <Box display="flex" justifyContent="space-around" my={2}>
             <ProfileInfo label="Height" value={user.height || "N/A"} />

@@ -125,6 +125,8 @@ const userData = sessionStorage.getItem("userData");
             borderColor: "#34495e",
             color: "black",
               textTransform:'capitalize',
+               "&:hover": {
+        backgroundColor:  "transparent"}
            
           }}
         >

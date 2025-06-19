@@ -25,6 +25,7 @@ import EducationPop from "../../viewAll/popupContent/educationPop/EducationPop";
 import FamilyPop from "../../viewAll/popupContent/familyPop/FamilyPop";
 import AboutPop from "../../viewAll/popupContent/abouPop/AboutPop";
 import ProfileDialog from "../../ProfileDialog/ProfileDialog";
+import { LoadingComponent } from "../../../../App";
 
 
 const Sent = () => {
@@ -119,9 +120,7 @@ const Sent = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      {isLoading ? (
-        <Typography>Loading...</Typography>
-      ) : sentData.length === 0 ? (
+      {!isLoading && sentData.length === 0 ? (
         <Typography>You haven't sent any interest requests.</Typography>
       ) : (
         <>
@@ -191,6 +190,11 @@ const Sent = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      {isLoading && (
+        <Box mt={4} display="flex" justifyContent="center">
+          <LoadingComponent />
+        </Box>
+      )}
     </Box>
   );
 };
@@ -266,7 +270,7 @@ return (
         px: { xs: 1, sm: 2 },
       }}
     >
-      <Typography fontWeight="bold" sx={{ mb: 0.5 }}>
+      <Typography fontWeight="bold" sx={{ mb: 0.5.toExponential, color:"#000" }}>
         {profile.first_name} {profile.last_name}
       </Typography>
       <Typography component="span" color="text.secondary">
@@ -274,8 +278,8 @@ return (
       </Typography>
 
       <Box sx={{ display: "flex", alignItems: "center", mb: 0.5 }}>
-        <FaBriefcase size={14} color="#777" style={{ marginRight: 6 }} />
-        <Typography variant="body2" color="text.secondary">
+        <FaBriefcase size={14} color="#000" style={{ marginRight: 6 }} />
+        <Typography variant="body2" color="#000">
           {profile.occupation || "Not specified"}
         </Typography>
       </Box>
@@ -296,13 +300,14 @@ return (
         <ProfileInfo label="Religion" value={profile.religion || "N/A"} />
         <ProfileInfo label="Caste" value={profile.caste || "N/A"} />
       </Box>
-<Box>
+      <Box display="flex" flexDirection="row" gap={1} width={"100%"}>
       <Button
         fullWidth
         variant="contained"
         color="primary"
         onClick={() => handleOpenDialog(profile)}
         sx={{
+          flex: 1,
           mt: "auto",
           borderRadius: 2,
           py: 1,
@@ -320,12 +325,14 @@ return (
         color="primary"
         onClick={() => handleRequestCancelClick(interestId)}
         sx={{
+          flex: 1,
           mt: 1,
           borderRadius: 2,
           py: 1,
           textTransform: "none",
           fontWeight: "bold",
           fontSize: { xs: "0.8rem", sm: "0.7rem" },
+          "&:hover": { backgroundColor: "transparent" },
         }}
       >
         Cancel Request

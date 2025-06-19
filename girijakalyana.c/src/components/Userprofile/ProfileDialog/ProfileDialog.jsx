@@ -272,6 +272,9 @@ const ProfileDialog = ({
                   fontSize: { xs: "0.7rem", sm: "0.8rem" },
                   minWidth: "unset",
                   padding: { xs: "6px 8px", sm: "12px 16px" },
+                   "&:hover": {
+                     backgroundColor: "transparent", 
+                   },
                 },
               }}
             >
@@ -319,6 +322,7 @@ const ProfileDialog = ({
             <Typography
               variant="body1"
               fontWeight="bold"
+              color="#000"
               sx={{ fontSize: { xs: "0.9rem", sm: "1rem" } }}
             >
               Verified Profile
@@ -362,6 +366,11 @@ const ProfileDialog = ({
               variant="outlined"
               onClick={() => setOpenDialog(false)}
               fullWidth={window.innerWidth < 600}
+              sx={{
+                 "&:hover": {
+        backgroundColor: "transparent", // transparent hover effect
+      },
+              }}
             >
               Close
             </Button>

@@ -186,6 +186,7 @@ const ViewAll = () => {
           <Box sx={{ textAlign: "center", mb: 0.5 }}>
             <Typography
               fontWeight="bold"
+              color="#000"
               sx={{
                 fontSize: { xs: "16px", sm: "17px", md: "16px", lg: "17px" },
               }}
@@ -205,8 +206,8 @@ const ViewAll = () => {
               fontSize: { xs: "0.8rem", sm: "0.9rem" },
             }}
           >
-            <FaBriefcase size={14} color="#777" style={{ marginRight: 6 }} />
-            <Typography variant="body2" color="text.secondary">
+            <FaBriefcase size={14} color="#000" style={{ marginRight: 6 }} />
+            <Typography variant="body2" color="#000">
               {user.occupation || "Not specified"}
             </Typography>
           </Box>
@@ -221,15 +222,15 @@ const ViewAll = () => {
               fontSize: { xs: "0.8rem", sm: "0.9rem" },
             }}
           >
-            <FaMapMarkerAlt size={14} color="#777" style={{ marginRight: 6 }} />
-            <Typography variant="body2">
+            <FaMapMarkerAlt size={14} color="#000" style={{ marginRight: 6 }} />
+            <Typography variant="body2" color="#000">
               {[user.city, user.state, user.country]
                 .filter(Boolean)
                 .join(", ") || "Location not specified"}
             </Typography>
           </Box>
 
-          <Divider sx={{ my: 1 }} />
+          <Divider sx={{  my: 1, height:'1px' }} />
 
           {/* Details row */}
           <Box display="flex" justifyContent="space-around" width="100%" my={2}>

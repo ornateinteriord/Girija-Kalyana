@@ -114,7 +114,9 @@ const About = () => {
             maxWidth: { xs: '100px', sm: 180 },
             padding:{xs:0.6},
             textTransform: 'capitalize',
-            fontSize: '16px'
+            fontSize: '16px',
+            "&:hover": {
+        backgroundColor: isEditing ?  "transparent" : ""}
           }}
         >
           {isEditing ? 'Cancel' : 'Edit Profile'}
@@ -200,20 +202,24 @@ const About = () => {
             onClick={handleReset}
             disabled={isUpdating}
             fullWidth={true}
-            sx={{ maxWidth: { xs: '160px', sm: 180 } }}
+            sx={{ maxWidth: { xs: '160px', sm: 180 } ,
+            textTransform:'capitalize',
+               "&:hover": {
+        backgroundColor: "transparent"}}}
           >
             Reset
           </Button>
           <Button
             variant="contained"
-            color="primary"
             onClick={handleSave}
             disabled={isUpdating}
             fullWidth={true}
-            sx={{ maxWidth: { xs: '160px', sm: 200 } }}
+            sx={{ maxWidth: { xs: '160px', sm: 200,textTransform:'capitalize', backgroundColor: "#34495e",
+            color: "#fff","&:hover": {
+              backgroundColor: "#4b6074"} } }}
             startIcon={isUpdating ? <CircularProgress size={20} /> : null}
           >
-            {isUpdating ? 'Saving...' : 'Save Changes'}
+            {isUpdating ? 'Saving...' : 'Save'}
           </Button>
         </Box>
       )}
