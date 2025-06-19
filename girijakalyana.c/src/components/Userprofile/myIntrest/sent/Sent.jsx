@@ -25,12 +25,8 @@ import EducationPop from "../../viewAll/popupContent/educationPop/EducationPop";
 import FamilyPop from "../../viewAll/popupContent/familyPop/FamilyPop";
 import AboutPop from "../../viewAll/popupContent/abouPop/AboutPop";
 import ProfileDialog from "../../ProfileDialog/ProfileDialog";
-<<<<<<< HEAD
 import { useVerifiedImage } from "../../../hook/ImageVerification";
 import { LoadingComponent } from "../../../../App";
-=======
-
->>>>>>> 9be65058cefcc7e8bebc92f8d082d6cf2c6beba2
 
 const Sent = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -208,20 +204,15 @@ const InterestCard = ({
   interestId,
   profile,
   handleOpenDialog,
-  handleRequestCancelClick,
-<<<<<<< HEAD
+  handleRequestCancelClick
 }) => {
   const { getVerifiedImage } = useVerifiedImage();
   const loggedInUserRole = TokenService.getRole();
-=======
 }) =>{
   
->>>>>>> 9be65058cefcc7e8bebc92f8d082d6cf2c6beba2
-
   return (
     <Card
       sx={{
-<<<<<<< HEAD
         width: { xs: 300, sm: 280, md: 260, lg: 280 },
         borderRadius: 4,
         boxShadow: 3,
@@ -231,7 +222,6 @@ const InterestCard = ({
           transform: "translateY(-4px)",
           boxShadow: 6,
         },
-=======
         width: { xs: 100, sm: 120 },
         height: { xs: 100, sm: 120 },
         borderRadius: "50%",
@@ -251,7 +241,6 @@ const InterestCard = ({
     <CardContent
       sx={{
         width: "100%",
->>>>>>> 9be65058cefcc7e8bebc92f8d082d6cf2c6beba2
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
