@@ -17,7 +17,7 @@ import { LoadingComponent } from "../../../App";
 
 const ProfileInfo = ({ label, value }) => (
   <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-    <Typography variant="body2" color="text.secondary" sx={{ fontWeight: "bold" }}>
+    <Typography variant="body2" color="text.secondary" sx={{ fontWeight: "bold",color:'#000' }}>
       {label}
     </Typography>
     <Typography variant="body2" color="text.secondary">
@@ -103,7 +103,7 @@ const InterestCard = ({ senderData, handleResponse }) => {
           px: { xs: 1, sm: 2 },
         }}
       >
-        <Typography fontWeight="bold" sx={{ mb: 0.5 }}>
+        <Typography fontWeight="bold" sx={{ mb: 0.5, color:'#000' }}>
           {senderData?.first_name} {senderData?.last_name}
         </Typography>
         <Typography component="span" color="text.secondary" sx={{ ml: 1 }}>
@@ -119,8 +119,8 @@ const InterestCard = ({ senderData, handleResponse }) => {
             fontSize: { xs: "0.8rem", sm: "0.9rem" },
           }}
         >
-          <FaBriefcase size={14} color="#777" style={{ marginRight: 6 }} />
-          <Typography variant="body2" color="text.secondary">
+          <FaBriefcase size={14} color='#000' style={{ marginRight: 6 }} />
+          <Typography variant="body2" color='#000' >
             {senderData?.occupation || "Not specified"}
           </Typography>
         </Box>
@@ -134,15 +134,15 @@ const InterestCard = ({ senderData, handleResponse }) => {
             fontSize: { xs: "0.8rem", sm: "0.9rem" },
           }}
         >
-          <FaMapMarkerAlt size={14} color="#777" style={{ marginRight: 6 }} />
-          <Typography variant="body2">
+          <FaMapMarkerAlt size={14} color='#000' style={{ marginRight: 6 }} />
+          <Typography variant="body2" color='#000'>
             {[senderData?.city, senderData?.state, senderData?.country]
               .filter(Boolean)
               .join(", ") || "Location not specified"}
           </Typography>
         </Box>
 
-        <Divider sx={{ my: 1 }} />
+       <Divider sx={{ my: 1, width: "100%", borderColor: "#ccc" }} />
 
         <Box display="flex" justifyContent="space-around" width="100%" my={2}>
           <ProfileInfo label="Height" value={senderData?.height || "N/A"} />

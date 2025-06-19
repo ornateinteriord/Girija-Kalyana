@@ -26,7 +26,7 @@ import { useConnectionStatus } from "../../../../hook/ConnectionStatus";
 
 const ProfileInfo = ({ label, value }) => (
   <Box sx={{ textAlign: "center" }}>
-    <Typography variant="body2" fontWeight="bold">{label}</Typography>
+    <Typography variant="body2" fontWeight="bold" color="#000">{label}</Typography>
     <Typography variant="body2" color="text.secondary">{value}</Typography>
   </Box>
 );
@@ -147,7 +147,7 @@ const Accepted = () => {
                     </Box>
 
                     <CardContent sx={{ width: "100%", textAlign: "center", px: 2 }}>
-                      <Typography fontWeight="bold" gutterBottom>
+                      <Typography fontWeight="bold" gutterBottom color={"#000"}>
                         {profile.first_name} {profile.last_name}
                       </Typography>
                       <Typography color="text.secondary">
@@ -158,7 +158,7 @@ const Accepted = () => {
                         sx={{ display: "flex",alignItems:'center', justifyContent: "center", gap: 1, mt: 1 }}
                       >
                         <FaBriefcase size={14} color="#777" />
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body2" color={"#000"}>
                           {profile.occupation || "Not specified"}
                         </Typography>
                       </Box>
@@ -167,16 +167,16 @@ const Accepted = () => {
                         sx={{ display: "flex",alignItems:'center', justifyContent: "center", gap: 1, mt: 1 }}
                       >
                         <FaMapMarkerAlt size={14} color="#777" />
-                        <Typography variant="body2">
+                        <Typography variant="body2" color={"#000"}>
                           {[profile.city, profile.state, profile.country]
                             .filter(Boolean)
                             .join(", ") || "Location not specified"}
                         </Typography>
                       </Box>
 
-                      <Divider sx={{ my: 1}} />
+                      <Divider sx={{ my: 1, height:'1px'}} />
 
-                      <Box display="flex" justifyContent="space-around" mb={2}>
+                      <Box display="flex" justifyContent="space-around" mb={2} color={"#000"}>
                         <ProfileInfo label="Height" value={profile.height || "N/A"} />
                         <ProfileInfo label="Religion" value={profile.religion || "N/A"} />
                         <ProfileInfo label="Caste" value={profile.caste || "N/A"} />

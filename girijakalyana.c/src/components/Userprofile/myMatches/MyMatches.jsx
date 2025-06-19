@@ -224,9 +224,10 @@ const MyMatches = () => {
                 overflow: "hidden",
                 transition: "transform 0.3s",
                 "&:hover": { transform: "translateY(-5px)" },
-                display: "flex", // Add flex display
-                flexDirection: "column", // Stack children vertically
-                height: "100%", // Take full height available
+                display: "flex", 
+                flexDirection: "column", 
+                height: "100%", 
+                color: "#000"
               }}
             >
               {/* Premium badge */}
@@ -269,13 +270,13 @@ const MyMatches = () => {
                 sx={{
                   textAlign: "center",
                   p: 0,
-                  flexGrow: 1, // Allow this section to grow and take available space
+                  flexGrow: 1, 
                   display: "flex",
                   flexDirection: "column",
                 }}
               >
                 <Box>
-                  <Typography fontWeight="bold">
+                  <Typography fontWeight="bold"  color={"#000"}>
                     {user.first_name} {user.last_name}{" "}
                   </Typography>
                   <Typography component="span" color="text.secondary">
@@ -288,9 +289,10 @@ const MyMatches = () => {
                   justifyContent="center"
                   mt={1}
                   gap={0.5}
+                  
                 >
                   <FaBriefcase size={14} />
-                  <Typography variant="body2">
+                  <Typography variant="body2" color={"#000"}>
                     {user.occupation || "Not specified"}
                   </Typography>
                 </Box>
@@ -303,14 +305,14 @@ const MyMatches = () => {
                   gap={0.5}
                 >
                   <FaMapMarkerAlt size={14} />
-                  <Typography variant="body2">
+                  <Typography variant="body2" color={"#000"}>
                     {[user.city, user.state, user.country]
                       .filter(Boolean)
                       .join(", ") || "Location not specified"}
                   </Typography>
                 </Box>
 
-                <Divider sx={{ my: 1 }} />
+                <Divider sx={{ my: 1, height:'1px' }} />
 
                 {/* Additional Details */}
                 <Box display="flex" justifyContent="space-around">
