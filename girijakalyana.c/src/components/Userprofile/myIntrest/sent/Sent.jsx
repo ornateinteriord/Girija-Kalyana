@@ -208,8 +208,6 @@ const InterestCard = ({
 }) => {
   const { getVerifiedImage } = useVerifiedImage();
   const loggedInUserRole = TokenService.getRole();
-}) =>{
-  
   return (
     <Card
       sx={{
