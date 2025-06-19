@@ -19,6 +19,7 @@ import { get } from "../../api/authHooks";
 import TokenService from "../../token/tokenService";
 import MembershipDialog from "../MembershipDailog/MembershipDailog";
 import {membershipOptions} from "../MembershipDailog/MemberShipPlans"
+import Profileimage from '../../../assets/profile.jpg'
 
 const ProfileDialog = ({
   openDialog,
@@ -215,7 +216,7 @@ const ProfileDialog = ({
           >
             <CardMedia
               component="img"
-              src={selectedUser?.image}
+              src={selectedUser?.image || Profileimage}
               sx={{
                 borderRadius: 2,
                 height: { xs: 200, sm: 250, md: 280 },
