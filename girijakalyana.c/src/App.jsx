@@ -141,7 +141,7 @@ const App = () => {
             <Route path="/privacy-policy" element={<Privacy />} />
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/register" element={<Register />} />
-             <Route path="/membership" element={<MembershipPlane />} />
+             <Route path="/membership" element={<MembershipPlan />} />
 
             {/* Admin Routes */}
             <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}>

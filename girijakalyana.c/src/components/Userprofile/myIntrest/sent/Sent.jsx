@@ -1,4 +1,4 @@
-import  { useCallback, useMemo, useState, useEffect } from "react";
+import { useCallback, useMemo, useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -27,7 +27,6 @@ import AboutPop from "../../viewAll/popupContent/abouPop/AboutPop";
 import ProfileDialog from "../../ProfileDialog/ProfileDialog";
 import { LoadingComponent } from "../../../../App";
 
-
 const Sent = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [openDialog, setOpenDialog] = useState(false);
@@ -46,7 +45,6 @@ const Sent = () => {
     isError,
     error,
   } = useGetSentInterests(currentUserRegistrationNo);
-
 
   useEffect(() => {
     if (isError) {
@@ -144,7 +142,7 @@ const Sent = () => {
             ))}
           </Box>
 
-          {totalPages >= 1 && (
+          {totalPages > 1 && (
             <Box sx={{ display: "flex", justifyContent: "end", mt: 4 }}>
               <Pagination
                 count={totalPages}
@@ -190,6 +188,7 @@ const Sent = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
       {isLoading && (
         <Box mt={4} display="flex" justifyContent="center">
           <LoadingComponent />
@@ -204,143 +203,139 @@ const InterestCard = ({
   profile,
   handleOpenDialog,
   handleRequestCancelClick,
-}) =>{
-  
-
-return (
-  <Card
-    sx={{
-      width: { xs: 300, sm: 280, md: 260, lg: 280 },
-      borderRadius: 4,
-      boxShadow: 3,
-      overflow: "hidden",
-      transition: "transform 0.2s",
-      "&:hover": {
-        transform: "translateY(-4px)",
-        boxShadow: 6,
-      },
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      pt: 1,
-      position: "relative",
-    }}
-  >
-    {profile.user_role === "PremiumUser" && (
-      <Chip
-        label="PREMIUM"
-        color="primary"
-        size="small"
-        sx={{
-          position: "absolute",
-          top: 12,
-          right: 12,
-          fontWeight: "bold",
-          fontSize: { xs: "0.6rem", sm: "0.7rem" },
-        }}
-      />
-    )}
-
-    <Box
+}) => {
+  return (
+    <Card
       sx={{
-        width: { xs: 100, sm: 120 },
-        height: { xs: 100, sm: 120 },
-        borderRadius: "50%",
-        border: "3px solid #87CEEB",
-        boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-        mb: 1,
-        padding: "2px",
-        background: "linear-gradient(45deg, #87CEEB, #E0F7FA)",
-      }}
-    >
-      <Avatar
-        src={profile?.image}
-        sx={{ width: "100%", height: "100%" }}
-      />
-    </Box>
-
-    <CardContent
-      sx={{
-        width: "100%",
+        width: { xs: 300, sm: 280, md: 260, lg: 280 },
+        borderRadius: 4,
+        boxShadow: 3,
+        overflow: "hidden",
+        transition: "transform 0.2s",
+        "&:hover": {
+          transform: "translateY(-4px)",
+          boxShadow: 6,
+        },
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        textAlign: "center",
-        pt: 0,
-        px: { xs: 1, sm: 2 },
+        pt: 1,
+        position: "relative",
       }}
     >
-      <Typography fontWeight="bold" sx={{ mb: 0.5.toExponential, color:"#000" }}>
-        {profile.first_name} {profile.last_name}
-      </Typography>
-      <Typography component="span" color="text.secondary">
-        {profile.age || "N/A"} yrs
-      </Typography>
+      {profile.user_role === "PremiumUser" && (
+        <Chip
+          label="PREMIUM"
+          color="primary"
+          size="small"
+          sx={{
+            position: "absolute",
+            top: 12,
+            right: 12,
+            fontWeight: "bold",
+            fontSize: { xs: "0.6rem", sm: "0.7rem" },
+          }}
+        />
+      )}
 
-      <Box sx={{ display: "flex", alignItems: "center", mb: 0.5 }}>
-        <FaBriefcase size={14} color="#000" style={{ marginRight: 6 }} />
-        <Typography variant="body2" color="#000">
-          {profile.occupation || "Not specified"}
-        </Typography>
-      </Box>
-
-      <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-        <FaMapMarkerAlt size={14} color="#777" style={{ marginRight: 6 }} />
-        <Typography variant="body2">
-          {[profile.city, profile.state, profile.country]
-            .filter(Boolean)
-            .join(", ") || "Location not specified"}
-        </Typography>
-      </Box>
-
-      <Divider sx={{ width:'100%', my: 1 }} />
-
-      <Box display="flex" justifyContent="space-around" width="100%" my={2}>
-        <ProfileInfo  label="Height" value={profile.height || "N/A"} />
-        <ProfileInfo label="Religion" value={profile.religion || "N/A"} />
-        <ProfileInfo label="Caste" value={profile.caste || "N/A"} />
-      </Box>
-      <Box display="flex" flexDirection="row" gap={1} width={"100%"}>
-      <Button
-        fullWidth
-        variant="contained"
-        color="primary"
-        onClick={() => handleOpenDialog(profile)}
+      <Box
         sx={{
-          flex: 1,
-          mt: "auto",
-          borderRadius: 2,
-          py: 1,
-          textTransform: "none",
-          fontWeight: "bold",
-          fontSize: { xs: "0.8rem", sm: "0.9rem" },
+          width: { xs: 100, sm: 120 },
+          height: { xs: 100, sm: 120 },
+          borderRadius: "50%",
+          border: "3px solid #87CEEB",
+          boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+          mb: 1,
+          padding: "2px",
+          background: "linear-gradient(45deg, #87CEEB, #E0F7FA)",
         }}
       >
-        View More
-      </Button>
+        <Avatar src={profile?.image} sx={{ width: "100%", height: "100%" }} />
+      </Box>
 
-      <Button
-        fullWidth
-        variant="outlined"
-        color="primary"
-        onClick={() => handleRequestCancelClick(interestId)}
+      <CardContent
         sx={{
-          flex: 1,
-          mt: 1,
-          borderRadius: 2,
-          py: 1,
-          textTransform: "none",
-          fontWeight: "bold",
-          fontSize: { xs: "0.8rem", sm: "0.7rem" },
-          "&:hover": { backgroundColor: "transparent" },
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          textAlign: "center",
+          pt: 0,
+          px: { xs: 1, sm: 2 },
         }}
       >
-        Cancel Request
-      </Button>
-      </Box>
-    </CardContent>
-  </Card>
-)};
+        <Typography fontWeight="bold" sx={{ mb: 0.5, color: "#000" }}>
+          {profile.first_name} {profile.last_name}
+        </Typography>
+        <Typography component="span" color="text.secondary">
+          {profile.age || "N/A"} yrs
+        </Typography>
+
+        <Box sx={{ display: "flex", alignItems: "center", mb: 0.5 }}>
+          <FaBriefcase size={14} color="#000" style={{ marginRight: 6 }} />
+          <Typography variant="body2" color="#000">
+            {profile.occupation || "Not specified"}
+          </Typography>
+        </Box>
+
+        <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+          <FaMapMarkerAlt size={14} color="#000" style={{ marginRight: 6 }} />
+          <Typography variant="body2" color="#000">
+            {[profile.city, profile.state, profile.country].filter(Boolean).join(", ") ||
+              "Location not specified"}
+          </Typography>
+        </Box>
+
+        <Divider sx={{ width: "100%", my: 1, height:'1px' }} />
+
+        <Box display="flex" justifyContent="space-around" width="100%" my={2}>
+          <ProfileInfo label="Height" value={profile.height || "N/A"} />
+          <ProfileInfo label="Religion" value={profile.religion || "N/A"} />
+          <ProfileInfo label="Caste" value={profile.caste || "N/A"} />
+        </Box>
+
+        <Box display="flex" flexDirection="row" gap={1} width="100%">
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            onClick={() => handleOpenDialog(profile)}
+            sx={{
+              flex: 1,
+              mt: "auto",
+              borderRadius: 2,
+              py: 1,
+              textTransform: "none",
+              fontWeight: "bold",
+              fontSize: { xs: "0.8rem", sm: "0.9rem" },
+            }}
+          >
+            View More
+          </Button>
+
+          <Button
+            fullWidth
+            variant="outlined"
+            color="primary"
+            onClick={() => handleRequestCancelClick(interestId)}
+            sx={{
+              flex: 1,
+              mt: 1,
+              borderRadius: 2,
+              py: 1,
+              textTransform: "none",
+              fontWeight: "bold",
+              fontSize: { xs: "0.8rem", sm: "0.7rem" },
+              "&:hover": { backgroundColor: "transparent" },
+            }}
+          >
+            Cancel Request
+          </Button>
+        </Box>
+      </CardContent>
+    </Card>
+  );
+};
 
 const ProfileInfo = ({ label, value }) => (
   <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
