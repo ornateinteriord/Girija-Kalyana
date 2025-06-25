@@ -8,6 +8,8 @@ import { ToastContainer } from 'react-toastify';
 import ProtectedRoute from './components/roterProtector/RouterProtector';
 import Register from './components/register/Register';
 import MembershipPlane from './components/membershipplan/MembershipPlane';
+import PromotersDashboard from './components/PromotersDash/PromotersDashboard';
+import AdminProfileDialog from './components/Adminprofile/AdminProfile';
 
 // Create a query client with default options
 const queryClient = new QueryClient({
@@ -165,6 +167,12 @@ const App = () => {
               <Route path="receiptsreports" element={<ReceiptsReportsData />} />
               <Route path="notification" element={<NotificationData />} />
             </Route>
+            </Route>
+           
+             {/* <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}> */}
+            <Route>
+            <Route path="/PromotAdmin" element={<PromotersDashboard />}></Route>
+              <Route path="/admin-profile" element={<AdminProfileDialog />} />
             </Route>
 
             {/* User Routes */}
