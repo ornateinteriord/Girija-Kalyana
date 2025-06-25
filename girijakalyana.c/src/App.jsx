@@ -7,7 +7,7 @@ import ProfileProvider from './components/usecontext/ProfileProvider';
 import { ToastContainer } from 'react-toastify';
 import ProtectedRoute from './components/roterProtector/RouterProtector';
 import Register from './components/register/Register';
-import MembershipPlane from './components/membershipplan/MembershipPlane';
+import MembershipPlan from './components/membershipplan/MembershipPlan';
 import PromotersDashboard from './components/PromotersDash/PromotersDashboard';
 import AdminProfileDialog from './components/Adminprofile/AdminProfile';
 
