@@ -1,10 +1,11 @@
 // data.js
-export const sidebarData = {
-  title:" Girija❤️Kalyana",
+const sidebarData = {
+  title: " Girija❤️Kalyana",
   menuItems: [
     {
       text: "Dashboard",
       icon: "Dashboard",
+      path:"/PromotAdmin"
     },
     {
       text: "My Profile",
@@ -16,39 +17,33 @@ export const sidebarData = {
     },
     {
       text: "My Referrals",
-      icon: "Groups",  
+      icon: "Groups",
       subItems: [
-        { text: "Pending" },
-        { text: "Success" },
-        { text: "Expired" },
-        { text: "inActive"},
-        { text: "Team Users"},
+        { text: "Pending", path: "/PromotAdmin/pending" },
+        { text: "Success",path: "/PromotAdmin/success" },
+        { text: "Expired",path: "/PromotAdmin/expired" },
+        { text: "inActive",path: "/PromotAdmin/inactive" },
+        { text: "Team Users",path: "/PromotAdmin/team-users"  },
       ],
     },
     {
       text: "Assistance Services",
-      icon: "SupportAgent",  
-      subItems: [
-        { text: "Pending" },
-        { text: "Success"},
-      ],
+      icon: "SupportAgent",
+      subItems: [{ text: "Pending" }, { text: "Success" }],
     },
     {
       text: "My Earnings",
-      icon: "AttachMoney", 
+      icon: "AttachMoney",
       subItems: [
         { text: "Registration Earnings" },
         { text: "Assistence Earnings" },
-        { text: "Renewal Earnings"},
+        { text: "Renewal Earnings" },
       ],
     },
     {
       text: "User Interests",
-      icon: "Favorite", 
-      subItems: [
-        { text: "Sent" },
-        { text: "Received"},
-      ],
+      icon: "Favorite",
+      subItems: [{ text: "Sent" }, { text: "Received" }],
     },
     {
       text: "Search Profile",
@@ -110,3 +105,5 @@ export const sidebarData = {
     },
   ],
 };
+
+export default sidebarData;
