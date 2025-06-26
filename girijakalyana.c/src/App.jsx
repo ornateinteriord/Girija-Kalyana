@@ -10,8 +10,18 @@ import Register from './components/register/Register';
 import MembershipPlan from './components/membershipplan/MembershipPlan';
 import PromotersDashboard from './components/PromotersDash/PromotersDashboard';
 import AdminProfileDialog from './components/Adminprofile/AdminProfile';
+
 import ProfilePage from './components/PromotersDash/ProfilePage/ProfilePage';
 import ReferInvitePage from './components/PromotersDash/RefferInvite/RefferInvitePage';
+
+import Pending from './components/PromotersDash/myReferals/Pending';
+import Success from './components/PromotersDash/myReferals/Success';
+import DashboardContent from './components/PromotersDash/dashboardContent/DashboardContent';
+import sidebarData from './components/PromotersDash/sidebar/data';
+import Expired from './components/PromotersDash/myReferals/Expired';
+import InActive from './components/PromotersDash/myReferals/InActive';
+import TeamUsers from './components/PromotersDash/myReferals/TeamUsers';
+
 
 // Create a query client with default options
 const queryClient = new QueryClient({
@@ -173,10 +183,22 @@ const App = () => {
            
              {/* <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}> */}
             <Route>
+
             <Route path="/PromotAdmin" element={<PromotersDashboard />}></Route>
               <Route path="/admin-profile" element={<AdminProfileDialog />} />
               <Route path="/profilepage" element={<ProfilePage/>}></Route>
               <Route path="/reffer" element={<ReferInvitePage/>}></Route>
+
+            <Route path="/PromotAdmin" element={<PromotersDashboard />}>
+             <Route index element={<DashboardContent sidebarData={sidebarData} />} />
+              <Route path="admin-profile" element={<AdminProfileDialog />} />
+              <Route path="pending" element={<Pending />} />
+              <Route path="success" element={<Success />} />
+              <Route path="expired" element={<Expired />} />
+              <Route path="inactive" element={<InActive />} />
+              <Route path="team-users" element={<TeamUsers />} />
+              </Route>
+
             </Route>
 
             {/* User Routes */}
