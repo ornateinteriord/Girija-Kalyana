@@ -10,10 +10,12 @@ const sidebarData = {
     {
       text: "My Profile",
       icon: "Person",
+      path:"/PromotAdmin/profilepage"
     },
     {
       text: "Refer / Invite",
       icon: "Share",
+       path:"/PromotAdmin/refer"
     },
     {
       text: "My Referrals",
