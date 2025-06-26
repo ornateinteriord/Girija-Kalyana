@@ -183,22 +183,17 @@ const App = () => {
            
              {/* <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}> */}
             <Route>
-
-            <Route path="/PromotAdmin" element={<PromotersDashboard />}></Route>
-              <Route path="/admin-profile" element={<AdminProfileDialog />} />
-              <Route path="/profilepage" element={<ProfilePage/>}></Route>
-              <Route path="/reffer" element={<ReferInvitePage/>}></Route>
-
-            <Route path="/PromotAdmin" element={<PromotersDashboard />}>
+              <Route path="/PromotAdmin" element={<PromotersDashboard />}>
              <Route index element={<DashboardContent sidebarData={sidebarData} />} />
               <Route path="admin-profile" element={<AdminProfileDialog />} />
+              <Route path="profilepage" element={<ProfilePage/>}/>
+              <Route path="refer" element={<ReferInvitePage/>}/>
               <Route path="pending" element={<Pending />} />
               <Route path="success" element={<Success />} />
               <Route path="expired" element={<Expired />} />
               <Route path="inactive" element={<InActive />} />
               <Route path="team-users" element={<TeamUsers />} />
               </Route>
-
             </Route>
 
             {/* User Routes */}
