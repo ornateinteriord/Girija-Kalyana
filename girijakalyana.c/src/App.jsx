@@ -10,6 +10,8 @@ import Register from './components/register/Register';
 import MembershipPlan from './components/membershipplan/MembershipPlan';
 import PromotersDashboard from './components/PromotersDash/PromotersDashboard';
 import AdminProfileDialog from './components/Adminprofile/AdminProfile';
+import ProfilePage from './components/PromotersDash/ProfilePage/ProfilePage';
+import ReferInvitePage from './components/PromotersDash/RefferInvite/RefferInvitePage';
 
 // Create a query client with default options
 const queryClient = new QueryClient({
@@ -173,6 +175,8 @@ const App = () => {
             <Route>
             <Route path="/PromotAdmin" element={<PromotersDashboard />}></Route>
               <Route path="/admin-profile" element={<AdminProfileDialog />} />
+              <Route path="/profilepage" element={<ProfilePage/>}></Route>
+              <Route path="/reffer" element={<ReferInvitePage/>}></Route>
             </Route>
 
             {/* User Routes */}
