@@ -24,20 +24,7 @@ function ProfilePage() {
   const [value, setValue] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
 
-  // Form state
   const [formData, setFormData] = useState({
-    fullName: 'kirancomputers',
-    email: 'nagarajs@kirancomputers.in',
-    phone: '9845044424',
-    address: 'Vijay nagar',
-    pinCode: '560040',
-    country: 'India',
-    state: 'Karnataka',
-    city: 'Bangalore',
-    accountName: 'Kiran Computers Pvt Ltd',
-    accountNumber: '015905500208',
-    accountType: 'Current',
-    ifscCode: 'ICIC0000159'
   });
 
   const handleChange = (event, newValue) => {
@@ -61,14 +48,9 @@ function ProfilePage() {
   };
 
   return (
-    <Card elevation={6} sx={{ 
-      p: isMobile ? 2 : 7, 
-      maxWidth: 1200, 
-      mx: 'auto', 
-      my: 4,
-      '&:hover': {
-        boxShadow: 6 // Maintain the same shadow on hover
-      }
+    <Box  sx={{ 
+      p: isMobile ? 0 : "0px 20px", 
+       width:'100%'
     }}>
       {/* Header */}
       <Typography 
@@ -77,7 +59,7 @@ function ProfilePage() {
         gutterBottom 
         sx={{ 
           textAlign: 'center', 
-          mb: 4,
+          mb: 1,
           fontWeight: 700,
           color: theme.palette.primary.main
         }}
@@ -86,7 +68,7 @@ function ProfilePage() {
       </Typography>
 
       {/* Action Buttons */}
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 0}}>
         {isEditing ? (
           <Button
             variant="contained"
@@ -94,8 +76,11 @@ function ProfilePage() {
             startIcon={<Save />}
             onClick={handleSave}
             sx={{
+                fontWeight:'bold',
+              p:'12px',
+              textTransform:'capitalize',
               '&:hover': {
-                backgroundColor: theme.palette.primary.main // Remove hover effect
+                backgroundColor: theme.palette.primary.main 
               }
             }}
           >
@@ -107,6 +92,9 @@ function ProfilePage() {
             color="primary"
             onClick={handleEdit}
             sx={{
+              fontWeight:'bold',
+                p:'12px',
+                 textTransform:'capitalize',
               '&:hover': {
                 backgroundColor: 'transparent' // Remove hover effect
               }
@@ -118,7 +106,7 @@ function ProfilePage() {
       </Box>
 
       {/* Tabs */}
-      <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1}}>
         <Tabs 
           value={value} 
           onChange={handleChange}
@@ -126,6 +114,7 @@ function ProfilePage() {
           scrollButtons="auto"
           allowScrollButtonsMobile
           sx={{
+             width:'100%',
             '& .MuiTab-root': {
               '&:hover': {
                 backgroundColor: 'transparent' 
@@ -163,8 +152,8 @@ function ProfilePage() {
       {value === 0 && (
         <Box sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 3 }}>
           {/* Basic Information */}
-          <Paper elevation={0} sx={{ 
-            p: 3, 
+          <Box  sx={{ 
+          p:isMobile? 0 : 2, 
             borderRadius: 2, 
             flex: 1,
             '&:hover': {
@@ -228,11 +217,11 @@ function ProfilePage() {
                 }}
               />
             </Box>
-          </Paper>
+          </Box>
 
           {/* Address Information */}
-          <Paper elevation={0} sx={{ 
-            p: 3, 
+          <Box  sx={{ 
+             p:isMobile? 0 : 2, 
             borderRadius: 2, 
             flex: 1,
             '&:hover': {
@@ -332,14 +321,14 @@ function ProfilePage() {
                 />
               </Box>
             </Box>
-          </Paper>
+          </Box>
         </Box>
       )}
 
       {/* Bank Details Section */}
       {value === 1 && (
-        <Paper elevation={0} sx={{ 
-          p: 3, 
+        <Box sx={{ 
+          p:isMobile? 0 : 2, 
           borderRadius: 2,
           '&:hover': {
             boxShadow: 0
@@ -420,9 +409,9 @@ function ProfilePage() {
               }}
             />
           </Box>
-        </Paper>
+        </Box>
       )}
-    </Card>
+    </Box>
   );
 }
 

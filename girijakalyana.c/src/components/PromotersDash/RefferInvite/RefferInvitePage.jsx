@@ -54,20 +54,38 @@ const ReferInvitePage = () => {
   };
 
   return (
-    <Paper elevation={3} sx={{
-      p: 4,
+    <Box sx={{
+      p: 0,
+      ml:{xs:0, md:2},
+      mt:{xs:1, md:2}, 
       maxWidth: 900,
-      mx: 'auto',
-      my: 4,
       borderRadius: 2
     }}>
-      <Typography variant="h4" component="h1" sx={{ 
-        fontWeight: 600,
-        mb: 3,
-        display: 'flex',
-        alignItems: 'center',
-        gap: 1.5
-      }}>
+
+     <Typography
+        variant="h4"
+        sx={{
+          fontWeight: 700,
+          mb: 4,
+          color: 'primary.main',
+          textAlign: 'center'
+        }}
+      >
+        Invite Your Friends & Family
+      </Typography>
+
+      {/* Subheading */}
+      <Typography
+        variant="h5"
+        sx={{
+          fontWeight: 600,
+          mb: 3,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1.5,
+          textAlign:  'center' 
+        }}
+      >
         <Send fontSize="large" /> Refer / Invite
       </Typography>
 
@@ -84,11 +102,9 @@ const ReferInvitePage = () => {
                 onChange={(e) => handleInputChange(index, 'name', e.target.value)}
               />
             </Grid>
-          <Grid container spacing={2} sx={{ mb: 3 }}>
-            
-            
-            <Grid item xs={12} sm={3}>
+             <Grid item xs={12} sm={3} mb={2}>
               <TextField
+               sx={{width:'80%'}}
                 fullWidth
                 label="Email ID"
                 variant="outlined"
@@ -97,6 +113,8 @@ const ReferInvitePage = () => {
                 onChange={(e) => handleInputChange(index, 'email', e.target.value)}
               />
             </Grid>
+          <Grid container spacing={2} sx={{ mb: 3 }}>
+            
             
             <Grid item xs={12} sm={2}>
               <TextField
@@ -131,13 +149,16 @@ const ReferInvitePage = () => {
         </React.Fragment>
       ))}
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
+      <Box sx={{ display: 'flex',
+         justifyContent: 'flex-start',
+          mt: 3, gap:1.5 }}>
         <Button
           variant="outlined"
           startIcon={<Add />}
           onClick={handleAddEntry}
-          size="small"
            sx={{
+            p:{xs:'10px', md:'10px'},
+            textTransform:'capitalize',
                   '&:hover': {
                     background: 'transparent'
                 }
@@ -150,13 +171,14 @@ const ReferInvitePage = () => {
           variant="contained"
           endIcon={<Send />}
           onClick={handleSubmit}
-          size="small"
-          sx={{ px: 4 }}
+          sx={{ px: 4, textTransform:'capitalize', 
+             p:{xs:'10px', md:' 10px 15px'},
+          }}
         >
           Submit
         </Button>
       </Box>
-    </Paper>
+    </Box>
   );
 };
 
