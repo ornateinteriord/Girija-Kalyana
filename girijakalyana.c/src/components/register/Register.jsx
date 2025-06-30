@@ -20,7 +20,7 @@ import Navbar from '../navbar/Navbar';
 import Footer from "../footer/Footer";
 import { toast } from 'react-toastify'; 
 import { useSignupMutation } from '../api/Auth';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const datas = rawJsonData.reduce((acc, curr) => ({ ...acc, ...curr }), {});
 
@@ -30,7 +30,7 @@ const Register = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const signupmutation = useSignupMutation();
   const { mutate } = signupmutation;
-   
+   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
 const planType = searchParams.get('type');
 
@@ -53,10 +53,36 @@ const [formData, setFormData] = useState({
   user_role: getUserRole(),
 });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+ const handleChange = (e) => {
+  const { name, value } = e.target;
+  
+  // If date_of_birth is being changed, calculate age
+  if (name === 'date_of_birth') {
+    const age = calculateAge(value);
+    setFormData(prev => ({
+      ...prev,
+      [name]: value,
+      age: age.toString() 
+    }));
+  } else {
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  }
+};
+
+const calculateAge = (birthDate) => {
+  const today = new Date();
+  const birthDateObj = new Date(birthDate);
+  let age = today.getFullYear() - birthDateObj.getFullYear();
+  const monthDiff = today.getMonth() - birthDateObj.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
+    age--;
+  }
+  
+  return age;
+};
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -70,6 +96,7 @@ const [formData, setFormData] = useState({
       mutate(formData, {
         onSuccess: () => {
           toast.success(formData.message);
+           navigate('/user/userDashboard');
         },
       });
     } catch (error) {
@@ -183,6 +210,9 @@ const [formData, setFormData] = useState({
                 InputLabelProps={{ shrink: true }}
                 required
                 sx={{ mb: 3 }}
+                inputProps={{
+               max: new Date().toISOString().split('T')[0]
+                }}
               />
 
               <TextField
@@ -193,6 +223,7 @@ const [formData, setFormData] = useState({
                 name="age"
                 value={formData.age}
                 onChange={handleChange}
+                 InputLabelProps={{ shrink: !!formData.age }}
               />
 
               <Typography variant="h6" sx={{ mb: 3, color: 'primary.main', fontWeight: 600 }}>
@@ -405,6 +436,7 @@ const [formData, setFormData] = useState({
                 sx={{ mb: 3 }}
                 value={formData.first_name}
                 onChange={handleChange}
+                required
               />
               <TextField
                 fullWidth
@@ -413,6 +445,7 @@ const [formData, setFormData] = useState({
                 name="last_name"
                 value={formData.last_name}
                 onChange={handleChange}
+                required
               />
             </Box>
             <Box sx={{ flex: 1 }}>
@@ -424,6 +457,7 @@ const [formData, setFormData] = useState({
                 sx={{ mb: 3 }}
                 value={formData.username}
                 onChange={handleChange}
+                required
               />
               <TextField
                 fullWidth
@@ -433,6 +467,7 @@ const [formData, setFormData] = useState({
                 sx={{ mb: 3 }}
                 value={formData.mobile_no}
                 onChange={handleChange}
+                required
               />
             </Box>
           </Box>

@@ -89,6 +89,12 @@ const ParentsPrefer = () => {
       currentValue: formData.caste_preference
     },
     {
+      name: "occupation_country_preference",
+      label: "Occupation Country",
+      options: ["India", "USA", "China"],
+      currentValue: formData.occupation_country_preference
+    },
+    {
       name: "from_age_preference",
       label: "Age Preference (From)",
       options: datas?.minAge || [],
@@ -111,12 +117,6 @@ const ParentsPrefer = () => {
       label: "Height Preference (To)",
       options: datas?.heightValues || [],
       currentValue: formData.to_height_preference
-    },
-    {
-      name: "occupation_country_preference",
-      label: "Occupation Country",
-      options: ["India", "USA", "China"],
-      currentValue: formData.occupation_country_preference
     },
     {
       name: "maritalstatus_preference",

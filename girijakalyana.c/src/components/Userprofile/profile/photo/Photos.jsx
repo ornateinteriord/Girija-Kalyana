@@ -205,12 +205,30 @@ const Photos = () => {
               * Please upload high-resolution images only (Max size: 10 MB)
             </Typography>
           </Box>
-          <Box display="flex" gap={1}>
+          <Box
+            display="flex"
+            gap={1}
+            flexWrap="wrap" 
+            alignItems="center" 
+            sx={{
+            
+              "@media (max-width: 600px)": {
+                width:"100%",
+                flexDirection: "column", 
+                alignItems: "stretch", 
+                "& > button": {
+                  width: "100%", 
+                  margin: "4px 0 !important", 
+                },
+              },
+            }}
+          >
             <Button
               variant="outlined"
-              component="label" // This makes the entire button act as a label for the file input
+              component="label" 
               startIcon={<FaUpload />}
               sx={{
+                width:"100%",
                 color: "#1976d2",
                 borderColor: "#1976d2",
                 "&:hover": {
