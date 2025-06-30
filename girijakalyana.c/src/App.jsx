@@ -182,7 +182,7 @@ const App = () => {
             </Route>
            
              {/* <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}> */}
-            <Route>
+            <Route element={<ProtectedRoute allowedRoles={["promoter"]} />}>
               <Route path="/PromotAdmin" element={<PromotersDashboard />}>
              <Route index element={<DashboardContent sidebarData={sidebarData} />} />
               <Route path="admin-profile" element={<AdminProfileDialog />} />
