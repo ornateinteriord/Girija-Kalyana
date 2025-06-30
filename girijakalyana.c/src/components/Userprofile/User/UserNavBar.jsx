@@ -1,13 +1,6 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import {
-  FaTachometerAlt,
-  FaUser,
-  FaUsers,
-  FaHeart,
-  FaSearch,
-  FaSignOutAlt,
   FaBars,
-  FaCog,
 } from "react-icons/fa";
 import {
   Avatar,
@@ -15,8 +8,6 @@ import {
   Toolbar,
   Typography,
   Drawer,
-  List,
-  ListItem,
   Box,
   CssBaseline,
   Menu,
@@ -31,9 +22,7 @@ import {
   TextField,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { FaDashcube, FaUsersViewfinder } from "react-icons/fa6";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import UserDashboard from "../userdDashboard/UserDashboard";
 import convertFromBase64 from "../profile/photo/Photos";
 import useStore from "../../../store";
 import TokenService from "../../token/tokenService";
@@ -55,7 +44,7 @@ const theme = createTheme({
 });
 
 const UserNavBar = () => {
-  const { profileImage, firstName, setFirstName, setProfileImage } = useStore();
+  const {  setFirstName, setProfileImage } = useStore();
   const [anchorEl, setAnchorEl] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
@@ -68,7 +57,7 @@ const UserNavBar = () => {
     confirmPassword: ''
   });
   const navigation = useNavigate();
-  const [imageUrl, setImageUrl] = useState("");
+  const [ setImageUrl] = useState("");
 
   const registerNo = TokenService.getRegistrationNo();
 

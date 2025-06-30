@@ -47,6 +47,8 @@ export const useLoginMutation = () => {
             break;
           case "Admin":
             navigate("/admin/dashboard");
+          case "promoter":
+            navigate("/PromotAdmin");
             break;
           default:
             console.error("Invalid role:", role);
