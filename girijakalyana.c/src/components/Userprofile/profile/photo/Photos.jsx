@@ -1,5 +1,16 @@
 import React, { useRef, useState } from "react";
-import { Box, Button, Typography, Card, CardMedia, DialogTitle, Dialog, DialogContent, DialogContentText, DialogActions } from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  Card,
+  CardMedia,
+  DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from "@mui/material";
 import { FaTrash, FaUpload } from "react-icons/fa";
 import toast from "react-hot-toast";
 import useStore from "../../../../store";
@@ -20,8 +31,9 @@ const Photos = () => {
   const fileInputRef = useRef(null);
 
   const handleFileChange = async (event) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const file = event.target.files[0];
+    const input = event.target;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
       if (!file.type.match("image.*")) {
         toast.error("Please select an image file");
         return;
@@ -44,7 +56,7 @@ const Photos = () => {
               ...prev,
               image: data.secure_url,
               previewImage: data.secure_url,
-              image_verification: "pending" 
+              image_verification: "pending",
             }));
             toast.success("Image uploaded to Cloudinary");
           } else {
@@ -56,6 +68,7 @@ const Photos = () => {
           console.error(err);
         },
       });
+      input.value = null;
     }
   };
 
@@ -73,7 +86,7 @@ const Photos = () => {
       {
         registerNo,
         image: formData.image,
-        image_verification: "pending"
+        image_verification: "pending",
       },
       {
         onSuccess: () => {
@@ -88,21 +101,21 @@ const Photos = () => {
     );
   };
 
-   const handleDeleteClick = () => {
+  const handleDeleteClick = () => {
     setOpenDeleteDialog(true);
   };
 
-   const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = () => {
     updateProfile(
       {
         registerNo,
         image: null,
-        image_verification: null
+        image_verification: null,
       },
       {
         onSuccess: () => {
           toast.success("Profile image deleted successfully");
-          setFormData(prev => ({ ...prev, previewImage: null, image: null }));
+          setFormData((prev) => ({ ...prev, previewImage: null, image: null }));
           setOpenDeleteDialog(false);
         },
         onError: (error) => {
@@ -195,8 +208,8 @@ const Photos = () => {
           <Box display="flex" gap={1}>
             <Button
               variant="outlined"
+              component="label" // This makes the entire button act as a label for the file input
               startIcon={<FaUpload />}
-              onClick={handleUploadClick}
               sx={{
                 color: "#1976d2",
                 borderColor: "#1976d2",
@@ -211,8 +224,8 @@ const Photos = () => {
                 name="image"
                 accept="image/*"
                 hidden
-                ref={fileInputRef}
                 onChange={handleFileChange}
+                onClick={(e) => (e.target.value = null)} // Reset value on click to allow re-selecting same file
               />
             </Button>
 
@@ -227,13 +240,13 @@ const Photos = () => {
                 "&:hover": {
                   backgroundColor: "#1976d2",
                 },
-                visibility: formData.image ? "visible" : "visible", // Always visible
-                opacity: !formData.image || isUpdating ? 0.7 : 1, // Faded when disabled
+                opacity: isUpdating ? 0.7 : 1,
+                cursor: isUpdating ? "not-allowed" : "pointer",
               }}
             >
               {isUpdating ? "Saving..." : "Save"}
             </Button>
-              {(userProfile?.image || formData.image) && (
+            {(userProfile?.image || formData.image) && (
               <Button
                 variant="contained"
                 color="error"
@@ -252,7 +265,7 @@ const Photos = () => {
               </Button>
             )}
           </Box>
-          <Box sx={{mt:2}}>
+          <Box sx={{ mt: 2 }}>
             <Typography sx={{ fontWeight: "bold" }}>
               Image Verification Status:{" "}
               <Box
@@ -265,7 +278,9 @@ const Photos = () => {
                     }[userProfile?.image_verification] || "text.secondary",
                 }}
               >
-                {!userProfile?.image ? "Please Upload Image" : userProfile?.image_verification}
+                {!userProfile?.image
+                  ? "Please Upload Image"
+                  : userProfile?.image_verification}
               </Box>
             </Typography>
           </Box>
@@ -279,10 +294,13 @@ const Photos = () => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Delete Profile Image?"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">
+          {"Delete Profile Image?"}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete your profile image? This action cannot be undone.
+            Are you sure you want to delete your profile image? This action
+            cannot be undone.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

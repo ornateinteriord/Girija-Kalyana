@@ -155,7 +155,7 @@ const ParentsPrefer = () => {
           marginBottom: { xs: "16px", sm: "24px" },
         }}
       >
-        Parents' Preference
+        Partner Preference
       </Typography>
 
       <Box
