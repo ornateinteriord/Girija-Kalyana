@@ -99,7 +99,7 @@ const DashboardContent = ({ sidebarData }) => {
         Welcome kirancomputers
       </Typography>
       
-      <Divider sx={{ my: 2 }} />
+      <Divider sx={{ height:'1px',my:2 }} />
 
       {/* Top Cards Section */}
       <Box
@@ -205,7 +205,7 @@ const DashboardContent = ({ sidebarData }) => {
         </Card>
       </Box>
 
-      <Divider sx={{ my: 2 }} />
+      <Divider sx={{ height:'1px',my:2 }} />
 
       {/* User Cards Section */}
       <Typography 

@@ -27,7 +27,8 @@ import {
 import sidebarData from "./sidebar/data";
 import AdminProfileDialog from "../Adminprofile/AdminProfile";
 import Sidebar from "./sidebar/Sidebar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
+import TokenService from "../token/tokenService";
 
 const PromotersDashboard = () => {
   const theme = useTheme();
@@ -36,7 +37,7 @@ const PromotersDashboard = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [profileDialogOpen, setProfileDialogOpen] = useState(false);
   const openMenu = Boolean(anchorEl);
-
+  const navigation = useNavigate();
   const toggleDrawer = () => setOpen(!open);
   const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
@@ -44,6 +45,13 @@ const PromotersDashboard = () => {
     setProfileDialogOpen(true);
     handleMenuClose();
   };
+
+   const handleConfirmLogout = () => {
+     
+      navigation("/");
+      TokenService.removeToken();
+      window.dispatchEvent(new Event("storage"));
+    };
 
 
   return (
@@ -179,8 +187,7 @@ const PromotersDashboard = () => {
           </ListItemIcon>
           Lock
         </MenuItem>
-        <Divider />
-        <MenuItem onClick={handleMenuClose}>
+        <MenuItem onClick={handleConfirmLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
