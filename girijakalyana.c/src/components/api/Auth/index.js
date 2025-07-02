@@ -47,6 +47,7 @@ export const useLoginMutation = () => {
             break;
           case "Admin":
             navigate("/admin/dashboard");
+            break;
           case "promoter":
             navigate("/PromotAdmin");
             break;
