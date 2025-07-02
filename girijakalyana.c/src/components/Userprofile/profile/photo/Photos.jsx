@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import  { useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import { FaTrash, FaUpload } from "react-icons/fa";
 import toast from "react-hot-toast";
-import useStore from "../../../../store";
 import {
   getCloudinaryUrl,
   useGetMemberDetails,
@@ -251,7 +250,7 @@ const Photos = () => {
               variant="contained"
               size="small"
               onClick={handleSave}
-              disabled={isUpdating}
+              disabled={isUpdating || !formData.image}
               sx={{
                 height: "35px",
                 backgroundColor: "#34495e",

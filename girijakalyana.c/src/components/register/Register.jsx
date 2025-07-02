@@ -1,4 +1,4 @@
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import {
   Box,
   Paper,
@@ -12,83 +12,88 @@ import {
   Divider,
   Avatar,
   useMediaQuery,
-  useTheme
-} from '@mui/material';
-import HowToRegIcon from '@mui/icons-material/HowToReg';
+  useTheme,
+} from "@mui/material";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
 import rawJsonData from "../Userprofile/profile/eduction/jsondata/data.json";
-import Navbar from '../navbar/Navbar';
+import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
-import { toast } from 'react-toastify'; 
-import { useSignupMutation } from '../api/Auth';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
+import { useSignupMutation } from "../api/Auth";
+import { useLocation, } from "react-router-dom";
 
 const datas = rawJsonData.reduce((acc, curr) => ({ ...acc, ...curr }), {});
 
 const Register = () => {
-    const location = useLocation();
+  const location = useLocation();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const signupmutation = useSignupMutation();
   const { mutate } = signupmutation;
-   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
-const planType = searchParams.get('type');
+  const planType = searchParams.get("type");
 
-const getUserRole = () => {
-  switch(planType) {
-    case 'PremiumUser': return 'PremiumUser';
-    case 'SilverUser': return 'SilverUser';
-    default: return 'FreeUser';
-  }
-};
+  const getUserRole = () => {
+    switch (planType) {
+      case "PremiumUser":
+        return "PremiumUser";
+      case "SilverUser":
+        return "SilverUser";
+      default:
+        return "FreeUser";
+    }
+  };
 
-useEffect(() => {
-  setFormData(prev => ({
-    ...prev,
-    user_role: getUserRole() 
-  }));
-}, [planType]);
-
-const [formData, setFormData] = useState({
-  user_role: getUserRole(),
-});
-
- const handleChange = (e) => {
-  const { name, value } = e.target;
-  
-  // If date_of_birth is being changed, calculate age
-  if (name === 'date_of_birth') {
-    const age = calculateAge(value);
-    setFormData(prev => ({
+  useEffect(() => {
+    setFormData((prev) => ({
       ...prev,
-      [name]: value,
-      age: age.toString() 
+      user_role: getUserRole(),
     }));
-  } else {
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  }
-};
+  }, [planType]);
 
-const calculateAge = (birthDate) => {
-  const today = new Date();
-  const birthDateObj = new Date(birthDate);
-  let age = today.getFullYear() - birthDateObj.getFullYear();
-  const monthDiff = today.getMonth() - birthDateObj.getMonth();
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
-    age--;
-  }
-  
-  return age;
-};
+  const [formData, setFormData] = useState({
+    user_role: getUserRole(),
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    // If date_of_birth is being changed, calculate age
+    if (name === "date_of_birth") {
+      const age = calculateAge(value);
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+        age: age.toString(),
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+  };
+
+  const calculateAge = (birthDate) => {
+    const today = new Date();
+    const birthDateObj = new Date(birthDate);
+    let age = today.getFullYear() - birthDateObj.getFullYear();
+    const monthDiff = today.getMonth() - birthDateObj.getMonth();
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDateObj.getDate())
+    ) {
+      age--;
+    }
+
+    return age;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     if (formData.password !== formData.confirmPassword) {
-      toast.error('Passwords do not match');
+      toast.error("Passwords do not match");
       return;
     }
 
@@ -96,63 +101,74 @@ const calculateAge = (birthDate) => {
       mutate(formData, {
         onSuccess: () => {
           toast.success(formData.message);
-           navigate('/user/userDashboard');
         },
       });
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   return (
     <>
       <Navbar />
-      <Box sx={{ 
-        backgroundColor: '#f5f7fa', 
-        minHeight: '100vh', 
-        py: 4, 
-        px: { xs: 1, sm: 2 }, 
-        mt: '10px', 
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center'
-      }}>
+      <Box
+        sx={{
+          backgroundColor: "#f5f7fa",
+          minHeight: "100vh",
+          py: 4,
+          px: { xs: 1, sm: 2 },
+          mt: "10px",
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
         <Paper
           component="form"
           onSubmit={handleSubmit}
-          sx={{ 
-            p: { xs: 2, sm: 4, md: 6 }, 
-            borderRadius: 2, 
-            width: '100%', 
+          sx={{
+            p: { xs: 2, sm: 4, md: 6 },
+            borderRadius: 2,
+            width: "100%",
             // maxWidth: '1400px'
           }}
         >
-          <Box sx={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            mb: 2, 
-            mt:1.5,          
-             gap: 2,
-            flexDirection: 'row'
-          }}>
-            <Avatar sx={{ bgcolor: 'primary.main' }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              mb: 2,
+              mt: 1.5,
+              gap: 2,
+              flexDirection: "row",
+            }}
+          >
+            <Avatar sx={{ bgcolor: "primary.main" }}>
               <HowToRegIcon />
             </Avatar>
-            <Typography variant={isMobile ? "h5" : "h4"} component="h1" sx={{ fontWeight: 600, textAlign: 'center' }}>
+            <Typography
+              variant={isMobile ? "h5" : "h4"}
+              component="h1"
+              sx={{ fontWeight: 600, textAlign: "center" }}
+            >
               REGISTER HERE!
             </Typography>
           </Box>
 
-          <Divider sx={{ height: '1px', mb:isMobile? 1 : 4 }} />
+          <Divider sx={{ height: "1px", mb: isMobile ? 1 : 4 }} />
 
-          <Box sx={{ 
-            display: 'flex', 
-            flexDirection: { xs: 'column', md: 'row' }, 
-            gap: 4 
-          }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              gap: 4,
+            }}
+          >
             {/* LEFT: Personal + Social */}
             <Box sx={{ flex: 1 }}>
-              <Typography variant="h6" sx={{ mb: 3, color: 'primary.main', fontWeight: 600 }}>
+              <Typography
+                variant="h6"
+                sx={{ mb: 3, color: "primary.main", fontWeight: 600 }}
+              >
                 PERSONAL DETAILS
               </Typography>
 
@@ -165,7 +181,9 @@ const calculateAge = (birthDate) => {
                   onChange={handleChange}
                 >
                   {datas.marritalStatus.map((item, idx) => (
-                    <MenuItem key={idx} value={item}>{item}</MenuItem>
+                    <MenuItem key={idx} value={item}>
+                      {item}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -211,7 +229,7 @@ const calculateAge = (birthDate) => {
                 required
                 sx={{ mb: 3 }}
                 inputProps={{
-               max: new Date().toISOString().split('T')[0]
+                  max: new Date().toISOString().split("T")[0],
                 }}
               />
 
@@ -223,22 +241,27 @@ const calculateAge = (birthDate) => {
                 name="age"
                 value={formData.age}
                 onChange={handleChange}
-                 InputLabelProps={{ shrink: !!formData.age }}
+                InputLabelProps={{ shrink: !!formData.age }}
               />
 
-              <Typography variant="h6" sx={{ mb: 3, color: 'primary.main', fontWeight: 600 }}>
+              <Typography
+                variant="h6"
+                sx={{ mb: 3, color: "primary.main", fontWeight: 600 }}
+              >
                 SOCIAL & CAREER DETAILS
               </Typography>
 
-              <Box sx={{ 
-                display: 'flex', 
-                flexWrap: 'wrap', 
-                gap: 2,
-                '& .MuiFormControl-root': {
-                  flex: isMobile ? '1 1 100%' : '1 1 48%',
-                  minWidth: '120px'
-                }
-              }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 2,
+                  "& .MuiFormControl-root": {
+                    flex: isMobile ? "1 1 100%" : "1 1 48%",
+                    minWidth: "120px",
+                  },
+                }}
+              >
                 <FormControl sx={{ mb: 2 }}>
                   <InputLabel>Educational Qualification</InputLabel>
                   <Select
@@ -248,7 +271,9 @@ const calculateAge = (birthDate) => {
                     onChange={handleChange}
                   >
                     {datas.qualificationValues.map((item, idx) => (
-                      <MenuItem key={idx} value={item}>{item}</MenuItem>
+                      <MenuItem key={idx} value={item}>
+                        {item}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -262,7 +287,9 @@ const calculateAge = (birthDate) => {
                     onChange={handleChange}
                   >
                     {datas.occupationValues.map((item, idx) => (
-                      <MenuItem key={idx} value={item}>{item}</MenuItem>
+                      <MenuItem key={idx} value={item}>
+                        {item}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -276,7 +303,9 @@ const calculateAge = (birthDate) => {
                     onChange={handleChange}
                   >
                     {datas.incomeValues.map((item, idx) => (
-                      <MenuItem key={idx} value={item}>{item}</MenuItem>
+                      <MenuItem key={idx} value={item}>
+                        {item}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -290,7 +319,9 @@ const calculateAge = (birthDate) => {
                     onChange={handleChange}
                   >
                     {datas.countries.map((item, idx) => (
-                      <MenuItem key={idx} value={item}>{item}</MenuItem>
+                      <MenuItem key={idx} value={item}>
+                        {item}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -304,7 +335,9 @@ const calculateAge = (birthDate) => {
                     onChange={handleChange}
                   >
                     {datas.languageValues.map((item, idx) => (
-                      <MenuItem key={idx} value={item}>{item}</MenuItem>
+                      <MenuItem key={idx} value={item}>
+                        {item}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -313,7 +346,10 @@ const calculateAge = (birthDate) => {
 
             {/* RIGHT: Family + Login */}
             <Box sx={{ flex: 1 }}>
-              <Typography variant="h6" sx={{ mb: 3, color: 'primary.main', fontWeight: 600 }}>
+              <Typography
+                variant="h6"
+                sx={{ mb: 3, color: "primary.main", fontWeight: 600 }}
+              >
                 FAMILY DETAILS
               </Typography>
 
@@ -339,7 +375,7 @@ const calculateAge = (birthDate) => {
                 value={formData.parent_name}
                 onChange={handleChange}
               />
-              
+
               <TextField
                 fullWidth
                 label="Religion"
@@ -358,7 +394,9 @@ const calculateAge = (birthDate) => {
                   onChange={handleChange}
                 >
                   {datas.casteValues.map((item, idx) => (
-                    <MenuItem key={idx} value={item}>{item}</MenuItem>
+                    <MenuItem key={idx} value={item}>
+                      {item}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -383,7 +421,9 @@ const calculateAge = (birthDate) => {
                   onChange={handleChange}
                 >
                   {datas.countries.map((item, idx) => (
-                    <MenuItem key={idx} value={item}>{item}</MenuItem>
+                    <MenuItem key={idx} value={item}>
+                      {item}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -397,7 +437,9 @@ const calculateAge = (birthDate) => {
                   onChange={handleChange}
                 >
                   {datas.states.map((item, idx) => (
-                    <MenuItem key={idx} value={item}>{item}</MenuItem>
+                    <MenuItem key={idx} value={item}>
+                      {item}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -411,7 +453,9 @@ const calculateAge = (birthDate) => {
                   onChange={handleChange}
                 >
                   {datas.cities.map((item, idx) => (
-                    <MenuItem key={idx} value={item}>{item}</MenuItem>
+                    <MenuItem key={idx} value={item}>
+                      {item}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -419,15 +463,20 @@ const calculateAge = (birthDate) => {
           </Box>
 
           {/* LOGIN DETAILS */}
-          <Typography variant="h6" sx={{ mt: 1, mb: 3, color: 'primary.main', fontWeight: 600 }}>
+          <Typography
+            variant="h6"
+            sx={{ mt: 1, mb: 3, color: "primary.main", fontWeight: 600 }}
+          >
             LOGIN DETAILS
           </Typography>
 
-          <Box sx={{ 
-            display: 'flex', 
-            flexDirection: { xs: 'column', sm: 'row' }, 
-            gap: 2 
-          }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
+              gap: 2,
+            }}
+          >
             <Box sx={{ flex: 1 }}>
               <TextField
                 fullWidth
@@ -472,12 +521,14 @@ const calculateAge = (birthDate) => {
             </Box>
           </Box>
 
-          <Box sx={{ 
-            display: 'flex', 
-            flexDirection: { xs: 'column', sm: 'row' }, 
-            gap: 2, 
-            mb: 4 
-          }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
+              gap: 2,
+              mb: 4,
+            }}
+          >
             <TextField
               fullWidth
               label="Password"
@@ -495,29 +546,26 @@ const calculateAge = (birthDate) => {
               onChange={handleChange}
             />
           </Box>
-          
-          <Box sx={{ 
-            width: '100%', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center' 
-          }}>
 
-            <input 
-    type="hidden" 
-    name="user_role" 
-    value={formData.user_role} 
-  />
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <input type="hidden" name="user_role" value={formData.user_role} />
             <Button
               type="submit"
               variant="contained"
               size="large"
               sx={{
-                backgroundColor: 'orange',
-                '&:hover': { backgroundColor: 'darkorange' },
+                backgroundColor: "orange",
+                "&:hover": { backgroundColor: "darkorange" },
                 fontWeight: 600,
-                width: { xs: '100%', sm: '50%', md: '30%' },
-                textTransform: 'capitalize'
+                width: { xs: "100%", sm: "50%", md: "30%" },
+                textTransform: "capitalize",
               }}
             >
               Submit Registration
