@@ -250,6 +250,7 @@ const Photos = () => {
               variant="contained"
               size="small"
               onClick={handleSave}
+              disabled={isUpdating}
               disabled={isUpdating || !formData.image}
               sx={{
                 height: "35px",
