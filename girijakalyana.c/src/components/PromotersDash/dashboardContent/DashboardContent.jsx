@@ -41,9 +41,16 @@ import {
   Notifications,
   Email
 } from '@mui/icons-material';
+import { useLoginMutation } from '../../api/Auth';
+import { usePromoters } from '../../api/Admin';
+
 
 const DashboardContent = ({ sidebarData }) => {
   const theme = useTheme();
+  const { data: promoter, isLoading, error } = useLoginMutation();
+
+
+  console.log("promoter user",promoter)
 
   const getIconComponent = (iconName, props = {}) => {
     const iconComponents = {
@@ -96,7 +103,7 @@ const DashboardContent = ({ sidebarData }) => {
           mb: 3
         }}
       >
-        Welcome kirancomputers
+        Welcome {promoter?.promoter_name}
       </Typography>
       
       <Divider sx={{ height:'1px',my:2 }} />

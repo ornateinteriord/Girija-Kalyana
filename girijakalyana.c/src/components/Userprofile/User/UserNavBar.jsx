@@ -1,7 +1,5 @@
-import  { useEffect, useState } from "react";
-import {
-  FaBars,
-} from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { FaBars } from "react-icons/fa";
 import {
   Avatar,
   AppBar,
@@ -20,9 +18,10 @@ import {
   DialogContentText,
   DialogActions,
   TextField,
+  useMediaQuery,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import convertFromBase64 from "../profile/photo/Photos";
 import useStore from "../../../store";
 import TokenService from "../../token/tokenService";
@@ -30,10 +29,6 @@ import { useChangePassword, useGetMemberDetails } from "../../api/User/useGetPro
 import { toast } from "react-toastify";
 import { LoadingComponent } from "../../../App";
 import SidebarMenu from "../../sidebar/SidebarMenu";
-
-
-
-
 
 const drawerWidth = 240;
 
@@ -44,20 +39,20 @@ const theme = createTheme({
 });
 
 const UserNavBar = () => {
-  const {  setFirstName, setProfileImage } = useStore();
+  const { setFirstName, setProfileImage } = useStore();
   const [anchorEl, setAnchorEl] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
   const [openChangePasswordDialog, setOpenChangePasswordDialog] = useState(false);
-  const [selectedItem, setSelectedItem] = useState("Dashboard");
+  const isLargeScreen = useMediaQuery('(min-width:790px)');
+  const location = useLocation();
+  const navigation = useNavigate();
 
   const [passwordData, setPasswordData] = useState({
     oldPassword: '',
     newPassword: '',
     confirmPassword: ''
   });
-  const navigation = useNavigate();
-  const [ setImageUrl] = useState("");
 
   const registerNo = TokenService.getRegistrationNo();
 
@@ -68,7 +63,26 @@ const UserNavBar = () => {
     error,
   } = useGetMemberDetails(registerNo);
 
-const { mutate: changePassword, isPending } = useChangePassword();
+  const { mutate: changePassword, isPending } = useChangePassword();
+
+  // Determine the selected item based on current route
+  const getSelectedItemFromRoute = () => {
+    const path = location.pathname;
+    if (path.includes("userdashboard")) return "Dashboard";
+    if (path.includes("profile")) return "My Profile";
+    if (path.includes("MyMatches")) return "My Matches";
+    if (path.includes("myintrest")) return "My Interest";
+    if (path.includes("viewAll")) return "View All";
+    if (path.includes("search")) return "Search";
+    return "Dashboard"; // Default to Dashboard
+  };
+
+  const [selectedItem, setSelectedItem] = useState(getSelectedItemFromRoute());
+
+  // Update selected item when route changes
+  useEffect(() => {
+    setSelectedItem(getSelectedItemFromRoute());
+  }, [location.pathname]);
 
   useEffect(() => {
     if (isError) {
@@ -81,7 +95,6 @@ const { mutate: changePassword, isPending } = useChangePassword();
       setFirstName(userProfile.firstName || "");
       if (userProfile.profileImage) {
         const url = convertFromBase64(userProfile.profileImage);
-        setImageUrl(url);
         setProfileImage(url);
       }
     }
@@ -133,36 +146,34 @@ const { mutate: changePassword, isPending } = useChangePassword();
     }));
   };
 
-const handleSubmitPasswordChange = () => {
-    
- if (passwordData.oldPassword === passwordData.newPassword) {
-  toast.error("New password cannot be the same as the old password.");
-  return;
-}
-
-  if (passwordData.newPassword !== passwordData.confirmPassword) {
-    toast.error("New password and confirm password don't match");
-    return;
-  }
-
-  changePassword(
-    {
-      registrationNo: registerNo,
-      oldPassword: passwordData.oldPassword,
-      newPassword: passwordData.newPassword,
-    },
-    {
-      onSuccess: () => {
-        toast.success("Password changed successfully");
-        handleCloseChangePassword();
-      },
-      onError: (error) => {
-        toast.error(error?.response?.data?.message || "Failed to change password");
-      },
+  const handleSubmitPasswordChange = () => {
+    if (passwordData.oldPassword === passwordData.newPassword) {
+      toast.error("New password cannot be the same as the old password.");
+      return;
     }
-  );
-};
 
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      toast.error("New password and confirm password don't match");
+      return;
+    }
+
+    changePassword(
+      {
+        registrationNo: registerNo,
+        oldPassword: passwordData.oldPassword,
+        newPassword: passwordData.newPassword,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Password changed successfully");
+          handleCloseChangePassword();
+        },
+        onError: (error) => {
+          toast.error(error?.response?.data?.message || "Failed to change password");
+        },
+      }
+    );
+  };
 
   const handleDashboardClick = () => {
     navigation("/user/userdashboard");
@@ -191,15 +202,20 @@ const handleSubmitPasswordChange = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-   useEffect(() => {
-    const savedItem = localStorage.getItem("selectedSidebarItem");
-    if (savedItem) {
-      setSelectedItem(savedItem);
+
+  // On first render, ensure we're on the dashboard if no specific route is set
+  useEffect(() => {
+    if (location.pathname === "/user" || location.pathname === "/user/") {
+      navigation("/user/userdashboard");
     }
-  }, []);
-   const handleSetSelectedItem = (item) => {
-    setSelectedItem(item);
-    localStorage.setItem("selectedSidebarItem", item);
+  }, [location.pathname, navigation]);
+
+  // Close sidebar on small screens when a menu item is clicked
+  const handleMenuItemClick = (handler) => {
+    if (!isLargeScreen) {
+      setIsSidebarOpen(false);
+    }
+    handler();
   };
 
   return (
@@ -216,9 +232,11 @@ const handleSubmitPasswordChange = () => {
           }}
         >
           <Toolbar sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <IconButton edge="start" color="inherit" onClick={toggleSidebar}>
-              <FaBars />
-            </IconButton>
+            {!isLargeScreen && (
+              <IconButton edge="start" color="inherit" onClick={toggleSidebar}>
+                <FaBars />
+              </IconButton>
+            )}
 
             <Box sx={{ textAlign: "left", width: "100%" }}>
               <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
@@ -263,10 +281,9 @@ const handleSubmitPasswordChange = () => {
                 horizontal: "right",
               }}
             >
-              <MenuItem onClick={handleProfileClick}>My Profile</MenuItem>
+              <MenuItem onClick={() => handleMenuItemClick(handleProfileClick)}>My Profile</MenuItem>
               <MenuItem onClick={handleOpenChangePassword}>
                 <Box display="flex" alignItems="center">
-                  {/* <FaCog style={{ marginRight: 8 }} /> */}
                   Change Password
                 </Box>
               </MenuItem>
@@ -275,36 +292,35 @@ const handleSubmitPasswordChange = () => {
           </Toolbar>
         </AppBar>
 
-       <Drawer
-  variant="persistent"
-  open={isSidebarOpen}
-  sx={{
-    width: isSidebarOpen ? drawerWidth : 0,
-    flexShrink: 0,
-    [`& .MuiDrawer-paper`]: {
-      width: isSidebarOpen ? drawerWidth : 0,
-      boxSizing: "border-box",
-      background: "#1a4f72",
-      color: "#fff",
-      transition: "width 0.6s ease, opacity 0.6s ease",
-      opacity: isSidebarOpen ? 1 : 0,
-    },
-  }}
->
-  <Toolbar />
-  <SidebarMenu
-    selectedItem={selectedItem}
-    setSelectedItem={handleSetSelectedItem}
-    handleDashboardClick={handleDashboardClick}
-    handleProfileClick={handleProfileClick}
-    handleMatchesClick={handleMatchesClick}
-    handleInterestClick={handleInterestClick}
-    handleViewAllClick={handleViewAllClick}
-    handleSearchClick={handleSearchClick}
-    handleOpenLogoutDialog={handleOpenLogoutDialog}
-    userProfile={userProfile}
-  />
-</Drawer>
+        <Drawer
+          variant="persistent"
+          open={isSidebarOpen}
+          sx={{
+            width: isSidebarOpen ? drawerWidth : 0,
+            flexShrink: 0,
+            [`& .MuiDrawer-paper`]: {
+              width: isSidebarOpen ? drawerWidth : 0,
+              boxSizing: "border-box",
+              background: "#1a4f72",
+              color: "#fff",
+              transition: "width 0.6s ease, opacity 0.6s ease",
+              opacity: isSidebarOpen ? 1 : 0,
+            },
+          }}
+        >
+          <Toolbar />
+          <SidebarMenu
+            selectedItem={selectedItem}
+            handleDashboardClick={() => handleMenuItemClick(handleDashboardClick)}
+            handleProfileClick={() => handleMenuItemClick(handleProfileClick)}
+            handleMatchesClick={() => handleMenuItemClick(handleMatchesClick)}
+            handleInterestClick={() => handleMenuItemClick(handleInterestClick)}
+            handleViewAllClick={() => handleMenuItemClick(handleViewAllClick)}
+            handleSearchClick={() => handleMenuItemClick(handleSearchClick)}
+            handleOpenLogoutDialog={handleOpenLogoutDialog}
+            userProfile={userProfile}
+          />
+        </Drawer>
 
         <Box
           component="main"
@@ -396,9 +412,8 @@ const handleSubmitPasswordChange = () => {
            sx={{textTransform:'capitalize',fontSize:'18px',
            color:'green',fontWeight:'bold',"&:hover": {
         backgroundColor: "transparent"}}}  disabled={isPending}>
-  {isPending ? "Changing..." : "Submit"}
-</Button>
-
+              {isPending ? "Changing..." : "Submit"}
+            </Button>
           </DialogActions>
         </Dialog>
 
