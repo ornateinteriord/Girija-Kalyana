@@ -10,9 +10,10 @@ import {
   Avatar,
   Divider,
   TextField,
+  CircularProgress,
 } from "@mui/material";
 import { FaMapMarkerAlt, FaBriefcase, FaSearch } from "react-icons/fa";
-import {  useGetAllUsersProfiles } from "../../api/User/useGetProfileDetails";
+import { useGetAllUsersProfiles } from "../../api/User/useGetProfileDetails";
 import TokenService from "../../token/tokenService";
 import ProfileDialog from "../ProfileDialog/ProfileDialog";
 import AboutPop from "../viewAll/popupContent/abouPop/AboutPop";
@@ -21,8 +22,22 @@ import EducationPop from "../viewAll/popupContent/educationPop/EducationPop";
 import LifeStylePop from "../viewAll/popupContent/lifeStylePop/LifeStylePop";
 import PreferencePop from "../viewAll/popupContent/preferencePop/PreferencePop";
 
-
 const itemsPerPage = 8;
+
+const LoadingComponent = () => (
+  <Box
+    sx={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      minHeight: "200px",
+      width: "100%",
+      gridColumn: "1 / -1",
+    }}
+  >
+    <CircularProgress size={60} />
+  </Box>
+);
 
 const ProfileInfo = ({ label, value }) => (
   <Box sx={{ textAlign: "center" }}>
@@ -42,14 +57,22 @@ const Search = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const { data: users = [] } = useGetAllUsersProfiles();
+  const [isSearching, setIsSearching] = useState(false);
+  const { data: users = [], isLoading } = useGetAllUsersProfiles();
   const loggedInUserId = TokenService.getRegistrationNo();
-  
 
   // Update searchQuery when clicking Search button
   const handleSearch = () => {
+    if (!searchTerm.trim()) return;
+    
+    setIsSearching(true);
     setSearchQuery(searchTerm.trim().toLowerCase());
     setCurrentPage(1);
+    
+    // Simulate API delay (remove this in production)
+    setTimeout(() => {
+      setIsSearching(false);
+    }, 1000);
   };
 
   // Optionally, enable "Enter" key to trigger search
@@ -69,7 +92,7 @@ const Search = () => {
 
       const fullName = `${user.first_name} ${user.last_name}`.toLowerCase();
       const email = user.email_id?.toLowerCase() || "";
-      const number = user. mobile_no?.toLowerCase() || "";
+      const number = user.mobile_no?.toLowerCase() || "";
 
       // Check if searchQuery is in name, email, or number
       return (
@@ -257,62 +280,81 @@ const Search = () => {
             variant="contained"
             color="primary"
             onClick={handleSearch}
-            sx={{ whiteSpace: "nowrap", textTransform: "capitalize", width: "150px", fontSize: "18px" }}
+            disabled={isSearching || isLoading}
+            sx={{ 
+              whiteSpace: "nowrap", 
+              textTransform: "capitalize", 
+              width: "150px", 
+              fontSize: "18px",
+              position: 'relative'
+            }}
           >
-            <FaSearch style={{ marginRight: 6 }} />
-            Search
+            {isSearching ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              <>
+                <FaSearch style={{ marginRight: 6 }} />
+                Search
+              </>
+            )}
           </Button>
         </Box>
       </Box>
 
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: {
-            xs: "1fr",
-            sm: "repeat(2, 1fr)",
-            md: "repeat(3, 1fr)",
-            lg: "repeat(4, 1fr)",
-          },
-          gap: { xs: 2, sm: 3 },
-        }}
-      >
-        {paginatedUsers.map(renderUserCard)}
-      </Box>
+      {isSearching || isLoading ? (
+        <LoadingComponent />
+      ) : (
+        <>
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: {
+                xs: "1fr",
+                sm: "repeat(2, 1fr)",
+                md: "repeat(3, 1fr)",
+                lg: "repeat(4, 1fr)",
+              },
+              gap: { xs: 2, sm: 3 },
+            }}
+          >
+            {paginatedUsers.map(renderUserCard)}
+          </Box>
 
-      {selectedUser && (
-        <ProfileDialog
-          openDialog={openDialog}
-          setOpenDialog={setOpenDialog}
-          selectedUser={selectedUser}
-          currentTab={currentTab}
-          setCurrentTab={setCurrentTab}
-          loggedInUserId={loggedInUserId}
-          isLoading={false}
-          renderDialogContent={renderDialogContent}
-        />
+          {selectedUser && (
+            <ProfileDialog
+              openDialog={openDialog}
+              setOpenDialog={setOpenDialog}
+              selectedUser={selectedUser}
+              currentTab={currentTab}
+              setCurrentTab={setCurrentTab}
+              loggedInUserId={loggedInUserId}
+              isLoading={false}
+              renderDialogContent={renderDialogContent}
+            />
+          )}
+
+          {filteredUsers.length > 0 && (
+            <Box display="flex" justifyContent="end" my={3}>
+              <Pagination
+                count={Math.ceil(filteredUsers.length / itemsPerPage)}
+                page={currentPage}
+                shape="rounded"
+                onChange={(e, page) => setCurrentPage(page)}
+                color="primary"
+              />
+            </Box>
+          )}
+
+          {/* Show message if no results found */}
+          {searchQuery && filteredUsers.length === 0 && (
+            <Box mt={4} textAlign="center" color="text.secondary">
+              <Typography>No results found for "{searchQuery}"</Typography>
+            </Box>
+          )}
+        </>
       )}
-
-     {filteredUsers.length > 0 && (
-  <Box display="flex" justifyContent="end" my={3}>
-    <Pagination
-      count={Math.ceil(filteredUsers.length / itemsPerPage)}
-      page={currentPage}
-      shape="rounded"
-      onChange={(e, page) => setCurrentPage(page)}
-      color="primary"
-    />
-  </Box>
-)}
-
-  {/* Show message if no results found */}
-  {searchQuery && filteredUsers.length === 0 && (
-    <Box mt={4} textAlign="center" color="text.secondary">
-      <Typography>No results found for "{searchQuery}"</Typography>
     </Box>
-  )}
-</Box>
-);
+  );
 };
 
 export default Search;

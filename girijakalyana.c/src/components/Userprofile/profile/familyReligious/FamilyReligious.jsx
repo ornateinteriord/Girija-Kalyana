@@ -102,7 +102,7 @@ const FamilyReligious = () => {
     <Box
       sx={{
         bgcolor: '#fff',
-        p: 1,
+         p: { xs: 1, sm: 3, md: 2 },
         borderRadius: 2,
         boxShadow: 1,
         maxWidth: 1200,

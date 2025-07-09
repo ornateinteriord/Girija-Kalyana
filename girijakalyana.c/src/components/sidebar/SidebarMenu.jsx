@@ -1,11 +1,17 @@
-// SidebarMenu.js
 import React from "react";
 import { List, ListItem, Box, Button, Typography } from "@mui/material";
-import { getMenuItems } from "../../utils/menudata/MenuData"; 
+import {
+  FaTachometerAlt,
+  FaUser,
+  FaUsers,
+  FaHeart,
+  FaSearch,
+  FaSignOutAlt,
+} from "react-icons/fa";
+import { FaUsersViewfinder } from "react-icons/fa6";
 
 const SidebarMenu = ({
   selectedItem,
-  setSelectedItem,
   handleDashboardClick,
   handleProfileClick,
   handleMatchesClick,
@@ -15,15 +21,43 @@ const SidebarMenu = ({
   handleOpenLogoutDialog,
   userProfile,
 }) => {
-  const menuItems = getMenuItems({
-    handleDashboardClick,
-    handleProfileClick,
-    handleMatchesClick,
-    handleInterestClick,
-    handleViewAllClick,
-    handleSearchClick,
-    handleOpenLogoutDialog,
-  });
+  const menuItems = [
+    {
+      text: "Dashboard",
+      icon: <FaTachometerAlt />,
+      onClick: handleDashboardClick,
+    },
+    {
+      text: "My Profile",
+      icon: <FaUser />,
+      onClick: handleProfileClick,
+    },
+    {
+      text: "My Matches",
+      icon: <FaUsers />,
+      onClick: handleMatchesClick,
+    },
+    {
+      text: "My Interest",
+      icon: <FaHeart />,
+      onClick: handleInterestClick,
+    },
+    {
+      text: "View All",
+      icon: <FaUsersViewfinder />,
+      onClick: handleViewAllClick,
+    },
+    {
+      text: "Search",
+      icon: <FaSearch />,
+      onClick: handleSearchClick,
+    },
+    {
+      text: "Logout",
+      icon: <FaSignOutAlt />,
+      onClick: handleOpenLogoutDialog,
+    },
+  ];
 
   return (
     <Box sx={{ overflow: "auto" }}>
@@ -44,16 +78,12 @@ const SidebarMenu = ({
           <ListItem
             key={index}
             disablePadding
-            onClick={() => {
-              item.onClick();
-              setSelectedItem(item.text);
-            }}
+            onClick={item.onClick}
             sx={{
               backgroundColor:
                 selectedItem === item.text ? "#1976d2" : "transparent",
               "&:hover": {
-                backgroundColor:
-                  selectedItem === item.text ? "#1976d2" : "transparent",
+                backgroundColor: "rgba(255, 255, 255, 0.1)",
               },
               borderRadius: "2px",
               mx: 0,
