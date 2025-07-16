@@ -21,6 +21,7 @@ import sidebarData from './components/PromotersDash/sidebar/data';
 import Expired from './components/PromotersDash/myReferals/Expired';
 import InActive from './components/PromotersDash/myReferals/InActive';
 import TeamUsers from './components/PromotersDash/myReferals/TeamUsers';
+import Footer from './components/footer/Footer';
 
 
 // Create a query client with default options
