@@ -20,7 +20,12 @@ import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
 import { toast } from "react-toastify";
 import { useSignupMutation } from "../api/Auth";
-import { useLocation, } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import { LoadingComponent } from "../../App";
 
 const datas = rawJsonData.reduce((acc, curr) => ({ ...acc, ...curr }), {});
 
@@ -28,8 +33,7 @@ const Register = () => {
   const location = useLocation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const signupmutation = useSignupMutation();
-  const { mutate } = signupmutation;
+  const { mutate, isPending } = useSignupMutation();
   const searchParams = new URLSearchParams(location.search);
   const planType = searchParams.get("type");
 
@@ -58,7 +62,6 @@ const Register = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // If date_of_birth is being changed, calculate age
     if (name === "date_of_birth") {
       const age = calculateAge(value);
       setFormData((prev) => ({
@@ -96,7 +99,6 @@ const Register = () => {
       toast.error("Passwords do not match");
       return;
     }
-
     try {
       mutate(formData, {
         onSuccess: () => {
@@ -109,6 +111,7 @@ const Register = () => {
   return (
     <>
       <Navbar />
+      {isPending && <LoadingComponent />}
       <Box
         sx={{
           backgroundColor: "#f5f7fa",
@@ -128,7 +131,6 @@ const Register = () => {
             p: { xs: 2, sm: 4, md: 6 },
             borderRadius: 2,
             width: "100%",
-            // maxWidth: '1400px'
           }}
         >
           <Box
@@ -218,20 +220,35 @@ const Register = () => {
                 </Select>
               </FormControl>
 
-              <TextField
-                fullWidth
-                label="Date of Birth"
-                name="date_of_birth"
-                value={formData.date_of_birth}
-                onChange={handleChange}
-                type="date"
-                InputLabelProps={{ shrink: true }}
-                required
-                sx={{ mb: 3 }}
-                inputProps={{
-                  max: new Date().toISOString().split("T")[0],
-                }}
-              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Date of Birth"
+                  value={
+                    formData.date_of_birth
+                      ? dayjs(formData.date_of_birth)
+                      : null
+                  }
+                  onChange={(newValue) => {
+                    const dob = newValue
+                      ? newValue.toISOString().split("T")[0]
+                      : "";
+                    const age = dob ? calculateAge(dob) : "";
+                    setFormData((prev) => ({
+                      ...prev,
+                      date_of_birth: dob,
+                      age: age.toString(),
+                    }));
+                  }}
+                  maxDate={dayjs()}
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      required: true,
+                      sx: { mb: 3 },
+                    },
+                  }}
+                />
+              </LocalizationProvider>
 
               <TextField
                 fullWidth
@@ -560,6 +577,7 @@ const Register = () => {
               type="submit"
               variant="contained"
               size="large"
+              disabled={isPending}
               sx={{
                 backgroundColor: "orange",
                 "&:hover": { backgroundColor: "darkorange" },
@@ -568,7 +586,7 @@ const Register = () => {
                 textTransform: "capitalize",
               }}
             >
-              Submit Registration
+              Registration Submit
             </Button>
           </Box>
         </Paper>
