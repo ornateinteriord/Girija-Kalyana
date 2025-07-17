@@ -204,6 +204,25 @@ const Photos = () => {
               * Please upload high-resolution images only (Max size: 10 MB)
             </Typography>
           </Box>
+          <Box sx={{ mb: 2 }}>
+            <Typography sx={{ fontWeight: "bold" }}>
+              Image Verification Status:{" "}
+              <Box
+                component="span"
+                sx={{
+                  color:
+                    {
+                      active: "green",
+                      pending: "orange",
+                    }[userProfile?.image_verification] || "text.secondary",
+                }}
+              >
+                {!userProfile?.image
+                  ? "Please Upload Image"
+                  : userProfile?.image_verification}
+              </Box>
+            </Typography>
+          </Box>
           <Box
             display="flex"
             gap={1}
@@ -242,7 +261,7 @@ const Photos = () => {
                 accept="image/*"
                 hidden
                 onChange={handleFileChange}
-                onClick={(e) => (e.target.value = null)} // Reset value on click to allow re-selecting same file
+                onClick={(e) => (e.target.value = null)}
               />
             </Button>
 
@@ -281,25 +300,6 @@ const Photos = () => {
                 Delete
               </Button>
             )}
-          </Box>
-          <Box sx={{ mt: 2 }}>
-            <Typography sx={{ fontWeight: "bold" }}>
-              Image Verification Status:{" "}
-              <Box
-                component="span"
-                sx={{
-                  color:
-                    {
-                      active: "green",
-                      pending: "orange",
-                    }[userProfile?.image_verification] || "text.secondary",
-                }}
-              >
-                {!userProfile?.image
-                  ? "Please Upload Image"
-                  : userProfile?.image_verification}
-              </Box>
-            </Typography>
           </Box>
         </Box>
       </Card>
