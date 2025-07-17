@@ -490,7 +490,7 @@ const Navbar = () => {
             }}
           >
             {isLoginPending ? (
-              <CircularProgress size={24} color="inherit" />
+             <CircularProgress size={24} color="inherit" /> 
             ) : (
               "Login"
             )}
