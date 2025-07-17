@@ -528,12 +528,11 @@ export const getUserDataColumns = (upgradeUserMutation, handleUpgrade) => [
       cell: row => (
         <Button
           variant="contained"
-          color="success"
           size="small"
-          sx={{ textTransform: "capitalize" }}
+          sx={{ textTransform: "capitalize",   backgroundColor: row.status === "active" ? "#f44336" : "#4caf50","&:hover": {
+      backgroundColor: row.status === "active" ? "#d32f2f" : "#388e3c", 
+    }, }}
           onClick={() => handleUpgrade(row.registration_no, row.status)}
-          disabled={upgradeUserMutation.isLoading && 
-            upgradeUserMutation.variables?.regno === row.registration_no}
         >
           {upgradeUserMutation.isLoading && 
             upgradeUserMutation.variables?.regno === row.registration_no

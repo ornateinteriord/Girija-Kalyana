@@ -11,10 +11,10 @@ import {
 } from "@mui/material";
 import MembershipDialog from "../Userprofile/MembershipDailog/MembershipDailog";
 
-const HomeUserTable = ({ userId }) => {
+const HomeUserTable = () => {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [open, setOpen] = useState(false);
-  const [currentMembership, setCurrentMembership] = useState(null);
+  const [currentMembership, ] = useState(null);
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
   const handleUpgrade = () => {
@@ -90,7 +90,6 @@ const HomeUserTable = ({ userId }) => {
                 width: isSmallScreen ? "100%" : "auto",
                 mt: isSmallScreen ? 1 : 0,
               }}
-              // onClick={handleRemoveMembership}
             >
               Remove Membership
             </Button>
@@ -164,7 +163,6 @@ const HomeUserTable = ({ userId }) => {
         open={open}
         onClose={handleClose}
         selectedPlan={selectedPlan}
-        // onConfirm={handleConfirmUpgrade}
       />
     </Box>
   );

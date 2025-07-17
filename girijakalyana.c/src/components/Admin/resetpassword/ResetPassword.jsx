@@ -28,7 +28,7 @@ const ResetPassword = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const { data: users = [], isLoading, isError, error } = getAllUserProfiles();
+  const { data: users = [], isFetching, isError, error } = getAllUserProfiles();
   const { mutateAsync: resetPassword, isPending } = UserResetPassword();
 
   if (isError) {
@@ -131,7 +131,7 @@ const ResetPassword = () => {
             rowsPerPageText: "Rows per page:",
             rangeSeparatorText: "of",
           }}
-          progressPending={isLoading}
+          progressPending={isFetching}
           progressComponent={<TableLoadingComponent />}
           noDataComponent={
             <Typography padding={3} textAlign="center">
@@ -182,15 +182,15 @@ const ResetPassword = () => {
         <DialogActions>
           <Button
             onClick={handleCloseDialog}
-            color="error"
             disabled={isPending}
+             sx={{ color: "#fff",backgroundColor:"#f44336","&:hover": {backgroundColor:"#d32f2f",} }}
           >
             Cancel
           </Button>
           <Button
+           color="white"
             onClick={handlePasswordReset}
-            sx={{ color: "#34495e" }}
-            disabled={isPending || !newPassword || !confirmPassword}
+            sx={{ color: "#fff",backgroundColor:"#4caf50","&:hover": {backgroundColor:"#388e3c",} }}
           >
             Submit
           </Button>

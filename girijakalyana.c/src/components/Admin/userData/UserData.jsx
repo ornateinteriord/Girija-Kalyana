@@ -19,7 +19,7 @@ import { TableLoadingComponent } from "../../../App";
 
 
 const UserData = () => {
-  const { data: users = [], isLoading, isError, error } = getAllUserProfiles();
+  const { data: users = [], isFetching, isError, error,} = getAllUserProfiles();
   const [localUsers, setLocalUsers] = useState(users);
   const [selectedStatus, setSelectedStatus] = useState("status");
   const [search, setSearch] = useState("");
@@ -53,7 +53,7 @@ const UserData = () => {
         }
       );
     } catch (err) {
-      console.error(err.message);
+      console.error(err.message); 
     }
   };
 
@@ -161,7 +161,7 @@ const UserData = () => {
             noRowsPerPage: false,
           }}
           noDataComponent={<Typography padding={3}>No data available</Typography>}
-          progressPending={isLoading}
+          progressPending={isFetching}
           progressComponent={<TableLoadingComponent/>}
            persistTableHead
           highlightOnHover
