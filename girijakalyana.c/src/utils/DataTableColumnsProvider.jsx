@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Typography } from "@mui/material";
 import { ModeComment } from "@mui/icons-material";
 import { getRelativeTime } from "./common/date";
+import { ViewImagesComponent } from "../components/Admin/imageVarify/ImageVerificationdata";
 
 
 export const customStyles = {
@@ -138,6 +139,19 @@ export const getImageVerificationColumns = (upgradeUserMutation,handleStatusUpda
         </Button>
       ),
     },
+    {
+  name: "Image",
+  cell: (row) => (
+      row.image?(<ViewImagesComponent
+        image={row.image} 
+        id={row.registration_no} 
+        loading={upgradeUserMutation.isLoading}
+      />):(<Typography variant="body2" color="textSecondary">
+        Not Uploaded
+      </Typography>)
+   
+  ),
+}
   ];
 
 export const getRenewalsColumns = () => [

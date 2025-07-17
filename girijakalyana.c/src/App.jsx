@@ -204,11 +204,6 @@ const App = () => {
       
         <ToastContainer position="top-right" autoClose={5000} />
       </Suspense>
-      
-      {/* React Query Devtools - Only in development */}
-      {/* {process.env.NODE_ENV === 'development' && (
-        <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
-      )} */}
     </QueryClientProvider>
 
     {/* <ProfileViewer /> */}
