@@ -130,7 +130,7 @@ export const getImageVerificationColumns = (upgradeUserMutation,handleStatusUpda
       cell: (row) => (
         <Button
           variant="contained"
-          color={row.image_verification === "active" ? "warning" : "success"}
+          sx={{backgroundColor:row.image_verification ==="active" ?"orange":"green","&:hover":{backgroundColor:row.image_verification ==="active" ?"orange":"green"}}}
           size="small"
           onClick={() => handleStatusUpdate(row.registration_no, row.image_verification)}
           disabled={upgradeUserMutation.isLoading }
