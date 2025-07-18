@@ -13,7 +13,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { FaMapMarkerAlt, FaBriefcase, FaSearch } from "react-icons/fa";
-import { useGetAllUsersProfiles } from "../../api/User/useGetProfileDetails";
+import { useGetAllUsersProfiles, useGetSearchProfiles } from "../../api/User/useGetProfileDetails";
 import TokenService from "../../token/tokenService";
 import ProfileDialog from "../ProfileDialog/ProfileDialog";
 import AboutPop from "../viewAll/popupContent/abouPop/AboutPop";
@@ -21,23 +21,11 @@ import FamilyPop from "../viewAll/popupContent/familyPop/FamilyPop";
 import EducationPop from "../viewAll/popupContent/educationPop/EducationPop";
 import LifeStylePop from "../viewAll/popupContent/lifeStylePop/LifeStylePop";
 import PreferencePop from "../viewAll/popupContent/preferencePop/PreferencePop";
+import { LoadingComponent } from "../../../App";
 
 const itemsPerPage = 8;
 
-const LoadingComponent = () => (
-  <Box
-    sx={{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      minHeight: "200px",
-      width: "100%",
-      gridColumn: "1 / -1",
-    }}
-  >
-    <CircularProgress size={60} />
-  </Box>
-);
+
 
 const ProfileInfo = ({ label, value }) => (
   <Box sx={{ textAlign: "center" }}>
@@ -58,54 +46,23 @@ const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-  const { data: users = [], isLoading } = useGetAllUsersProfiles();
+  const { data = [], isFetching,refetch,isError, } = useGetSearchProfiles(searchTerm);
   const loggedInUserId = TokenService.getRegistrationNo();
 
-  // Update searchQuery when clicking Search button
   const handleSearch = () => {
-    if (!searchTerm.trim()) return;
-    
-    setIsSearching(true);
-    setSearchQuery(searchTerm.trim().toLowerCase());
-    setCurrentPage(1);
-    
-    // Simulate API delay (remove this in production)
-    setTimeout(() => {
-      setIsSearching(false);
-    }, 1000);
+   refetch()
   };
-
-  // Optionally, enable "Enter" key to trigger search
+  
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       handleSearch();
     }
   };
 
-  // Filter users by searchQuery (name, email, or mobile number)
-  const filteredUsers = useMemo(() => {
-    if (!searchQuery) return [];
-
-    return users.filter((user) => {
-      // Exclude logged-in user and admin users
-      if (user.registration_no === loggedInUserId || user.user_role === "Admin") return false;
-
-      const fullName = `${user.first_name} ${user.last_name}`.toLowerCase();
-      const email = user.email_id?.toLowerCase() || "";
-      const number = user.mobile_no?.toLowerCase() || "";
-
-      // Check if searchQuery is in name, email, or number
-      return (
-        fullName.includes(searchQuery) ||
-        email.includes(searchQuery) ||
-        number.includes(searchQuery)
-      );
-    });
-  }, [users, loggedInUserId, searchQuery]);
 
   const paginatedUsers = useMemo(() => {
-    return filteredUsers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-  }, [filteredUsers, currentPage]);
+    return data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  }, [data, currentPage]);
 
   const handleOpenDialog = useCallback((user) => {
     setSelectedUser(user);
@@ -271,7 +228,7 @@ const Search = () => {
             size="medium"
             fullWidth
             variant="outlined"
-            placeholder="Search by name, email, or number"
+            placeholder="Search by name, email, or registeration number"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -280,7 +237,7 @@ const Search = () => {
             variant="contained"
             color="primary"
             onClick={handleSearch}
-            disabled={isSearching || isLoading}
+            disabled={isSearching || isFetching || !searchTerm.trim()}
             sx={{ 
               whiteSpace: "nowrap", 
               textTransform: "capitalize", 
@@ -289,19 +246,14 @@ const Search = () => {
               position: 'relative'
             }}
           >
-            {isSearching ? (
-              <CircularProgress size={24} color="inherit" />
-            ) : (
-              <>
+           
                 <FaSearch style={{ marginRight: 6 }} />
                 Search
-              </>
-            )}
           </Button>
         </Box>
       </Box>
 
-      {isSearching || isLoading ? (
+      {isSearching || isFetching ? (
         <LoadingComponent />
       ) : (
         <>
@@ -333,10 +285,10 @@ const Search = () => {
             />
           )}
 
-          {filteredUsers.length > 0 && (
+          {data.length > 0 && (
             <Box display="flex" justifyContent="end" my={3}>
               <Pagination
-                count={Math.ceil(filteredUsers.length / itemsPerPage)}
+                count={Math.ceil(data.length / itemsPerPage)}
                 page={currentPage}
                 shape="rounded"
                 onChange={(e, page) => setCurrentPage(page)}
@@ -346,9 +298,9 @@ const Search = () => {
           )}
 
           {/* Show message if no results found */}
-          {searchQuery && filteredUsers.length === 0 && (
-            <Box mt={4} textAlign="center" color="text.secondary">
-              <Typography>No results found for "{searchQuery}"</Typography>
+          {isError && data.length === 0 && (
+            <Box mt={4} textAlign="center">
+              <Typography color="red">No users found matching the input</Typography>
             </Box>
           )}
         </>

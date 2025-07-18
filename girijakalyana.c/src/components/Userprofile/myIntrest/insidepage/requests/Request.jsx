@@ -14,7 +14,7 @@ const Requests = () => {
 
   const {
     data: receivedInterests = [],
-    isLoading,
+    isFetching,
     isError,
     error,
     refetch,
@@ -77,7 +77,7 @@ const Requests = () => {
           marginTop: 1,
         }}
       >
-        {isLoading ? (
+        {isFetching ? (
           <LoadingComponent />
         ) : currentInterests?.length === 0 ? (
           <Typography variant="h6">No pending requests found</Typography>

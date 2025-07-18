@@ -41,7 +41,7 @@ const Sent = () => {
 
   const {
     data: sentInterests = { data: [], totalPages: 0, totalCount: 0 },
-    isLoading,
+    isFetching,
     isError,
     error,
   } = useGetSentInterests(currentUserRegistrationNo);
@@ -73,7 +73,7 @@ const Sent = () => {
     setCancelConfirmOpen(true);
   }, []);
 
-  const { mutate: cancelInterest, isLoading: isCancelling } = useCancelSentInterest();
+  const { mutate: cancelInterest, isFetching: isCancelling } = useCancelSentInterest();
 
   const handleConfirmCancel = useCallback(() => {
     const interestToCancel = sentData.find((item) => item._id === selectedCancelId);
@@ -118,7 +118,7 @@ const Sent = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      {!isLoading && sentData.length === 0 ? (
+      {!isFetching && sentData.length === 0 ? (
         <Typography>You haven't sent any interest requests.</Typography>
       ) : (
         <>
@@ -189,7 +189,7 @@ const Sent = () => {
         </DialogActions>
       </Dialog>
 
-      {isLoading && (
+      {isFetching && (
         <Box mt={4} display="flex" justifyContent="center">
           <LoadingComponent />
         </Box>

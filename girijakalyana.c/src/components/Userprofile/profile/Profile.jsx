@@ -124,7 +124,7 @@ const Profile = () => {
             backgroundColor: "transparent", 
             
           },}}/>
-              <Tab label="Parents Preference" sx={{fontWeight:700,"&:hover": {
+              <Tab label="Partner's Preference" sx={{fontWeight:700,"&:hover": {
             backgroundColor: "transparent", 
             
           },}}/>
