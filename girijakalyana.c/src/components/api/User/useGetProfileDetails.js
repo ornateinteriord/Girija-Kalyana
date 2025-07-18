@@ -20,6 +20,22 @@ export const useGetAllUsersProfiles = () => {
     },
   });
 };
+export const useGetSearchProfiles = (input) => {
+  return useQuery({
+    queryKey: ["searchProfiles",input],
+    queryFn: async () => {
+      const response = await get(`/api/user/search?input=${input}`);
+      if (response?.success) {
+        return response.users || [];
+      } else {
+        throw new Error(
+          response?.data?.error?.message
+        );
+      }
+    },
+    enabled:false,
+  });
+};
 
 // Get single member details
 export const useGetMemberDetails = (reg_No) => {
