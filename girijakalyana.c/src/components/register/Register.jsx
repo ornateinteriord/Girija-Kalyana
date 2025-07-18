@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {
+import {   
   Box,
   Paper,
   Typography,
@@ -13,6 +13,7 @@ import {
   Avatar,
   useMediaQuery,
   useTheme,
+  Chip,
 } from "@mui/material";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import rawJsonData from "../Userprofile/profile/eduction/jsondata/data.json";
@@ -26,6 +27,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { LoadingComponent } from "../../App";
+import CustomAutocomplete from "../Autocomplete/CustomAutocomplete";
+
 
 const datas = rawJsonData.reduce((acc, curr) => ({ ...acc, ...curr }), {});
 
@@ -36,6 +39,15 @@ const Register = () => {
   const { mutate, isPending } = useSignupMutation();
   const searchParams = new URLSearchParams(location.search);
   const planType = searchParams.get("type");
+
+  const [citySuggestions, setCitySuggestions] = useState(datas.cities || []);
+  const [talukSuggestions, setTalukSuggestions] = useState([]);
+  const [occupationSuggestions, setOccupationSuggestions] = useState(datas.occupationValues || []);
+  const [educationSuggestions, setEducationSuggestions] = useState(datas.qualificationValues || []);
+  const [incomeSuggestions, setIncomeSuggestions] = useState(datas.incomeValues || []);
+  const [countrySuggestions, setCountrySuggestions] = useState(datas.countries || []);
+  const [languageSuggestions, setLanguageSuggestions] = useState(datas.languageValues || []);
+  const [casteSuggestions, setCasteSuggestions] = useState(datas.casteValues || []);
 
   const getUserRole = () => {
     switch (planType) {
@@ -48,6 +60,10 @@ const Register = () => {
     }
   };
 
+  const [formData, setFormData] = useState({
+    user_role: getUserRole(),
+  });
+
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
@@ -55,13 +71,34 @@ const Register = () => {
     }));
   }, [planType]);
 
-  const [formData, setFormData] = useState({
-    user_role: getUserRole(),
-  });
+  useEffect(() => {
+    if (formData.state) {
+      const filteredCities = datas.cities?.filter(city => 
+        city.toLowerCase().includes(formData.state.toLowerCase())
+      ) || [];
+      setCitySuggestions(filteredCities);
+    }
+  }, [formData.state]);
+
+  useEffect(() => {
+    if (formData.district) {
+      const selectedDistrict = datas.districts?.find(
+        (d) => d.name.toLowerCase() === formData.district.toLowerCase()
+      );
+      setTalukSuggestions(selectedDistrict?.taluks || []);
+    }
+  }, [formData.district]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
+    
+    if (name === 'district') {
+      const selectedDistrict = datas.districts?.find(
+        (d) => d.name.toLowerCase() === value.toLowerCase()
+      );
+      setTalukSuggestions(selectedDistrict?.taluks || []);
+    }
+    
     if (name === "date_of_birth") {
       const age = calculateAge(value);
       setFormData((prev) => ({
@@ -88,7 +125,6 @@ const Register = () => {
     ) {
       age--;
     }
-
     return age;
   };
 
@@ -139,7 +175,7 @@ const Register = () => {
               alignItems: "center",
               justifyContent: "center",
               mb: 2,
-              mt: 1.5,
+              mt: 0.5,
               gap: 2,
               flexDirection: "row",
             }}
@@ -154,9 +190,37 @@ const Register = () => {
             >
               REGISTER HERE!
             </Typography>
+ 
           </Box>
 
-          <Divider sx={{ height: "1px", mb: isMobile ? 1 : 4 }} />
+    <Divider sx={{ height: "1px", mb: isMobile ? 1 : 2 }} />
+  <Box
+  sx={{
+    fontSize: '22px',
+    backgroundColor:"transparent",
+    color: 'black',
+    py: 1,
+    mb: 0,
+    borderRadius: 1,
+    textAlign: 'center',
+    fontWeight: 'bold',
+   
+  }}
+>
+  Registering as:{' '}
+  <Box 
+    component="span"
+    sx={{
+      color: theme =>
+        planType === 'SilverUser' ? theme.palette.secondary.main :
+        planType === 'PremiumUser' ? '#FFD700' : 
+        '#000',
+      textTransform: 'capitalize'  
+    }}
+  >
+    {getUserRole()}
+  </Box>
+</Box>
 
           <Box
             sx={{
@@ -165,7 +229,6 @@ const Register = () => {
               gap: 4,
             }}
           >
-            {/* LEFT: Personal + Social */}
             <Box sx={{ flex: 1 }}>
               <Typography
                 variant="h6"
@@ -182,7 +245,7 @@ const Register = () => {
                   value={formData.marital_status}
                   onChange={handleChange}
                 >
-                  {datas.marritalStatus.map((item, idx) => (
+                  {datas.marritalStatus?.map((item, idx) => (
                     <MenuItem key={idx} value={item}>
                       {item}
                     </MenuItem>
@@ -263,9 +326,9 @@ const Register = () => {
 
               <Typography
                 variant="h6"
-                sx={{ mb: 3, color: "primary.main", fontWeight: 600 }}
+                sx={{ mb: 2, color: "primary.main", fontWeight: 600 }}
               >
-                SOCIAL & CAREER DETAILS
+               SOCIAL & CAREER DETAILS
               </Typography>
 
               <Box
@@ -273,95 +336,63 @@ const Register = () => {
                   display: "flex",
                   flexWrap: "wrap",
                   gap: 2,
-                  "& .MuiFormControl-root": {
-                    flex: isMobile ? "1 1 100%" : "1 1 48%",
-                    minWidth: "120px",
-                  },
                 }}
               >
-                <FormControl sx={{ mb: 2 }}>
-                  <InputLabel>Educational Qualification</InputLabel>
-                  <Select
+                <Box sx={{ flex: '1 1 48%', minWidth: '200px' }}>
+                  <CustomAutocomplete
+                    options={educationSuggestions}
                     label="Educational Qualification"
                     name="educational_qualification"
                     value={formData.educational_qualification}
                     onChange={handleChange}
-                  >
-                    {datas.qualificationValues.map((item, idx) => (
-                      <MenuItem key={idx} value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-
-                <FormControl sx={{ mb: 2 }}>
-                  <InputLabel>Occupation</InputLabel>
-                  <Select
+                    sx={{ width: '100%', mb: 2 }}
+                  />
+                </Box>
+                <Box sx={{ flex: '1 1 48%', minWidth: '200px' }}>
+                  <CustomAutocomplete
+                    options={occupationSuggestions}
                     label="Occupation"
                     name="occupation"
                     value={formData.occupation}
                     onChange={handleChange}
-                  >
-                    {datas.occupationValues.map((item, idx) => (
-                      <MenuItem key={idx} value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                    sx={{ width: '100%', mb: 2 }}
+                  />
+                </Box>
 
-                <FormControl sx={{ mb: 2 }}>
-                  <InputLabel>Income Per Annum</InputLabel>
-                  <Select
+                <Box sx={{ flex: '1 1 48%', minWidth: '200px' }}>
+                  <CustomAutocomplete
+                    options={incomeSuggestions}
                     label="Income Per Annum"
                     name="income_per_month"
                     value={formData.income_per_month}
                     onChange={handleChange}
-                  >
-                    {datas.incomeValues.map((item, idx) => (
-                      <MenuItem key={idx} value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-
-                <FormControl sx={{ mb: 2 }}>
-                  <InputLabel>Country</InputLabel>
-                  <Select
+                    sx={{ width: '100%', mb: 2 }}
+                  />
+                </Box>
+                <Box sx={{ flex: '1 1 48%', minWidth: '200px' }}>
+                  <CustomAutocomplete
+                    options={countrySuggestions}
                     label="Country"
                     name="country"
                     value={formData.country}
                     onChange={handleChange}
-                  >
-                    {datas.countries.map((item, idx) => (
-                      <MenuItem key={idx} value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                    sx={{ width: '100%', mb: 2 }}
+                  />
+                </Box>
 
-                <FormControl sx={{ mb: 3 }}>
-                  <InputLabel>Mother Tongue</InputLabel>
-                  <Select
+                <Box sx={{ flex: '1 1 48%', minWidth: '200px' }}>
+                  <CustomAutocomplete
+                    options={languageSuggestions}
                     label="Mother Tongue"
                     name="mother_tongue"
                     value={formData.mother_tongue}
                     onChange={handleChange}
-                  >
-                    {datas.languageValues.map((item, idx) => (
-                      <MenuItem key={idx} value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                    sx={{ width: '100%', mb: 2 }}
+                  />
+                </Box>
               </Box>
             </Box>
 
-            {/* RIGHT: Family + Login */}
             <Box sx={{ flex: 1 }}>
               <Typography
                 variant="h6"
@@ -402,21 +433,14 @@ const Register = () => {
                 sx={{ mb: 3 }}
               />
 
-              <FormControl fullWidth sx={{ mb: 3 }}>
-                <InputLabel>Caste</InputLabel>
-                <Select
-                  label="Caste"
-                  name="caste"
-                  value={formData.caste}
-                  onChange={handleChange}
-                >
-                  {datas.casteValues.map((item, idx) => (
-                    <MenuItem key={idx} value={item}>
-                      {item}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <CustomAutocomplete
+                options={casteSuggestions}
+                label="Caste"
+                name="caste"
+                value={formData.caste}
+                onChange={handleChange}
+                sx={{ mb: 3 }}
+              />
 
               <TextField
                 fullWidth
@@ -429,57 +453,36 @@ const Register = () => {
                 onChange={handleChange}
               />
 
-              <FormControl fullWidth sx={{ mb: 3 }}>
-                <InputLabel>Occupation Country</InputLabel>
-                <Select
-                  label="Country"
-                  name="occupation_country"
-                  value={formData.occupation_country}
-                  onChange={handleChange}
-                >
-                  {datas.countries.map((item, idx) => (
-                    <MenuItem key={idx} value={item}>
-                      {item}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <CustomAutocomplete
+                options={countrySuggestions}
+                label="Occupation Country"
+                name="occupation_country"
+                value={formData.occupation_country}
+                onChange={handleChange}
+                sx={{ mb: 3 }}
+              />
 
-              <FormControl fullWidth sx={{ mb: 3 }}>
-                <InputLabel>Select State</InputLabel>
-                <Select
-                  label="State"
-                  name="state"
-                  value={formData.state}
-                  onChange={handleChange}
-                >
-                  {datas.states.map((item, idx) => (
-                    <MenuItem key={idx} value={item}>
-                      {item}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <CustomAutocomplete
+                options={datas.states || []}
+                label="Select State"
+                name="state"
+                value={formData.state}
+                onChange={handleChange}
+                sx={{ mb: 3 }}
+              />
 
-              <FormControl fullWidth sx={{ mb: 3 }}>
-                <InputLabel>Select City</InputLabel>
-                <Select
-                  label="City"
-                  name="city"
-                  value={formData.city}
-                  onChange={handleChange}
-                >
-                  {datas.cities.map((item, idx) => (
-                    <MenuItem key={idx} value={item}>
-                      {item}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <CustomAutocomplete
+                options={citySuggestions}
+                label="Select City"
+                name="city"
+                value={formData.city}
+                onChange={handleChange}
+                sx={{ mb: 3 }}
+              />
+
             </Box>
           </Box>
 
-          {/* LOGIN DETAILS */}
           <Typography
             variant="h6"
             sx={{ mt: 1, mb: 3, color: "primary.main", fontWeight: 600 }}
