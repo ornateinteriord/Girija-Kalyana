@@ -2,10 +2,6 @@ import React, { memo, useEffect, useState } from "react";
 import {
   Box,
   Grid,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Button,
   Typography,
   CircularProgress,
@@ -17,6 +13,7 @@ import toast from "react-hot-toast";
 import { useGetMemberDetails, useUpdateProfile } from "../../../api/User/useGetProfileDetails";
 import TokenService from "../../../token/tokenService";
 import { LoadingComponent } from "../../../../App";
+import CustomAutocomplete from "../../../Autocomplete/CustomAutocomplete";
 
 const datas = rawJsonData.reduce((acc, curr) => ({ ...acc, ...curr }), {});
 
@@ -39,9 +36,16 @@ const ParentsPrefer = () => {
     education_preference: ""
   });
 
+  // Initialize suggestions state
+  const [casteSuggestions, setCasteSuggestions] = useState(datas?.casteValues || []);
+  const [countrySuggestions, setCountrySuggestions] = useState(["India", "USA", "China"]);
+  const [ageSuggestions, setAgeSuggestions] = useState(datas?.minAge || []);
+  const [heightSuggestions, setHeightSuggestions] = useState(datas?.heightValues || []);
+  const [maritalStatusSuggestions, setMaritalStatusSuggestions] = useState(datas?.marritalStatus || []);
+  const [educationSuggestions, setEducationSuggestions] = useState(datas?.qualificationValues || []);
+
   const { data: userProfile, isLoading, isError, error } = useGetMemberDetails(registerNo);
   const { mutate: updateProfile, isPending: isUpdating } = useUpdateProfile();
-  console.log("prefffere,",userProfile)
 
   useEffect(() => {
     if (isError) {
@@ -85,49 +89,49 @@ const ParentsPrefer = () => {
     {
       name: "caste_preference",
       label: "Caste Preference",
-      options: datas?.casteValues || [],
+      options: casteSuggestions,
       currentValue: formData.caste_preference
     },
     {
       name: "occupation_country_preference",
       label: "Occupation Country",
-      options: ["India", "USA", "China"],
+      options: countrySuggestions,
       currentValue: formData.occupation_country_preference
     },
     {
       name: "from_age_preference",
       label: "Age Preference (From)",
-      options: datas?.minAge || [],
+      options: ageSuggestions,
       currentValue: formData.from_age_preference
     },
     {
       name: "to_age_preference",
       label: "Age Preference (To)",
-      options: datas?.minAge || [],
+      options: ageSuggestions,
       currentValue: formData.to_age_preference
     },
     {
       name: "from_height_preference",
       label: "Height Preference (From)",
-      options: datas?.heightValues || [],
+      options: heightSuggestions,
       currentValue: formData.from_height_preference
     },
     {
       name: "to_height_preference",
       label: "Height Preference (To)",
-      options: datas?.heightValues || [],
+      options: heightSuggestions,
       currentValue: formData.to_height_preference
     },
     {
       name: "maritalstatus_preference",
       label: "Marital Status",
-      options: datas?.marritalStatus || [],
+      options: maritalStatusSuggestions,
       currentValue: formData.maritalstatus_preference
     },
     {
       name: "education_preference",
       label: "Education Preference",
-      options: datas?.qualificationValues || [],
+      options: educationSuggestions,
       currentValue: formData.education_preference
     }
   ];
@@ -135,14 +139,12 @@ const ParentsPrefer = () => {
   return (
     <Box
       sx={{
-        padding:1,
-        backgroundColor: "#f9f9f9",
+        padding: 3,
         borderRadius: "12px",
         boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
         fontFamily: "Roboto, sans-serif",
-        width: { xs: "100%", md: "80%" },
-        // margin: "0 auto",
-        maxWidth: "1200px"
+        width: { xs: "100%", md: "100%" },
+        maxWidth: "100%"
       }}
     >
       <Typography
@@ -166,68 +168,60 @@ const ParentsPrefer = () => {
             md: 'repeat(2, 1fr)',
             lg: 'repeat(2, 1fr)'
           },
-          gap: 2
+          gap: 3.5
         }}
       >
         {formFields.map((field, index) => (
-          <FormControl key={index} fullWidth size={isXs ? "medium" : "medium"}>
-            <InputLabel>{field.label}</InputLabel>
-            <Select
-              value={field.currentValue}
-              onChange={(e) => handleChange(field.name, e.target.value)}
-              label={field.label}
-            >
-              {field.currentValue && !field.options.includes(field.currentValue) && (
-                <MenuItem key="current" value={field.currentValue}>
-                  {field.currentValue}
-                </MenuItem>
-              )}
-              {field.options.map((item, idx) => (
-                <MenuItem key={idx} value={item}>{item}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <CustomAutocomplete
+            key={index}
+            options={field.options}
+            label={field.label}
+            name={field.name}
+            value={field.currentValue}
+            onChange={(e) => handleChange(field.name, e.target.value)}
+            sx={{ width: '100%' }}
+          />
         ))}
       </Box>
 
       <Box
-      mt={1.5}
-                    sx={{
-                      display: "flex",
-                      gap: "10px",
-                      flexDirection: { xs: "row", sm: "row" },
-                      alignItems: { xs: "center", sm: "center" },
-                      justifySelf: {sm:'end',md:'end'}
-                    }}
-                  >
-                    <Button
-                      onClick={handleClear}
-                      variant="outlined"
-                      sx={{
-                        color: "black",
-                        backgroundColor: "#fff",
-                        textTransform: "capitalize",
-                        "&:hover": { backgroundColor: "#fff" },
-                        width: { xs: "100%", sm: "130px" }
-                      }}
-                    >
-                      Clear
-                    </Button>
-                    <Button
-                      onClick={handleSave}
-                      variant="contained"
-                      disabled={isUpdating}
-                      sx={{
-                        backgroundColor: "#34495e",
-                        textTransform: "capitalize",
-                        "&:hover": { backgroundColor: "#2c3e50" },
-                        width: { xs: "100%", sm: "130px" }
-                      }}
-                    >
-                      {isUpdating ? <CircularProgress size={24} /> : "Save"}
-                    </Button>
-                  </Box>
-      {isLoading && <LoadingComponent/>}
+        mt={1.5}
+        sx={{
+          display: "flex",
+          gap: "10px",
+          flexDirection: { xs: "row", sm: "row" },
+          alignItems: { xs: "center", sm: "center" },
+          justifySelf: { sm: 'end', md: 'end' }
+        }}
+      >
+        <Button
+          onClick={handleClear}
+          variant="outlined"
+          sx={{
+            color: "black",
+            backgroundColor: "#fff",
+            textTransform: "capitalize",
+            "&:hover": { backgroundColor: "#fff" },
+            width: { xs: "100%", sm: "130px" }
+          }}
+        >
+          Clear
+        </Button>
+        <Button
+          onClick={handleSave}
+          variant="contained"
+          disabled={isUpdating}
+          sx={{
+            backgroundColor: "#34495e",
+            textTransform: "capitalize",
+            "&:hover": { backgroundColor: "#2c3e50" },
+            width: { xs: "100%", sm: "130px" }
+          }}
+        >
+          {isUpdating ? <CircularProgress size={24} /> : "Save"}
+        </Button>
+      </Box>
+      {isLoading && <LoadingComponent />}
     </Box>
   );
 };
