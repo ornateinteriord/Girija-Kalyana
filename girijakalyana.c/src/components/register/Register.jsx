@@ -91,14 +91,14 @@ const Register = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
+
     if (name === 'district') {
       const selectedDistrict = datas.districts?.find(
         (d) => d.name.toLowerCase() === value.toLowerCase()
       );
       setTalukSuggestions(selectedDistrict?.taluks || []);
     }
-    
+
     if (name === "date_of_birth") {
       const age = calculateAge(value);
       setFormData((prev) => ({
@@ -190,7 +190,7 @@ const Register = () => {
             >
               REGISTER HERE!
             </Typography>
- 
+
           </Box>
 
     <Divider sx={{ height: "1px", mb: isMobile ? 1 : 2 }} />
@@ -204,7 +204,7 @@ const Register = () => {
     borderRadius: 1,
     textAlign: 'center',
     fontWeight: 'bold',
-   
+
   }}
 >
   Registering as:{' '}

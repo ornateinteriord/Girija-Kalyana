@@ -16,7 +16,7 @@ const CustomAutocomplete = ({
 
   const handleInputChange = (_, inputValue) => {
     onChange({ target: { name, value: inputValue } });
-    
+
     if (inputValue) {
       const filtered = options.filter(option =>
         option.toLowerCase().includes(inputValue.toLowerCase())
