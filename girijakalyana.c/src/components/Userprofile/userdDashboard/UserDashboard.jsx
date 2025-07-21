@@ -77,6 +77,7 @@ const UserDashboard = () => {
         >
           Welcome {userProfile?.first_name || "User"} {userProfile?.last_name || ""}
         </Typography>
+        <Typography color="#34495e">({userProfile?.registration_no})</Typography>
         <Divider sx={{ mt: 1,height:'1px' }} />
       </Box>
 
