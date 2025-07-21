@@ -25,6 +25,7 @@ import LifeStylePop from "../viewAll/popupContent/lifeStylePop/LifeStylePop";
 import PreferencePop from "../viewAll/popupContent/preferencePop/PreferencePop";
 import ProfileDialog from "../ProfileDialog/ProfileDialog";
 import GenderFilter from "../../../utils/Filters/GenderFilter";
+import { isSilverOrPremiumUser } from "../../../utils/common";
 
 
 
@@ -225,7 +226,7 @@ const MyMatches = () => {
               }}
             >
               {/* Premium badge */}
-              {(user.user_role === "PremiumUser"|| user.user_role==="SilverUser") && (
+              {isSilverOrPremiumUser(user?.type_of_user) && (
                 <Chip
                   label="PREMIUM"
                   size="small"

@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { FaBriefcase, FaMapMarkerAlt } from "react-icons/fa";
 import { LoadingComponent } from "../../../App";
+import { isSilverOrPremiumUser } from "../../../utils/common";
 
 const ProfileInfo = ({ label, value }) => (
   <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -47,7 +48,7 @@ const InterestCard = ({ senderData, handleResponse }) => {
         position: "relative",
       }}
     >
-      {(senderData.type_of_user === "PremiumUser"|| senderData.type_of_user==="SilverUser") && (
+      {isSilverOrPremiumUser(senderData?.type_of_user) && (
         <Chip
           label="PREMIUM"
           color="primary"

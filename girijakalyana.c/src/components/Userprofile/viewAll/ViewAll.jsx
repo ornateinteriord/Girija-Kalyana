@@ -24,6 +24,7 @@ import FamilyPop from "./popupContent/familyPop/FamilyPop";
 import EducationPop from "./popupContent/educationPop/EducationPop";
 import LifeStylePop from "./popupContent/lifeStylePop/LifeStylePop";
 import PreferencePop from "./popupContent/preferencePop/PreferencePop";
+import { isSilverOrPremiumUser } from "../../../utils/common";
 
 const itemsPerPage = 8;
 
@@ -120,7 +121,7 @@ const ViewAll = () => {
         }}
       >
         {/* Premium badge */}
-        {(user.type_of_user === "PremiumUser"|| user.type_of_user==="SilverUser") && (
+        {isSilverOrPremiumUser(user?.type_of_user) && (
           <Chip
             label="PREMIUM"
             size="small"

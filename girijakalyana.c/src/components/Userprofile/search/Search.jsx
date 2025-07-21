@@ -22,6 +22,7 @@ import EducationPop from "../viewAll/popupContent/educationPop/EducationPop";
 import LifeStylePop from "../viewAll/popupContent/lifeStylePop/LifeStylePop";
 import PreferencePop from "../viewAll/popupContent/preferencePop/PreferencePop";
 import { LoadingComponent } from "../../../App";
+import { isSilverOrPremiumUser } from "../../../utils/common";
 
 const itemsPerPage = 8;
 
@@ -110,7 +111,7 @@ const Search = () => {
           position: "relative",
         }}
       >
-        {(user.type_of_user === "PremiumUser"|| user.type_of_user==="SilverUser") && (
+        {isSilverOrPremiumUser(user?.type_of_user) && (
           <Chip
             label="PREMIUM"
             size="small"
