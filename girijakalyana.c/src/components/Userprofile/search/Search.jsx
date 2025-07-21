@@ -22,6 +22,7 @@ import EducationPop from "../viewAll/popupContent/educationPop/EducationPop";
 import LifeStylePop from "../viewAll/popupContent/lifeStylePop/LifeStylePop";
 import PreferencePop from "../viewAll/popupContent/preferencePop/PreferencePop";
 import { LoadingComponent } from "../../../App";
+import { isSilverOrPremiumUser } from "../../../utils/common";
 
 const itemsPerPage = 8;
 
@@ -110,12 +111,12 @@ const Search = () => {
           position: "relative",
         }}
       >
-        {user.user_role === "PremiumUser" && (
+        {isSilverOrPremiumUser(user?.type_of_user) && (
           <Chip
             label="PREMIUM"
             size="small"
             sx={{
-              background: "gold",
+            backgroundColor:"#FFD700",
               position: "absolute",
               top: 12,
               right: 12,

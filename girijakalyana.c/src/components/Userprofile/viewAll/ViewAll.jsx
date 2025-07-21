@@ -24,6 +24,7 @@ import FamilyPop from "./popupContent/familyPop/FamilyPop";
 import EducationPop from "./popupContent/educationPop/EducationPop";
 import LifeStylePop from "./popupContent/lifeStylePop/LifeStylePop";
 import PreferencePop from "./popupContent/preferencePop/PreferencePop";
+import { isSilverOrPremiumUser } from "../../../utils/common";
 
 const itemsPerPage = 8;
 
@@ -120,10 +121,9 @@ const ViewAll = () => {
         }}
       >
         {/* Premium badge */}
-        {user.user_role === "PremiumUser" && (
+        {isSilverOrPremiumUser(user?.type_of_user) && (
           <Chip
             label="PREMIUM"
-            color="primary"
             size="small"
             sx={{
               position: "absolute",
@@ -131,6 +131,7 @@ const ViewAll = () => {
               right: 12,
               fontWeight: "bold",
               fontSize: { xs: "0.6rem", sm: "0.7rem" },
+               backgroundColor:"#FFD700"
             }}
           />
         )}

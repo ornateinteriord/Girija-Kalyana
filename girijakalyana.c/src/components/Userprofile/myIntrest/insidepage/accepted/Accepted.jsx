@@ -21,6 +21,7 @@ import FamilyPop from "../../../viewAll/popupContent/familyPop/FamilyPop";
 import EducationPop from "../../../viewAll/popupContent/educationPop/EducationPop";
 import LifeStylePop from "../../../viewAll/popupContent/lifeStylePop/LifeStylePop";
 import PreferencePop from "../../../viewAll/popupContent/preferencePop/PreferencePop";
+import { isSilverOrPremiumUser } from "../../../../../utils/common";
 
 const ProfileInfo = ({ label, value }) => (
   <Box sx={{ textAlign: "center" }}>
@@ -84,6 +85,7 @@ const Accepted = () => {
           <Grid container spacing={3}>
             {currentItems.map((item, index) => {
               const profile = item.sender || {};
+             const role = isSilverOrPremiumUser(profile.type_of_use)
               
               return (
                 <Grid item xs={12} sm={6} md={3} key={index}>
@@ -107,10 +109,9 @@ const Accepted = () => {
                       position: "relative",
                     }}
                   >
-                    {profile.user_role === "PremiumUser" && (
+                    {isSilverOrPremiumUser(profile?.type_of_user) && (
                       <Chip
                         label="PREMIUM"
-                        color="primary"
                         size="small"
                         sx={{
                           position: "absolute",
@@ -118,6 +119,7 @@ const Accepted = () => {
                           right: 12,
                           fontWeight: "bold",
                           fontSize: "0.7rem",
+                          backgroundColor:"#FFD700"
                         }}
                       />
                     )}

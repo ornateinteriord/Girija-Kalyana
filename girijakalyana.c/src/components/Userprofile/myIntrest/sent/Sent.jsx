@@ -26,6 +26,7 @@ import FamilyPop from "../../viewAll/popupContent/familyPop/FamilyPop";
 import AboutPop from "../../viewAll/popupContent/abouPop/AboutPop";
 import ProfileDialog from "../../ProfileDialog/ProfileDialog";
 import { LoadingComponent } from "../../../../App";
+import { isSilverOrPremiumUser } from "../../../../utils/common";
 
 const Sent = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -223,10 +224,10 @@ const InterestCard = ({
         position: "relative",
       }}
     >
-      {profile.user_role === "PremiumUser" && (
+      
+      {isSilverOrPremiumUser(profile.type_of_use) && (
         <Chip
           label="PREMIUM"
-          color="primary"
           size="small"
           sx={{
             position: "absolute",
@@ -234,6 +235,7 @@ const InterestCard = ({
             right: 12,
             fontWeight: "bold",
             fontSize: { xs: "0.6rem", sm: "0.7rem" },
+             backgroundColor:"#FFD700"
           }}
         />
       )}
