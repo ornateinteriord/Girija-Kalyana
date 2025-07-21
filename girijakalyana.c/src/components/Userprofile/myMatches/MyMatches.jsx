@@ -225,16 +225,16 @@ const MyMatches = () => {
               }}
             >
               {/* Premium badge */}
-              {user.user_role === "PremiumUser" && (
+              {(user.user_role === "PremiumUser"|| user.user_role==="SilverUser") && (
                 <Chip
                   label="PREMIUM"
-                  color="primary"
                   size="small"
                   sx={{
                     position: "absolute",
                     top: 12,
                     right: 12,
                     fontWeight: "bold",
+                    backgroundColor:"#FFD700"
                   }}
                 />
               )}

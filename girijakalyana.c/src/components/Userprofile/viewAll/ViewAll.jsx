@@ -120,10 +120,9 @@ const ViewAll = () => {
         }}
       >
         {/* Premium badge */}
-        {user.user_role === "PremiumUser" && (
+        {(user.type_of_user === "PremiumUser"|| user.type_of_user==="SilverUser") && (
           <Chip
             label="PREMIUM"
-            color="primary"
             size="small"
             sx={{
               position: "absolute",
@@ -131,6 +130,7 @@ const ViewAll = () => {
               right: 12,
               fontWeight: "bold",
               fontSize: { xs: "0.6rem", sm: "0.7rem" },
+               backgroundColor:"#FFD700"
             }}
           />
         )}

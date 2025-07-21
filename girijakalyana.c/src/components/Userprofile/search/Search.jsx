@@ -110,12 +110,12 @@ const Search = () => {
           position: "relative",
         }}
       >
-        {user.user_role === "PremiumUser" && (
+        {(user.type_of_user === "PremiumUser"|| user.type_of_user==="SilverUser") && (
           <Chip
             label="PREMIUM"
             size="small"
             sx={{
-              background: "gold",
+            backgroundColor:"#FFD700",
               position: "absolute",
               top: 12,
               right: 12,

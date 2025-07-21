@@ -230,7 +230,7 @@ const ProfileDialog = ({
                   borderRadius: 2,
                   height: { xs: 200, sm: 250, md: 280 },
                   width: "100%",
-                  objectFit: "cover",
+                  objectFit: "contain",
                   maxWidth: { xs: "300px", md: "none" },
                 }}
               />

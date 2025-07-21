@@ -47,7 +47,7 @@ const InterestCard = ({ senderData, handleResponse }) => {
         position: "relative",
       }}
     >
-      {senderData?.user_role === "PremiumUser" && (
+      {(senderData.type_of_user === "PremiumUser"|| senderData.type_of_user==="SilverUser") && (
         <Chip
           label="PREMIUM"
           color="primary"
@@ -58,6 +58,7 @@ const InterestCard = ({ senderData, handleResponse }) => {
             right: 12,
             fontWeight: "bold",
             fontSize: { xs: "0.6rem", sm: "0.7rem" },
+             backgroundColor:"#FFD700"
           }}
         />
       )}

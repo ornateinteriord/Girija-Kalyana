@@ -107,10 +107,9 @@ const Accepted = () => {
                       position: "relative",
                     }}
                   >
-                    {profile.user_role === "PremiumUser" && (
+                    {(profile.type_of_user === "PremiumUser"|| profile.type_of_user==="SilverUser") && (
                       <Chip
                         label="PREMIUM"
-                        color="primary"
                         size="small"
                         sx={{
                           position: "absolute",
@@ -118,6 +117,7 @@ const Accepted = () => {
                           right: 12,
                           fontWeight: "bold",
                           fontSize: "0.7rem",
+                          backgroundColor:"#FFD700"
                         }}
                       />
                     )}
