@@ -6,16 +6,17 @@ import axios from "axios";
 
 // Get all user profiles
 export const useGetAllUsersProfiles = () => {
-  return useQuery({
-    queryKey: ["allUsersProfiles"],
-    queryFn: async () => {
-      const response = await get("/api/user/all-users-profiles");
+  return useMutation({
+    mutationFn: async ({ page, pageSize }) => {
+      const response = await post("/api/user/all-users-profiles", {
+        page,
+        pageSize,
+      });
+
       if (response?.success) {
-        return response.users || [];
+        return response;
       } else {
-        throw new Error(
-          response?.message || "Failed to fetch all users profiles"
-        );
+        throw new Error(response?.message || "Failed to fetch users");
       }
     },
   });
