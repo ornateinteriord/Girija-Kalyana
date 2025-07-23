@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import {
   Box,
   Divider,
@@ -17,6 +17,7 @@ import TokenService from "../../token/tokenService";
 import HomeUserTable from "../../userupgrade/HomeUserTable";
 import { useGetMemberDetails } from "../../api/User/useGetProfileDetails";
 import { LoadingComponent } from "../../../App";
+import { isSilverOrPremiumUser } from "../../../utils/common";
 
 const UserDashboard = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -38,8 +39,8 @@ const UserDashboard = () => {
     }
   }, [isError, error]);
 
-  // Dummy array to mimic profile card layout (replace later)
-  const dummyProfiles = []; // keep empty or fill with mock data if needed
+  
+  const dummyProfiles = []; 
 
   const currentCards = dummyProfiles.slice(
     (currentPage - 1) * cardsPerPage,
@@ -81,13 +82,14 @@ const UserDashboard = () => {
         <Divider sx={{ mt: 1,height:'1px' }} />
       </Box>
 
-      <Stack spacing={3}>
+    <Stack spacing={3}>
+        {!isSilverOrPremiumUser(userProfile?.type_of_user) && 
         <Box sx={{ 
           width: "100%",
           overflowX: isSmallScreen ? "auto" : "visible",
         }}>
           <HomeUserTable />
-        </Box>
+        </Box>}
 
         {/* Interested Profiles Section (UI only, logic removed) */}
         <Box>

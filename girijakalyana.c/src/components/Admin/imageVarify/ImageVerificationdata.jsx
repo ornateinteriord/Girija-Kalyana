@@ -192,7 +192,8 @@ console.log(image,'user img')
                     src={image}
                     alt={`Usr img`}
                     loading="lazy"
-                    style={{ width: "100%", borderRadius: 4 }}
+                    style={{ width: "100%",height: "500px", 
+    objectFit: "contain",  borderRadius: 4 }}
                   />
           )}
         </DialogContent>
