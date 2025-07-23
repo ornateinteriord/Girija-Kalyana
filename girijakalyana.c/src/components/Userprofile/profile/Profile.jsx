@@ -52,7 +52,7 @@ const Profile = () => {
     sx={{
       bgcolor: 'background.paper',
       borderRadius: 2,
-      boxShadow: 1,
+      boxShadow: 2,
       p: { xs: 1, sm: 3, md: 2 },
       maxWidth: 1200,
       justifySelf:{md:'start'},

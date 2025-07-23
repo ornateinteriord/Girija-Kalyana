@@ -13,11 +13,13 @@ import toast from "react-hot-toast";
 import TokenService from "../../../token/tokenService";
 import { useGetMemberDetails, useUpdateProfile } from "../../../api/User/useGetProfileDetails";
 import { LoadingComponent } from "../../../../App";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 
 const About = () => {
   const registerNo = TokenService.getRegistrationNo();
-  const [isEditing, setIsEditing] = useState(false);
-
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -54,25 +56,16 @@ const About = () => {
   };
 
   const handleReset = () => {
-    setFormData({
-      first_name: '',
-      last_name: '',
-      date_of_birth: '',
-      pincode: '',
-      address: '',
-      occupation_country: '',
-      mother_tounge: '',
-      state: '',
-      mobile_no: '',
-      email_id: '',
-      age: ''
-    });
+    if (userProfile) {
+      setFormData({
+        ...userProfile,
+        date_of_birth: userProfile.date_of_birth?.split('T')[0] || ""
+      });
+    }
   };
 
   const handleSave = () => {
-    updateProfile(formData, {
-      onSuccess: () => setIsEditing(false)
-    });
+    updateProfile(formData);
   };
 
   return (
@@ -104,23 +97,6 @@ const About = () => {
         >
           Profile Information
         </Typography>
-        <Button
-          variant={isEditing ? "outlined" : "contained"}
-          color={isEditing ? "error" : "primary"}
-          onClick={() => setIsEditing(!isEditing)}
-          disabled={isUpdating}
-          fullWidth={true}
-          sx={{
-            maxWidth: { xs: '100px', sm: 180 },
-            padding:{xs:0.6},
-            textTransform: 'capitalize',
-            fontSize: '16px',
-            "&:hover": {
-        backgroundColor: isEditing ?  "transparent" : ""}
-          }}
-        >
-          {isEditing ? 'Cancel' : 'Edit Profile'}
-        </Button>
       </Box>
 
       {/* Form Sections */}
@@ -137,10 +113,38 @@ const About = () => {
               Personal Details
             </Typography>
             <Stack spacing={2}>
-              <TextField label="First Name" name="first_name" value={formData.first_name} onChange={handleChange} disabled={!isEditing || isUpdating} fullWidth />
-              <TextField label="Last Name" name="last_name" value={formData.last_name} onChange={handleChange} disabled={!isEditing || isUpdating} fullWidth />
-              <TextField label="Date of Birth" name="date_of_birth" type="date" value={formData.date_of_birth} onChange={handleChange} disabled={!isEditing || isUpdating} InputLabelProps={{ shrink: true }} fullWidth />
-              <TextField label="Age" name="age" type="number" value={formData.age} onChange={handleChange} disabled={!isEditing || isUpdating} fullWidth />
+              <TextField label="First Name" name="first_name" value={formData.first_name} onChange={handleChange} disabled={isUpdating} fullWidth />
+              <TextField label="Last Name" name="last_name" value={formData.last_name} onChange={handleChange} disabled={isUpdating} fullWidth />
+             <LocalizationProvider dateAdapter={AdapterDayjs}>
+                             <DatePicker
+                               label="Date of Birth"
+                               value={
+                                 formData.date_of_birth
+                                   ? dayjs(formData.date_of_birth)
+                                   : null
+                               }
+                               onChange={(newValue) => {
+                                 const dob = newValue
+                                   ? newValue.toISOString().split("T")[0]
+                                   : "";
+                                 const age = dob ? calculateAge(dob) : "";
+                                 setFormData((prev) => ({
+                                   ...prev,
+                                   date_of_birth: dob,
+                                   age: age.toString(),
+                                 }));
+                               }}
+                               maxDate={dayjs()}
+                               slotProps={{
+                                 textField: {
+                                   fullWidth: true,
+                                   required: true,
+                                   sx: { mb: 3 },
+                                 },
+                               }}
+                             />
+                           </LocalizationProvider>
+              <TextField label="Age" name="age" type="number" value={formData.age} onChange={handleChange} disabled={isUpdating} fullWidth />
             </Stack>
           </Box>
 
@@ -150,9 +154,9 @@ const About = () => {
               Contact Details
             </Typography>
             <Stack spacing={2}>
-              <TextField label="Mobile Number" name="mobile_no" value={formData.mobile_no} onChange={handleChange} disabled={!isEditing || isUpdating} fullWidth />
-              <TextField label="Email" name="email_id" type="email" value={formData.email_id} onChange={handleChange} disabled={!isEditing || isUpdating} fullWidth />
-              <TextField label="Address" name="address" multiline rows={3} value={formData.address} onChange={handleChange} disabled={!isEditing || isUpdating} fullWidth />
+              <TextField label="Mobile Number" name="mobile_no" value={formData.mobile_no} onChange={handleChange} disabled={isUpdating} fullWidth />
+              <TextField label="Email" name="email_id" type="email" value={formData.email_id} onChange={handleChange} disabled={isUpdating} fullWidth />
+              <TextField label="Address" name="address" multiline rows={3} value={formData.address} onChange={handleChange} disabled={isUpdating} fullWidth />
             </Stack>
           </Box>
         </Box>
@@ -169,9 +173,9 @@ const About = () => {
               Location Details
             </Typography>
             <Stack spacing={2}>
-              <TextField label="State" name="state" value={formData.state} onChange={handleChange} disabled={!isEditing || isUpdating} fullWidth />
-              <TextField label="Pin Code" name="pincode" value={formData.pincode} onChange={handleChange} disabled={!isEditing || isUpdating} fullWidth />
-              <TextField label="Occupation Country" name="occupation_country" value={formData.occupation_country} onChange={handleChange} disabled={!isEditing || isUpdating} fullWidth />
+              <TextField label="State" name="state" value={formData.state} onChange={handleChange} disabled={isUpdating} fullWidth />
+              <TextField label="Pin Code" name="pincode" value={formData.pincode} onChange={handleChange} disabled={isUpdating} fullWidth />
+              <TextField label="Occupation Country" name="occupation_country" value={formData.occupation_country} onChange={handleChange} disabled={isUpdating} fullWidth />
             </Stack>
           </Box>
 
@@ -181,48 +185,54 @@ const About = () => {
               Additional Details
             </Typography>
             <Stack spacing={2}>
-              <TextField label="Mother Tongue" name="mother_tounge" value={formData.mother_tounge} onChange={handleChange} disabled={!isEditing || isUpdating} fullWidth />
+              <TextField label="Mother Tongue" name="mother_tounge" value={formData.mother_tounge} onChange={handleChange} disabled={isUpdating} fullWidth />
             </Stack>
           </Box>
         </Box>
       </Box>
 
       {/* Buttons */}
-      {isEditing && (
-        <Box
-          display="flex"
-          justifyContent={{ xs: 'space-evenly', sm: 'flex-end' }}
-          gap={2}
-          mt={2}
-         
+      <Box
+        display="flex"
+        justifyContent={{ xs: 'space-evenly', sm: 'flex-end' }}
+        gap={2}
+        mt={2}
+      >
+        <Button
+          variant="outlined"
+          onClick={handleReset}
+          disabled={isUpdating}
+          fullWidth={true}
+          sx={{ 
+            color: "black",
+            maxWidth: { xs: '160px', sm: 180 },
+            textTransform: 'capitalize',
+            "&:hover": {
+              backgroundColor: "transparent"
+            }
+          }}
         >
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={handleReset}
-            disabled={isUpdating}
-            fullWidth={true}
-            sx={{ maxWidth: { xs: '160px', sm: 180 } ,
-            textTransform:'capitalize',
-               "&:hover": {
-        backgroundColor: "transparent"}}}
-          >
-            Reset
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleSave}
-            disabled={isUpdating}
-            fullWidth={true}
-            sx={{ maxWidth: { xs: '160px', sm: 200,textTransform:'capitalize', backgroundColor: "#34495e",
-            color: "#fff","&:hover": {
-              backgroundColor: "#4b6074"} } }}
-            startIcon={isUpdating ? <CircularProgress size={20} /> : null}
-          >
-            {isUpdating ? 'Saving...' : 'Save'}
-          </Button>
-        </Box>
-      )}
+          Reset
+        </Button>
+        <Button
+          variant="contained"
+          onClick={handleSave}
+          disabled={isUpdating}
+          fullWidth={true}
+          sx={{ 
+            maxWidth: { xs: '160px', sm: 200 },
+            textTransform: 'capitalize', 
+            backgroundColor: "#34495e",
+            color: "#fff",
+            "&:hover": {
+              backgroundColor: "#4b6074"
+            } 
+          }}
+          startIcon={isUpdating ? <CircularProgress size={20} /> : null}
+        >
+          {isUpdating ? 'Saving...' : 'Save Changes'}
+        </Button>
+      </Box>
 
       {isLoading && <LoadingComponent />}
     </Box>

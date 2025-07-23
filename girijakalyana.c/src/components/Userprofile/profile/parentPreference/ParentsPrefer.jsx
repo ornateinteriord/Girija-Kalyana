@@ -19,9 +19,7 @@ const datas = rawJsonData.reduce((acc, curr) => ({ ...acc, ...curr }), {});
 
 const ParentsPrefer = () => {
   const theme = useTheme();
-  const isXs = useMediaQuery(theme.breakpoints.only('xs'));
-  const isMd = useMediaQuery(theme.breakpoints.between('sm', 'lg'));
-  const isLg = useMediaQuery(theme.breakpoints.up('lg'));
+    const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const registerNo = TokenService.getRegistrationNo();
 
@@ -139,7 +137,7 @@ const ParentsPrefer = () => {
   return (
     <Box
       sx={{
-        padding: 3,
+        padding: isMobile ? 1 : 3,
         borderRadius: "12px",
         boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
         fontFamily: "Roboto, sans-serif",

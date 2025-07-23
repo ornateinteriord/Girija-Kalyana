@@ -86,8 +86,8 @@ const Education = () => {
     <Box
       sx={{
         borderRadius: "8px",
-        width: { xs: "100%", sm: "90%", md: "85%", lg: "73%" },
-        p: { xs: 2, sm: 4 },
+        width: { xs: "100%", sm: "90%", md: "85%", lg: "100%" },
+        p: { xs: 1, sm: 4 },
         boxSizing: 'border-box'
       }}
     >
@@ -98,22 +98,21 @@ const Education = () => {
         <form>
           <Stack spacing={3}>
             <Stack
-              direction="column"
-              spacing={4}
+              direction= {isMobile ? "column" : "row"}
+              spacing={3}
               alignItems={isMobile ? "center" : "flex-start"}
             >
               {/* Column 1 */}
               <Box sx={{ width: '100%' }}>
                 <CustomAutocomplete
                   options={educationSuggestions}
+                  FullWidth
                   label="Qualification"
                   name="educational_qualification"
                   value={formData.educational_qualification}
                   onChange={(e) => handleChange("educational_qualification", e.target.value)}
                   sx={{ 
-                    width: isMobile ? '100%' : '400px',
-                    mb: 2 
-                  }}
+                    mb:isMobile ? 2 : 4 }}
                 />
 
                 <CustomAutocomplete
@@ -122,9 +121,9 @@ const Education = () => {
                   name="occupation"
                   value={formData.occupation}
                   onChange={(e) => handleChange("occupation", e.target.value)}
-                  sx={{ 
-                    width: isMobile ? '100%' : '400px' 
-                  }}
+                 FullWidth
+                    sx={{ 
+                    mb:isMobile ? 0 : 3}}
                 />
               </Box>
 
@@ -134,12 +133,11 @@ const Education = () => {
                   options={incomeSuggestions}
                   label="Income Per Month"
                   name="income_per_month"
+                  FullWidth
                   value={formData.income_per_month}
                   onChange={(e) => handleChange("income_per_month", e.target.value)}
-                  sx={{ 
-                    width: isMobile ? '100%' : '400px',
-                    mb: 2 
-                  }}
+                 sx={{ 
+                    mb:isMobile ? 2 : 4 }}
                 />
 
                 <CustomAutocomplete
@@ -148,9 +146,8 @@ const Education = () => {
                   name="occupation_country"
                   value={formData.occupation_country}
                   onChange={(e) => handleChange("occupation_country", e.target.value)}
-                  sx={{ 
-                    width: isMobile ? '100%' : '400px' 
-                  }}
+                  FullWidth
+                  mb={3}
                 />
               </Box>
             </Stack>
@@ -162,7 +159,7 @@ const Education = () => {
                 gap: "10px",
                 flexDirection:"row" ,
                 alignItems: "center",
-                justifyContent: "center",
+                justifyContent: "end",
                 width: '100%'
               }}
             >

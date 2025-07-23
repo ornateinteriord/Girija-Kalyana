@@ -105,6 +105,20 @@ const userData = sessionStorage.getItem("userData");
         spacing={2}
         sx={{ marginTop: "16px", justifyContent: "center" }}
       >
+          <Button
+          variant="outlined"
+         
+          onClick={handleReset}
+          sx={{
+            color: "black",
+              textTransform:'capitalize',
+               "&:hover": {
+        backgroundColor:  "transparent"}
+           
+          }}
+        >
+          Reset
+        </Button>
         <Button
           variant="contained"
         
@@ -117,21 +131,7 @@ const userData = sessionStorage.getItem("userData");
         >
           Submit
         </Button>
-        <Button
-          variant="outlined"
-         
-          onClick={handleReset}
-          sx={{
-            borderColor: "#34495e",
-            color: "black",
-              textTransform:'capitalize',
-               "&:hover": {
-        backgroundColor:  "transparent"}
-           
-          }}
-        >
-          Reset
-        </Button>
+      
       </Stack>
     </Box>
   );

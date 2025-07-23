@@ -13,13 +13,8 @@ import { useGetMemberDetails, useUpdateProfile } from "../../../api/User/useGetP
 import TokenService from "../../../token/tokenService";
 import { LoadingComponent } from "../../../../App";
 
-
-
-
 const FamilyReligious = () => {
   const registerNo = TokenService.getRegistrationNo();
-  const [isEditing, setIsEditing] = useState(false);
-
   const [formData, setFormData] = useState({
     religion: '',
     caste: '',
@@ -39,16 +34,14 @@ const FamilyReligious = () => {
     sister_elder_married: ''
   });
 
-  const { data: userProfile, isLoading, isError,error } =
-    useGetMemberDetails(registerNo);
+  const { data: userProfile, isLoading, isError, error } = useGetMemberDetails(registerNo);
   const { mutate: updateProfile, isPending: isUpdating } = useUpdateProfile();
 
-
-   useEffect(() => {
-      if (isError) {
-        toast.error(error.message);
-      }
-    }, [isError, error]);
+  useEffect(() => {
+    if (isError) {
+      toast.error(error.message);
+    }
+  }, [isError, error]);
 
   useEffect(() => {
     if (userProfile) {
@@ -67,7 +60,6 @@ const FamilyReligious = () => {
     updateProfile(formData, {
       onSuccess: () => {
         toast.success("Details updated successfully");
-        setIsEditing(false);
       },
       onError: () => {
         toast.error("Failed to update details");
@@ -76,33 +68,18 @@ const FamilyReligious = () => {
   };
 
   const handleReset = () => {
+    if (userProfile) {
       setFormData({
-        religion: '',
-        caste: '',
-        subcaste: '',
-        gotra: '',
-        rashi: '',
-        nakshatra: '',
-        sunsign: '',
-        name_of_parent: '',
-        brother_younger_unmarried: '',
-        brother_younger_married: '',
-        brother_elder_unmarried: '',
-        brother_elder_married: '',
-        sister_younger_unmarried: '',
-        sister_younger_married: '',
-        sister_elder_unmarried: '',
-        sister_elder_married: ''
-      })
+        ...userProfile,
+      });
+    }
   };
-
- 
 
   return (
     <Box
       sx={{
         bgcolor: '#fff',
-         p: { xs: 1, sm: 3, md: 2 },
+        p: { xs: 1, sm: 3, md: 2 },
         borderRadius: 2,
         boxShadow: 1,
         maxWidth: 1200,
@@ -111,26 +88,9 @@ const FamilyReligious = () => {
     >
       {/* Header */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h5" sx={{fontSize:{xs : '21px',sm:'25px',color:'#34495e'}}} fontWeight="bold">
+        <Typography variant="h5" sx={{ fontSize: { xs: '21px', sm: '25px' }, color: '#34495e' }} fontWeight="bold">
           Family & Religious Information
         </Typography>
-         <Button
-                  variant={isEditing ? "outlined" : "contained"}
-                  color={isEditing ? "error" : "primary"}
-                  onClick={() => setIsEditing(!isEditing)}
-                  disabled={isUpdating}
-                  fullWidth={true}
-                  sx={{
-                    maxWidth: { xs: '100px', sm: 180 },
-                    padding:{xs:0.6},
-                    textTransform: 'capitalize',
-                    fontSize: '16px',
-                     "&:hover": {
-        backgroundColor: isEditing ?  "transparent" : ""}
-                  }}
-                >
-                  {isEditing ? 'Cancel' : 'Edit Profile'}
-                </Button>
       </Box>
 
       {/* Sections */}
@@ -149,7 +109,6 @@ const FamilyReligious = () => {
               { name: 'gotra', label: 'Gotra' },
               { name: 'rashi', label: 'Rashi' },
               { name: 'nakshatra', label: 'Nakshatra' },
-             
             ].map(({ name, label }) => (
               <TextField
                 key={name}
@@ -157,7 +116,7 @@ const FamilyReligious = () => {
                 name={name}
                 value={formData[name]}
                 onChange={handleChange}
-                disabled={!isEditing || isUpdating}
+                disabled={isUpdating}
                 fullWidth
               />
             ))}
@@ -176,7 +135,7 @@ const FamilyReligious = () => {
               name="name_of_parent"
               value={formData.name_of_parent}
               onChange={handleChange}
-              disabled={!isEditing || isUpdating}
+              disabled={isUpdating}
               fullWidth
             />
             {[
@@ -195,7 +154,7 @@ const FamilyReligious = () => {
                 name={field}
                 value={formData[field]}
                 onChange={handleChange}
-                disabled={!isEditing || isUpdating}
+                disabled={isUpdating}
                 fullWidth
               />
             ))}
@@ -204,41 +163,48 @@ const FamilyReligious = () => {
       </Stack>
 
       {/* Actions */}
-           {isEditing && (
-              <Box
-                display="flex"
-                justifyContent={{ xs: 'space-evenly', sm: 'flex-end' }}
-                gap={2}
-                mt={2}
-               
-              >
-                <Button
-                  variant="outlined"
-                  color="error"
-                  onClick={handleReset}
-                  disabled={isUpdating}
-                  fullWidth={true}
-                  sx={{ maxWidth: { xs: '160px', sm: 180 } ,
-                  textTransform:'capitalize',
-                     "&:hover": {
-              backgroundColor: "transparent"}}}
-                >
-                  Reset
-                </Button>
-                <Button
-                  variant="contained"
-                  onClick={handleSave}
-                  disabled={isUpdating}
-                  fullWidth={true}
-                  sx={{ maxWidth: { xs: '160px', sm: 200,textTransform:'capitalize', backgroundColor: "#34495e",
-            color: "#fff","&:hover": {
-              backgroundColor: "#4b6074"} } }}
-                  startIcon={isUpdating ? <CircularProgress size={20} /> : null}
-                >
-                  {isUpdating ? 'Saving...' : 'Save '}
-                </Button>
-              </Box>
-            )}
+      <Box
+        display="flex"
+        justifyContent={{ xs: 'space-evenly', sm: 'flex-end' }}
+        gap={2}
+        mt={2}
+      >
+        <Button
+          variant="outlined"
+          onClick={handleReset}
+          disabled={isUpdating}
+          fullWidth={true}
+          sx={{ 
+            color:"black",
+            maxWidth: { xs: '160px', sm: 180 },
+            textTransform: 'capitalize',
+            "&:hover": {
+              backgroundColor: "transparent"
+            }
+          }}
+        >
+          Reset
+        </Button>
+        <Button
+          variant="contained"
+          onClick={handleSave}
+          disabled={isUpdating}
+          fullWidth={true}
+          sx={{ 
+            maxWidth: { xs: '160px', sm: 200 },
+            textTransform: 'capitalize', 
+            backgroundColor: "#34495e",
+            color: "#fff",
+            "&:hover": {
+              backgroundColor: "#4b6074"
+            } 
+          }}
+          startIcon={isUpdating ? <CircularProgress size={20} /> : null}
+        >
+          {isUpdating ? 'Saving...' : 'Save Changes'}
+        </Button>
+      </Box>
+
       {isLoading && <LoadingComponent/>}
     </Box>
   );
