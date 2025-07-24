@@ -23,6 +23,7 @@ import LifeStylePop from "../viewAll/popupContent/lifeStylePop/LifeStylePop";
 import PreferencePop from "../viewAll/popupContent/preferencePop/PreferencePop";
 import { LoadingComponent } from "../../../App";
 import { isSilverOrPremiumUser } from "../../../utils/common";
+import OthersPop from "../viewAll/popupContent/others/OthersPop";
 
 const itemsPerPage = 8;
 
@@ -78,6 +79,7 @@ const Search = () => {
       2: <EducationPop userDetails={selectedUser} />,
       3: <LifeStylePop userDetails={selectedUser} />,
       4: <PreferencePop userDetails={selectedUser} />,
+      5: <OthersPop userDetails={selectedUser} />
     };
     return contentMap[currentTab] || null;
   };
