@@ -59,7 +59,6 @@ const ViewAll = () => {
     if (!data?.content) return [];
 
     return data.content.filter((user) => {
-      if (user.user_role === "Admin") return false;
       if (selectedStatus !== "all" && user.gender !== selectedStatus)
         return false;
       return true;
@@ -301,7 +300,7 @@ const ViewAll = () => {
           <Pagination
             count={totalPages}
             page={currentPage}
-            onChange={(e, page) => setCurrentPage(page)}
+            onChange={( e,page) => setCurrentPage(page)}
             color="primary"
             shape="rounded"
             size={window.innerWidth < 600 ? "small" : "medium"}

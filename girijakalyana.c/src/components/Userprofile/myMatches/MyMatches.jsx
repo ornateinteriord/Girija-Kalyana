@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Box,
   Typography,
@@ -13,11 +13,8 @@ import {
 import { FaMapMarkerAlt, FaBriefcase } from "react-icons/fa";
 import TokenService from "../../token/tokenService";
 import {
-  useGetAllUsersProfiles,
-  useGetMemberDetails,
+  useGetMyMatches,
 } from "../../api/User/useGetProfileDetails";
-import { LoadingComponent } from "../../../App";
-import toast from "react-hot-toast";
 import AboutPop from "../viewAll/popupContent/abouPop/AboutPop";
 import FamilyPop from "../viewAll/popupContent/familyPop/FamilyPop";
 import EducationPop from "../viewAll/popupContent/educationPop/EducationPop";
@@ -27,11 +24,11 @@ import ProfileDialog from "../ProfileDialog/ProfileDialog";
 import GenderFilter from "../../../utils/Filters/GenderFilter";
 import { isSilverOrPremiumUser } from "../../../utils/common";
 import OthersPop from "../viewAll/popupContent/others/OthersPop";
+import { isSilverOrPremiumUser, LoadingTextSpinner } from "../../../utils/common";
 
 
 
 const MyMatches = () => {
-  const [userCard, setUserCard] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -42,90 +39,40 @@ const MyMatches = () => {
   const registerNo = TokenService.getRegistrationNo();
 
 
+
   const {
-    data: userProfile,
-    isLoading: isProfileLoading,
-    isError: isProfileError,
-    error: profileError,
-  } = useGetMemberDetails(registerNo);
-  const {
-    data: allUsers = [],
-    isLoading: isUsersLoading,
-    isError: isUsersError,
-    error: usersError,
-  } = useGetAllUsersProfiles();
+    mutate: fetchProfiles,
+    data,
+    isPending: isUsersLoading,
+  } = useGetMyMatches(registerNo);
 
   const handleOpenDialog = useCallback((user) => {
     setSelectedUser(user);
     setOpenDialog(true);
   }, []);
 
-  useEffect(() => {
-    if (allUsers.length > 0 && userProfile) {
-      const filteredUsers = allUsers.filter((user) => {
-        if (user.registration_no === registerNo) return false;
+   const filteredUsers = useMemo(() => {
+    if (!data?.content) return [];
 
-        if (selectedStatus !== "all" && user.gender !== selectedStatus) {
-          return false;
-        }
-        const {
-          from_age_preference,
-          to_age_preference,
-          from_height_preference,
-          to_height_preference,
-          caste_preference,
-        } = userProfile;
+    return data.content.filter((user) => {
+      if (selectedStatus !== "all" && user.gender !== selectedStatus)
+        return false;
+      return true;
+    });
+  }, [data, selectedStatus]);
 
-        const isAgeMatch =
-          from_age_preference &&
-          to_age_preference &&
-          user.age &&
-          parseInt(user.age) >= parseInt(from_age_preference) &&
-          parseInt(user.age) <= parseInt(to_age_preference);
-
-        const isHeightMatch =
-          from_height_preference &&
-          to_height_preference &&
-          user.height &&
-          parseInt(user.height?.replace("cm", "")) >=
-            parseInt(from_height_preference?.replace("cm", "")) &&
-          parseInt(user.height?.replace("cm", "")) <=
-            parseInt(to_height_preference?.replace("cm", ""));
-
-        const isCasteMatch =
-          !caste_preference ||
-          caste_preference?.toLowerCase().includes("any") ||
-          (user.caste &&
-            caste_preference?.toLowerCase().includes(user.caste.toLowerCase()));
-
-        return isAgeMatch && isHeightMatch && isCasteMatch;
-      });
-
-      setTotalItems(filteredUsers.length);
-      const startIndex = (currentPage - 1) * itemsPerPage;
-      const paginatedUsers = filteredUsers.slice(
-        startIndex,
-        startIndex + itemsPerPage
-      );
-      setUserCard(paginatedUsers);
-    } else {
-      setUserCard([]);
-      setTotalItems(0);
-    }
-  }, [allUsers, userProfile, currentPage, registerNo, selectedStatus]);
-
-  useEffect(() => {
-    if (isProfileError) toast.error(profileError.message);
-    if (isUsersError) toast.error(usersError.message);
-  }, [isProfileError, profileError, isUsersError, usersError]);
-
-  const handlePageChange = (event, page) => {
-    setCurrentPage(page);
-  };
   const handleStatusChange = (value) => {
     setSelectedStatus(value);
-    setCurrentPage(1); // Reset to first page when filter changes
+    setCurrentPage(1); 
   };
+    useEffect(() => {
+      fetchProfiles({ page: currentPage - 1, pageSize: itemsPerPage });
+    }, [currentPage, selectedStatus, fetchProfiles]);
+
+    const totalPages = useMemo(() => {
+        return data ? Math.ceil(data.totalRecords / itemsPerPage) : 1;
+      }, [data]); 
+
   const calculateAge = (dob) => {
     if (!dob) return null;
     const birthDate = new Date(dob);
@@ -184,9 +131,9 @@ const MyMatches = () => {
         />
       </Box>
 
-      {isProfileLoading || isUsersLoading ? (
-        <LoadingComponent />
-      ) : userCard.length === 0 ? (
+      { isUsersLoading ? (
+        <LoadingTextSpinner />
+      ) : filteredUsers.length === 0 ? (
         <Typography variant="h6" textAlign="center" mt={4}>
           No matches found based on your preferences.
         </Typography>
@@ -208,7 +155,7 @@ const MyMatches = () => {
   }}
 >
 
-          {userCard.map((user) => {
+          {filteredUsers?.map((user) => {
            return(
             <Card
               key={user.registration_no}
@@ -319,16 +266,7 @@ const MyMatches = () => {
                 </Box>
 
                 {/* Caste Preference */}
-                <Box mt={2} mb={2}>
-                  <Chip
-                    label={`Caste Preference: ${
-                      userProfile.caste_preference || "N/A"
-                    }`}
-                    size="small"
-                    color="secondary"
-                    sx={{ fontSize: "0.75rem" }}
-                  />
-                </Box>
+                {/* Caste Preference removed, backend handles preference filtering */}
 
                 <Box sx={{  width: "100%" }}>
                   <Button
@@ -354,14 +292,15 @@ const MyMatches = () => {
         </Box>
       )}
 
-      {userCard.length > 0 && (
+      {totalPages > 1 && (
         <Box sx={{ display: "flex", justifyContent: "end", mt: 3 }}>
           <Pagination
-            count={Math.ceil(totalItems / itemsPerPage)}
+            count={totalPages}
             page={currentPage}
-            onChange={handlePageChange}
+            onChange={(e,page) => setCurrentPage(page)}
             color="primary"
             shape="rounded"
+            size={window.innerWidth < 600 ? "small" : "medium"}
           />
         </Box>
       )}
@@ -378,6 +317,7 @@ const MyMatches = () => {
           renderDialogContent={renderDialogContent}
         />
       )}
+       
     </Box>
   );
 };
