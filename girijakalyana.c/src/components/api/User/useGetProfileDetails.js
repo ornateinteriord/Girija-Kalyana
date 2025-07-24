@@ -21,6 +21,23 @@ export const useGetAllUsersProfiles = () => {
     },
   });
 };
+export const useGetMyMatches = () => {
+  return useMutation({
+    mutationFn: async ({ page, pageSize, regno }) => {
+      const response = await post("/api/user/my-matches", {
+        page,
+        pageSize,
+         regno,
+      });
+
+      if (response?.success) {
+        return response;
+      } else {
+        throw new Error(response?.message || "Failed to fetch users");
+      }
+    },
+  });
+};
 export const useGetSearchProfiles = (input) => {
   return useQuery({
     queryKey: ["searchProfiles",input],
