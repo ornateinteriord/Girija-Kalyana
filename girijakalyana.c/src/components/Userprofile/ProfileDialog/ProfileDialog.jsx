@@ -31,7 +31,7 @@ const ProfileDialog = ({
   isLoading,
   renderDialogContent,
 }) => {
-  const tabLabels = ["About", "Family", "Education", "LifeStyle", "Preference"];
+  const tabLabels = ["About", "Family", "Education", "LifeStyle", "Preference", "Others"];
   const [localInterestStatus, setLocalInterestStatus] = useState("none");
   const [isStatusLoading, setIsStatusLoading] = useState(false);
   const [membershipDialogOpen, setMembershipDialogOpen] = useState(false);

@@ -85,7 +85,7 @@ const Requests = () => {
           currentInterests?.map((interest) => (
             <InterestCard
               key={interest._id}
-              senderData={interest.sender} // Pass the entire sender profile data // Pass the entire interest data if needed
+              senderData={interest.sender} 
               handleResponse={handleInterestResponse}
             />
           ))

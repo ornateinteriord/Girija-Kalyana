@@ -27,6 +27,7 @@ import AboutPop from "../../viewAll/popupContent/abouPop/AboutPop";
 import ProfileDialog from "../../ProfileDialog/ProfileDialog";
 import { LoadingComponent } from "../../../../App";
 import { isSilverOrPremiumUser } from "../../../../utils/common";
+import OthersPop from "../../viewAll/popupContent/others/OthersPop";
 
 const Sent = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -113,6 +114,7 @@ const Sent = () => {
       2: <EducationPop userDetails={selectedUser} />,
       3: <LifeStylePop userDetails={selectedUser} />,
       4: <PreferencePop userDetails={selectedUser} />,
+      5: <OthersPop userDetails={selectedUser} />
     };
     return contentMap[currentTab] || null;
   };

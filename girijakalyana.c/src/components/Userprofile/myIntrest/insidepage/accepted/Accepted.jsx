@@ -22,6 +22,7 @@ import EducationPop from "../../../viewAll/popupContent/educationPop/EducationPo
 import LifeStylePop from "../../../viewAll/popupContent/lifeStylePop/LifeStylePop";
 import PreferencePop from "../../../viewAll/popupContent/preferencePop/PreferencePop";
 import { isSilverOrPremiumUser } from "../../../../../utils/common";
+import OthersPop from "../../../viewAll/popupContent/others/OthersPop";
 
 const ProfileInfo = ({ label, value }) => (
   <Box sx={{ textAlign: "center" }}>
@@ -65,7 +66,8 @@ const Accepted = () => {
       1: <FamilyPop userDetails={selectedUser} />,
       2: <EducationPop userDetails={selectedUser} />,
       3: <LifeStylePop userDetails={selectedUser} />,
-      4: <PreferencePop userDetails={selectedUser} />
+      4: <PreferencePop userDetails={selectedUser} />,
+      5: <OthersPop userDetails={selectedUser} />
     };
     return contentMap[currentTab] || null;
   };
