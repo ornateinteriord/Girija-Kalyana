@@ -22,7 +22,6 @@ import LifeStylePop from "../viewAll/popupContent/lifeStylePop/LifeStylePop";
 import PreferencePop from "../viewAll/popupContent/preferencePop/PreferencePop";
 import ProfileDialog from "../ProfileDialog/ProfileDialog";
 import GenderFilter from "../../../utils/Filters/GenderFilter";
-import { isSilverOrPremiumUser } from "../../../utils/common";
 import OthersPop from "../viewAll/popupContent/others/OthersPop";
 import { isSilverOrPremiumUser, LoadingTextSpinner } from "../../../utils/common";
 
