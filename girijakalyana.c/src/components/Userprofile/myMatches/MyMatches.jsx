@@ -26,6 +26,7 @@ import PreferencePop from "../viewAll/popupContent/preferencePop/PreferencePop";
 import ProfileDialog from "../ProfileDialog/ProfileDialog";
 import GenderFilter from "../../../utils/Filters/GenderFilter";
 import { isSilverOrPremiumUser } from "../../../utils/common";
+import OthersPop from "../viewAll/popupContent/others/OthersPop";
 
 
 
@@ -145,6 +146,7 @@ const MyMatches = () => {
       3: <LifeStylePop userDetails={selectedUser} />,
       4: <PreferencePop userDetails={selectedUser} />,
       4: <PreferencePop userDetails={selectedUser} />,
+      5: <OthersPop userDetails={selectedUser} />
     };
 
     return contentMap[currentTab] || null;

@@ -16,17 +16,7 @@ const LifeStylePop = ({ userDetails }) => {
     return <Typography>No user details available.</Typography>;
   }
 
-  // 👉 Map root-level fields into a pseudo 'lifestyle' object
-  const lifestyle = {
-    skinType: userDetails.skin_type || "N/A",
-    bodyType: userDetails.body_type || "N/A",
-    diet: userDetails.diet || "N/A",
-    drink: userDetails.drink || "N/A",
-    smoke: userDetails.smoke || "N/A",
-    sunsign: userDetails.sunsign || "N/A",
-    bloodgroup: userDetails.bloodgroup || "N/A",
-  };
-
+ 
   const data = [
     { label: "Skin Type", value: userDetails.skin_type },
     { label: "Body Type", value: userDetails.body_type },
