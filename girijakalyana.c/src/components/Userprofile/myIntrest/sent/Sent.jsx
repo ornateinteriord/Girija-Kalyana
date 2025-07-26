@@ -43,7 +43,7 @@ const Sent = () => {
 
   const {
     data: sentInterests = { data: [], totalPages: 0, totalCount: 0 },
-    isLoading,
+    isFetching : isLoading,
     isError,
     error,
   } = useGetSentInterests(currentUserRegistrationNo);
