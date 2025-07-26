@@ -249,3 +249,25 @@ export const useGetInterestCounts = (reg_No) => {
     },
   });
 };
+export const useGetConnections = () => {
+  return useMutation({
+    mutationFn: async ({ page, pageSize, userId }) => {
+       const response = await get(`/api/user/connections/${userId}`, {
+        page,
+        pageSize,
+        userId
+      });
+
+      if (response?.success) {
+        return {
+          connections: response.content || [],
+          currentPage: response.currentPage,
+          pageSize: response.pageSize,
+          totalRecords: response.totalRecords
+        };
+      } else {
+        throw new Error(response?.message || "Failed to fetch connections");
+      }
+    },
+  });
+};
