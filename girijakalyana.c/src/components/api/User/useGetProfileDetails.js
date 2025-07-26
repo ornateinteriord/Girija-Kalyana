@@ -23,11 +23,10 @@ export const useGetAllUsersProfiles = () => {
 };
 export const useGetMyMatches = () => {
   return useMutation({
-    mutationFn: async ({ page, pageSize, regno }) => {
+    mutationFn: async ({ page, pageSize }) => {
       const response = await post("/api/user/my-matches", {
         page,
         pageSize,
-         regno,
       });
 
       if (response?.success) {

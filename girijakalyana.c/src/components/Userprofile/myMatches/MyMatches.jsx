@@ -29,7 +29,6 @@ import { isSilverOrPremiumUser, LoadingTextSpinner } from "../../../utils/common
 
 const MyMatches = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalItems, setTotalItems] = useState(0);
   const [selectedUser, setSelectedUser] = useState(null);
   const [openDialog, setOpenDialog] = useState(null);
   const [currentTab, setCurrentTab] = useState(0);
@@ -43,7 +42,7 @@ const MyMatches = () => {
     mutate: fetchProfiles,
     data,
     isPending: isUsersLoading,
-  } = useGetMyMatches(registerNo);
+  } = useGetMyMatches();
 
   const handleOpenDialog = useCallback((user) => {
     setSelectedUser(user);
