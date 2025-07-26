@@ -91,7 +91,6 @@ const MyMatches = () => {
       2: <EducationPop userDetails={selectedUser} />,
       3: <LifeStylePop userDetails={selectedUser} />,
       4: <PreferencePop userDetails={selectedUser} />,
-      4: <PreferencePop userDetails={selectedUser} />,
       5: <OthersPop userDetails={selectedUser} />
     };
 

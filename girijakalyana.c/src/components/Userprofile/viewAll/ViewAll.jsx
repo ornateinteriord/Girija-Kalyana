@@ -214,7 +214,7 @@ const ViewAll = () => {
 
           <Divider sx={{ my: 1, height:'1px' }} />
 
-          <Box display="flex" justifyContent="space-around" my={2}>
+          <Box display="flex" justifyContent="space-around" >
             <ProfileInfo label="Height" value={user.height || "N/A"} />
             <ProfileInfo label="Religion" value={user.religion || "N/A"} />
             <ProfileInfo label="Caste" value={user.caste || "N/A"} />

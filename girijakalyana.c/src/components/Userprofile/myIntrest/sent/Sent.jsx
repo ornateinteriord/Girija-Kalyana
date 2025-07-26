@@ -43,7 +43,7 @@ const Sent = () => {
 
   const {
     data: sentInterests = { data: [], totalPages: 0, totalCount: 0 },
-    isFetching,
+    isLoading,
     isError,
     error,
   } = useGetSentInterests(currentUserRegistrationNo);
@@ -121,7 +121,7 @@ const Sent = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      {!isFetching && sentData.length === 0 ? (
+      {!isLoading && sentData.length === 0 ? (
         <Typography>You haven't sent any interest requests.</Typography>
       ) : (
         <>
@@ -192,7 +192,7 @@ const Sent = () => {
         </DialogActions>
       </Dialog>
 
-      {isFetching && (
+      {isLoading && (
         <Box mt={4} display="flex" justifyContent="center">
           <LoadingComponent />
         </Box>
