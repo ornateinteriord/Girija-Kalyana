@@ -18,7 +18,7 @@ const MyInterest = () => {
     sent: 0,
   });
 
-  const { data: countsData } = useGetInterestCounts(registrationNo);
+  const { data: countsData , refetch : refetchCounts} = useGetInterestCounts(registrationNo);
   
  
 
@@ -44,11 +44,11 @@ const MyInterest = () => {
   const renderContents = () => {
     switch (tabValue) {
       case 0:
-        return <Accepted  />;
+        return <Accepted />;
       case 1:
-        return <Requests />;
+        return <Requests refetchCounts={refetchCounts} />;
       case 2:
-        return <Sent  />;
+        return <Sent refetchCounts={refetchCounts} />;
       default:
         return null;
     }
