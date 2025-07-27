@@ -14,7 +14,6 @@ import {
 import { FaBriefcase, FaMapMarkerAlt } from "react-icons/fa";
 import TokenService from "../../../../token/tokenService";
 import { useGetAcceptedInterests } from "../../../../api/User/useGetProfileDetails";
-import { LoadingComponent } from "../../../../../App";
 import ProfileDialog from "../../../ProfileDialog/ProfileDialog";
 import AboutPop from "../../../viewAll/popupContent/abouPop/AboutPop";
 import FamilyPop from "../../../viewAll/popupContent/familyPop/FamilyPop";
@@ -22,7 +21,7 @@ import EducationPop from "../../../viewAll/popupContent/educationPop/EducationPo
 import LifeStylePop from "../../../viewAll/popupContent/lifeStylePop/LifeStylePop";
 import PreferencePop from "../../../viewAll/popupContent/preferencePop/PreferencePop";
 import OthersPop from "../../../viewAll/popupContent/others/OthersPop";
-import { isSilverOrPremiumUser } from "../../../../../utils/common";
+import { isSilverOrPremiumUser, LoadingTextSpinner } from "../../../../../utils/common";
 
 const ProfileInfo = ({ label, value }) => (
   <Box sx={{ textAlign: "center" }}>
@@ -77,7 +76,7 @@ const Accepted = () => {
   return (
     <Box sx={{ padding: 3 }}>
       {isLoading ? (
-        <LoadingComponent />
+        <LoadingTextSpinner />
       ) : interests.length === 0 ? (
         <Typography variant="h6" textAlign="center" mt={4}>
           No accepted interests found

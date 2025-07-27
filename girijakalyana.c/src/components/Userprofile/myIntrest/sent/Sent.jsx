@@ -25,8 +25,7 @@ import EducationPop from "../../viewAll/popupContent/educationPop/EducationPop";
 import FamilyPop from "../../viewAll/popupContent/familyPop/FamilyPop";
 import AboutPop from "../../viewAll/popupContent/abouPop/AboutPop";
 import ProfileDialog from "../../ProfileDialog/ProfileDialog";
-import { LoadingComponent } from "../../../../App";
-import { isSilverOrPremiumUser } from "../../../../utils/common";
+import { isSilverOrPremiumUser, LoadingTextSpinner } from "../../../../utils/common";
 import OthersPop from "../../viewAll/popupContent/others/OthersPop";
 
 const Sent = ({refetchCounts}) => {
@@ -180,9 +179,7 @@ const Sent = ({refetchCounts}) => {
       </Dialog>
 
       {isLoading && (
-        <Box mt={4} display="flex" justifyContent="center">
-          <LoadingComponent />
-        </Box>
+        <LoadingTextSpinner />
       )}
     </Box>
   );

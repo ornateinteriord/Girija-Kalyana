@@ -4,7 +4,7 @@ import { useGetReceivedInterests, useUpdateInterestStatus } from "../../../../ap
 import TokenService from "../../../../token/tokenService";
 import toast from "react-hot-toast";
 import InterestCard from "../../../intrestCard/IntrestCard";
-import { LoadingComponent } from "../../../../../App";
+import { LoadingTextSpinner } from "../../../../../utils/common";
 
 const Requests = ({refetchCounts}) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -70,7 +70,7 @@ const Requests = ({refetchCounts}) => {
         }}
       >
         {isFetching ? (
-          <LoadingComponent />
+          <LoadingTextSpinner />
         ) : interests.length === 0 ? (
           <Typography variant="h6">No pending requests found</Typography>
         ) : (
