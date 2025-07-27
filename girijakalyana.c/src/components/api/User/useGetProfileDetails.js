@@ -126,29 +126,43 @@ export const useExpressInterest = () => {
 };
 
 export const useGetReceivedInterests = (recipient) => {
-  return useQuery({
-    queryKey: ["receivedInterests", recipient],
-    queryFn: async () => {
-      const response = await get(
-        `/api/user/interest/received/${recipient}`
-      );
+    const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ page, pageSize }) => {
+      const response = await post(`/api/user/interest/received/${recipient}`, {
+        page,
+        pageSize,
+      });
 
-      return response;
+      if (response?.success) {
+        return response;
+      } else {
+        throw new Error(response?.message || "Failed to fetch users");
+      }
     },
-    enabled: !!recipient,
-    staleTime: 1000 * 60 * 5,
+    onSuccess: ()=>{
+      queryClient.invalidateQueries(['interestCounts']);
+    }
   });
 };
-
-// Get interest status query
-// api/User/useGetProfileDetails.js
 export const useGetSentInterests = (sender) => {
-  return useSuspenseQuery({
-    queryKey: ["sentInterests", sender],
-    queryFn: async () => {
-      const data = await get(`/api/user/interest/sent/${sender}`);
-      return data || { data: [], totalPages: 0 };
+    const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ page, pageSize }) => {
+      const response = await post(`/api/user/interest/sent/${sender}`, {
+        page,
+        pageSize,
+      });
+
+      if (response?.success) {
+        return response;
+      } else {
+        throw new Error(response?.message || "Failed to fetch users");
+      }
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['interestCounts']);
+    }
   });
 };
 
@@ -179,20 +193,25 @@ export const useUpdateInterestStatus = () => {
 };
 
 export const useGetAcceptedInterests = (recipient) => {
-  return useQuery({
-    queryKey: ["acceptedInterests", recipient],
-    queryFn: async () => {
-      const response = await get(`/api/user/interest/accepted/${recipient}`);
-      return response;
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ page, pageSize }) => {
+      const response = await post(`/api/user/interest/accepted/${recipient}`, {
+        page,
+        pageSize,
+      });
+
+      if (response?.success) {
+        return response;
+      } else {
+        throw new Error(response?.message || "Failed to fetch users");
+      }
     },
-    enabled: !!recipient,
-    staleTime: 1000 * 60 * 5,
-    onError: (error) => {
-      toast.error(error?.message || "Failed to fetch accepted interests.");
+    onSuccess : () => {
+      queryClient.invalidateQueries(['interestCounts']);
     }
   });
 };
-
 
 export const useCancelSentInterest = () => {
   return useMutation({
@@ -241,7 +260,7 @@ export const useChangePassword = () => {
 
 export const useGetInterestCounts = (reg_No) => {
   return useSuspenseQuery({
-    queryKey: ["sentInterests","acceptedInterests","receivedInterests", reg_No],
+    queryKey: ["sentInterests","acceptedInterests","receivedInterests",'interestCounts', reg_No],
     queryFn: async () => {
       const data = await get(`/api/user/interest-counts/${reg_No}`);
       return data;

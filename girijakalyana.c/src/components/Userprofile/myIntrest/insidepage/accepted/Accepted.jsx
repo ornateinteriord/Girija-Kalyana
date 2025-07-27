@@ -1,4 +1,4 @@
-import  { useCallback, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Box,
   Card,
@@ -14,15 +14,14 @@ import {
 import { FaBriefcase, FaMapMarkerAlt } from "react-icons/fa";
 import TokenService from "../../../../token/tokenService";
 import { useGetAcceptedInterests } from "../../../../api/User/useGetProfileDetails";
-import { LoadingComponent } from "../../../../../App";
 import ProfileDialog from "../../../ProfileDialog/ProfileDialog";
 import AboutPop from "../../../viewAll/popupContent/abouPop/AboutPop";
 import FamilyPop from "../../../viewAll/popupContent/familyPop/FamilyPop";
 import EducationPop from "../../../viewAll/popupContent/educationPop/EducationPop";
 import LifeStylePop from "../../../viewAll/popupContent/lifeStylePop/LifeStylePop";
 import PreferencePop from "../../../viewAll/popupContent/preferencePop/PreferencePop";
-import { isSilverOrPremiumUser } from "../../../../../utils/common";
 import OthersPop from "../../../viewAll/popupContent/others/OthersPop";
+import { isSilverOrPremiumUser, LoadingTextSpinner } from "../../../../../utils/common";
 
 const ProfileInfo = ({ label, value }) => (
   <Box sx={{ textAlign: "center" }}>
@@ -33,26 +32,26 @@ const ProfileInfo = ({ label, value }) => (
 
 const Accepted = () => {
   const registrationNo = TokenService.getRegistrationNo();
-  const { data: responseData, isLoading } = useGetAcceptedInterests(registrationNo);
+  const { data: responseData, isPending: isLoading, mutate: fetchAcceptedProfiles } = useGetAcceptedInterests(registrationNo);
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
+
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [currentTab, setCurrentTab] = useState(0);
 
-  const allAccepted = Array.isArray(responseData)
-    ? responseData.filter(item => item?.status === "accepted")
-    : [];
+  useEffect(() => {
+    fetchAcceptedProfiles({ page: currentPage - 1, pageSize: itemsPerPage });
+  }, [currentPage]);
 
-  const totalItems = allAccepted.length;
+  const totalPages = useMemo(() => {
+    return responseData ? Math.ceil(responseData.totalRecords / itemsPerPage) : 1;
+  }, [responseData]);
 
   const handlePageChange = (_, value) => {
     setCurrentPage(value);
   };
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = allAccepted.slice(indexOfFirstItem, indexOfLastItem);
 
   const handleOpenDialog = useCallback((user) => {
     setSelectedUser(user);
@@ -72,23 +71,21 @@ const Accepted = () => {
     return contentMap[currentTab] || null;
   };
 
-   
+  const interests = responseData?.content || [];
 
   return (
     <Box sx={{ padding: 3 }}>
       {isLoading ? (
-        <LoadingComponent />
-      ) : totalItems === 0 ? (
+        <LoadingTextSpinner />
+      ) : interests.length === 0 ? (
         <Typography variant="h6" textAlign="center" mt={4}>
           No accepted interests found
         </Typography>
       ) : (
         <>
           <Grid container spacing={3}>
-            {currentItems.map((item, index) => {
+            {interests.map((item, index) => {
               const profile = item.sender || {};
-             const role = isSilverOrPremiumUser(profile.type_of_use)
-              
               return (
                 <Grid item xs={12} sm={6} md={3} key={index}>
                   <Card
@@ -100,10 +97,7 @@ const Accepted = () => {
                       boxShadow: 3,
                       overflow: "hidden",
                       transition: "transform 0.2s",
-                      "&:hover": {
-                        transform: "translateY(-4px)",
-                        boxShadow: 6,
-                      },
+                      "&:hover": { transform: "translateY(-4px)", boxShadow: 6 },
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
@@ -121,22 +115,22 @@ const Accepted = () => {
                           right: 12,
                           fontWeight: "bold",
                           fontSize: "0.7rem",
-                          backgroundColor:"#FFD700"
+                          backgroundColor: "#FFD700",
                         }}
                       />
                     )}
 
                     <Box
-                         sx={{
-                           width: { xs: 100, sm: 120 },
-                           height: { xs: 100, sm: 120 },
-                           borderRadius: "50%",
-                           border: "3px solid #87CEEB",
-                           boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-                           padding: "2px",
-                           background: "linear-gradient(45deg, #87CEEB, #E0F7FA)",
-                         }}
-                       >
+                      sx={{
+                        width: { xs: 100, sm: 120 },
+                        height: { xs: 100, sm: 120 },
+                        borderRadius: "50%",
+                        border: "3px solid #87CEEB",
+                        boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+                        padding: "2px",
+                        background: "linear-gradient(45deg, #87CEEB, #E0F7FA)",
+                      }}
+                    >
                       <Avatar
                         src={profile?.image}
                         alt={profile?.first_name}
@@ -152,27 +146,21 @@ const Accepted = () => {
                         {profile.age || "N/A"} yrs
                       </Typography>
 
-                      <Box
-                        sx={{ display: "flex",alignItems:'center', justifyContent: "center", gap: 1, mt: 1 }}
-                      >
+                      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 1, mt: 1 }}>
                         <FaBriefcase size={14} color="#777" />
                         <Typography variant="body2" color={"#000"}>
                           {profile.occupation || "Not specified"}
                         </Typography>
                       </Box>
 
-                      <Box
-                        sx={{ display: "flex",alignItems:'center', justifyContent: "center", gap: 1, mt: 1 }}
-                      >
+                      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 1, mt: 1 }}>
                         <FaMapMarkerAlt size={14} color="#777" />
                         <Typography variant="body2" color={"#000"}>
-                          {[profile.city, profile.state, profile.country]
-                            .filter(Boolean)
-                            .join(", ") || "Location not specified"}
+                          {[profile.city, profile.state, profile.country].filter(Boolean).join(", ") || "Location not specified"}
                         </Typography>
                       </Box>
 
-                      <Divider sx={{ my: 1, height:'1px'}} />
+                      <Divider sx={{ my: 1, height: "1px" }} />
 
                       <Box display="flex" justifyContent="space-around" mb={2} color={"#000"}>
                         <ProfileInfo label="Height" value={profile.height || "N/A"} />
@@ -202,21 +190,17 @@ const Accepted = () => {
             })}
           </Grid>
 
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "end",
-              marginTop: 4,
-            }}
-          >
-            <Pagination
-              count={Math.ceil(totalItems / itemsPerPage)}
-              page={currentPage}
-              onChange={handlePageChange}
-              shape="rounded"
-              color="primary"
-            />
-          </Box>
+          {totalPages > 1 && (
+            <Box sx={{ display: "flex", justifyContent: "end", marginTop: 4 }}>
+              <Pagination
+                count={totalPages}
+                page={currentPage}
+                onChange={handlePageChange}
+                shape="rounded"
+                color="primary"
+              />
+            </Box>
+          )}
         </>
       )}
 
