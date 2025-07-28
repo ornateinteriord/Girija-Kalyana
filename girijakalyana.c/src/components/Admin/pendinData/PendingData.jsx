@@ -11,13 +11,13 @@ import {
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 import { getAllUserProfiles } from "../../api/Admin";
-import {  TableLoadingComponent } from "../../../App";
 import { toast } from "react-toastify";
 import DataTable from "react-data-table-component";
 import {
   customStyles,
   getAssistancePendingColumns,
 } from "../../../utils/DataTableColumnsProvider";
+import { LoadingTextSpinner } from "../../../utils/common";
 
 const PendingData = () => {
   const { data: users = [], isLoading, isError, error } = getAllUserProfiles();
@@ -97,7 +97,7 @@ const PendingData = () => {
             <Typography padding={3}>No data available</Typography>
           }
           progressPending={isLoading}
-          progressComponent={<TableLoadingComponent />}
+          progressComponent={<LoadingTextSpinner />}
            persistTableHead
           highlightOnHover
         />

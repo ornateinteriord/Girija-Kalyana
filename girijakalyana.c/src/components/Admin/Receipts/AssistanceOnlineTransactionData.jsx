@@ -8,13 +8,13 @@ import {
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 import { getAllAssistanceTransactions } from "../../api/Admin";
-import {  TableLoadingComponent } from "../../../App";
 import DataTable from "react-data-table-component";
 import {
   customStyles,
   getAssistanceOnlineTransactionDataColumns,
 } from "../../../utils/DataTableColumnsProvider";
 import { toast } from "react-toastify";
+import { LoadingTextSpinner } from "../../../utils/common";
 
 const AssistanceOnlineTransactionData = () => {
   const {
@@ -109,7 +109,7 @@ const AssistanceOnlineTransactionData = () => {
             </Typography>
           }
           progressPending={isLoading}
-          progressComponent={<TableLoadingComponent />}
+          progressComponent={<LoadingTextSpinner />}
           persistTableHead
           highlightOnHover
         />

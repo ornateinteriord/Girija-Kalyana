@@ -11,24 +11,30 @@ import axios from "axios";
 import { FaSearch } from "react-icons/fa";
 import { getAllUserProfiles } from "../../api/Admin";
 import { toast } from "react-toastify";
-import {  TableLoadingComponent } from "../../../App";
 import DataTable from "react-data-table-component";
 import {
   customStyles,
   getUserReportsColumns,
 } from "../../../utils/DataTableColumnsProvider";
+import { LoadingTextSpinner } from "../../../utils/common";
 
 const UserReports = () => {
-  const { data: users = [], isLoading, isError, error } = getAllUserProfiles();
+  const { data , isPending:isLoading, isError, error, mutate : fetchUsers } = getAllUserProfiles();
   const [search, setSearch] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const users = data?.content || []
+  const [paginationModel,setpaginationModel] = useState({page:0,pageSize:50})
 
   useEffect(() => {
     if (isError) {
       toast.error(error.message);
     }
   }, [isError, error]);
+
+  useEffect(() => {
+    fetchUsers({page : paginationModel.page, pageSize: paginationModel.pageSize});
+  },[])
 
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
@@ -147,8 +153,11 @@ const UserReports = () => {
         columns={getUserReportsColumns()}
         data={filteredRecords}
         pagination
-        paginationPerPage={6}
-        paginationRowsPerPageOptions={[6, 10, 15, 20]}
+        paginationDefaultPage={paginationModel.page + 1}
+        onChangePage={(page)=>setpaginationModel((prev)=>({...prev,page:page-1}))}
+        onChangeRowsPerPage={(pageSize)=>setpaginationModel((prev)=>({...prev,pageSize}))}
+        paginationPerPage={paginationModel.pageSize}
+        paginationRowsPerPageOptions={[6, 10, 15, 20,50]}
         paginationComponentOptions={{
           rowsPerPageText: "Rows per page:",
           rangeSeparatorText: "of",
@@ -160,7 +169,7 @@ const UserReports = () => {
         }
         customStyles={customStyles}
         progressPending={isLoading}
-        progressComponent={<TableLoadingComponent />}
+        progressComponent={<LoadingTextSpinner />}
         persistTableHead
         highlightOnHover
       />

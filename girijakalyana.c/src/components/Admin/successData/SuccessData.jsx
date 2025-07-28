@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import DataTable from "react-data-table-component";
+import PaginationDataTable from "../../common/PaginationDataTable";
 import {
   Box,
   Typography,
@@ -13,13 +13,18 @@ import {
   customStyles,
   getAssistanceSuccessColumns,
 } from "../../../utils/DataTableColumnsProvider";
-import {  TableLoadingComponent } from "../../../App";
+import { LoadingTextSpinner } from "../../../utils/common";
+
 
 const SuccessData = () => {
-  const { data: users = [], isLoading, isError, error } = getAllUserProfiles();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(7);
+  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 50 });
+  const { data, isPending: isLoading, isError, error, mutate: fetchUsers } = getAllUserProfiles();
+  const users = data?.content || [];
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    fetchUsers({ page: paginationModel.page, pageSize: paginationModel.pageSize });
+  }, [paginationModel.page, paginationModel.pageSize, fetchUsers]);
 
   useEffect(() => {
     if (isError) {
@@ -31,10 +36,9 @@ const SuccessData = () => {
     setSearch(event.target.value);
   };
 
-  const filterCurrentRowData = users.filter((data) => {
+  const filteredRows = users.filter((data) => {
     const isAdmin = data?.user_role?.toLowerCase() === "admin";
     const isActive = data?.status?.toLowerCase() === "active";
-
     return (
       !isAdmin &&
       isActive &&
@@ -60,16 +64,6 @@ const SuccessData = () => {
     );
   });
 
-  const startIndex = (currentPage - 1) * rowsPerPage;
-  const paginatedRecords = filterCurrentRowData.slice(
-    startIndex,
-    startIndex + rowsPerPage
-  );
-
-  const handlePageChange = (event, page) => {
-    setCurrentPage(page);
-  };
-
   return (
     <div style={{ padding: "20px", paddingLeft: "30px", paddingTop: "100px" }}>
       <Typography
@@ -82,7 +76,6 @@ const SuccessData = () => {
       >
         Success Data
       </Typography>
-
       <Box display="flex" alignItems="center" gap={2}>
         <TextField
           placeholder="Search user"
@@ -90,7 +83,7 @@ const SuccessData = () => {
           variant="outlined"
           value={search}
           onChange={handleSearch}
-          sx={{ width: { xs: "100%", sm: "auto", md: "auto" },mb:"20px" }}
+          sx={{ width: { xs: "100%", sm: "auto", md: "auto" }, mb: "20px" }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start" style={{ marginRight: "8px" }}>
@@ -100,29 +93,18 @@ const SuccessData = () => {
           }}
         />
       </Box>
-
-      <Paper>
-        <DataTable
-          columns={getAssistanceSuccessColumns()}
-          data={filterCurrentRowData}
-          customStyles={customStyles}
-          pagination
-          paginationPerPage={6}
-          paginationRowsPerPageOptions={[6, 10, 15, 20]}
-          paginationComponentOptions={{
-            rowsPerPageText: "Rows per page:",
-            rangeSeparatorText: "of",
-            noRowsPerPage: false,
-          }}
-          noDataComponent={
-            <Typography padding={3}>No data available</Typography>
-          }
-          progressPending={isLoading}
-          progressComponent={<TableLoadingComponent />}
-            persistTableHead
-          highlightOnHover
-        />
-      </Paper>
+      <PaginationDataTable
+        columns={getAssistanceSuccessColumns()}
+        data={filteredRows}
+        customStyles={customStyles}
+        isLoading={isLoading}
+        totalRows={data?.totalRecords || 0}
+        paginationModel={paginationModel}
+        setPaginationModel={setPaginationModel}
+        rowsPerPageOptions={[6, 10, 15, 20, 50, 1000]}
+        noDataComponent={<Typography padding={3}>No data available</Typography>}
+        progressComponent={<LoadingTextSpinner />}
+      />
     </div>
   );
 };

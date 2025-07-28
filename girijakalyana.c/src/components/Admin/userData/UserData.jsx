@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import DataTable from "react-data-table-component";
+import  { useEffect, useState } from "react";
+import PaginationDataTable from "../../common/PaginationDataTable";
 import {
   TextField,
   Select,
@@ -7,22 +7,23 @@ import {
   FormControl,
   Typography,
   InputAdornment,
-  Paper,
-  CircularProgress,
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 import "./UserData.css";
 import { getAllUserProfiles, UpgradeUserStatus } from "../../api/Admin";
 import toast from "react-hot-toast";
 import { customStyles, getUserDataColumns } from "../../../utils/DataTableColumnsProvider";
-import { TableLoadingComponent } from "../../../App";
+import { LoadingTextSpinner } from "../../../utils/common";
 
 
 const UserData = () => {
-  const { data: users = [], isFetching, isError, error,} = getAllUserProfiles();
+ const { data , isPending:isFetching, isError, error, mutate : fetchUsers } = getAllUserProfiles();
+  const users = data?.content || []
   const [localUsers, setLocalUsers] = useState(users);
   const [selectedStatus, setSelectedStatus] = useState("status");
   const [search, setSearch] = useState("");
+  
+    const [paginationModel,setPaginationModel] = useState({page:0,pageSize:50})
 
   useEffect(() => {
     if (users.length > 0) {
@@ -30,13 +31,18 @@ const UserData = () => {
     }
   }, [users]);
 
+  // Fetch users whenever page or pageSize changes
+  useEffect(() => {
+    fetchUsers({ page: paginationModel.page, pageSize: paginationModel.pageSize });
+  }, [paginationModel.page, paginationModel.pageSize, fetchUsers]);
+
   const upgradeUserMutation = UpgradeUserStatus();
 
   const handleUpgrade = async (regno, currentStatus) => {
     try {
       const newStatus = currentStatus === "active" ? "inactive" : "active";
       await upgradeUserMutation.mutateAsync(
-        { regno, status: newStatus },
+        { regno, status: newStatus, },
         {
           onSuccess: () => {
             setLocalUsers((prevUsers) =>
@@ -147,26 +153,17 @@ const UserData = () => {
         </div>
 
       {/* DataTable */}
-      <Paper sx={{mt:2}}>
-        <DataTable
-          columns={getUserDataColumns(upgradeUserMutation ,handleUpgrade)}
-          data={filteredRows}
-          customStyles={customStyles}
-          pagination
-          paginationPerPage={6}
-          paginationRowsPerPageOptions={[6, 10, 15, 20]}
-          paginationComponentOptions={{
-            rowsPerPageText: 'Rows per page:',
-            rangeSeparatorText: 'of',
-            noRowsPerPage: false,
-          }}
-          noDataComponent={<Typography padding={3}>No data available</Typography>}
-          progressPending={isFetching}
-          progressComponent={<TableLoadingComponent/>}
-           persistTableHead
-          highlightOnHover
-        />
-      </Paper>
+      <PaginationDataTable
+        columns={getUserDataColumns(upgradeUserMutation, handleUpgrade)}
+        data={filteredRows}
+        customStyles={customStyles}
+        isLoading={isFetching}
+        totalRows={data?.totalRecords || 0}
+        paginationModel={paginationModel}
+        setPaginationModel={setPaginationModel}
+        noDataComponent={<Typography padding={3}>No data available</Typography>}
+        progressComponent={<LoadingTextSpinner />}
+      />
     </div>
   );
 };
