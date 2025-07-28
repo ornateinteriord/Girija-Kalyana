@@ -315,7 +315,7 @@ const ProfileDialog = ({
             </Box>
           </Box>
 
-          {/* Footer with action buttons */}
+   
           <Box
             sx={{
               display: "flex",
@@ -360,36 +360,42 @@ const ProfileDialog = ({
                 },
               }}
             >
-              <Button
-                variant="contained"
-                color={buttonState.color}
-                onClick={handleButtonClick}
-                disabled={isLoading}
-                startIcon={
-                  isLoading || isStatusLoading ? (
-                    <CircularProgress size={20} />
-                  ) : (
-                    <FaHeart />
-                  )
-                }
-                fullWidth={window.innerWidth < 600}
-                sx={
-                  buttonState.customStyle || {
-                    textTransform: "none",
-                    fontSize: { xs: "0.8rem", sm: "0.9rem" },
-                    padding: { xs: "6px 12px", sm: "8px 16px" },
-                  }
-                }
-              >
-                {buttonState.text}
-              </Button>
+          <Button
+  variant="contained"
+  color={buttonState.color}
+  onClick={handleButtonClick}
+  disabled={isLoading}
+  startIcon={
+    isLoading || isStatusLoading ? (
+      <CircularProgress size={20} />
+    ) : (
+      <FaHeart />
+    )
+  }
+  fullWidth={window.innerWidth < 600}
+  sx={{
+    textTransform: "none",
+    fontSize: { xs: "0.8rem", sm: "0.9rem" },
+    padding: { xs: "6px 12px", sm: "8px 16px" },
+    backgroundColor: (theme) =>
+      theme.palette[buttonState.color]?.main || theme.palette.primary.main,
+    '&:hover': {
+      backgroundColor: (theme) =>
+        theme.palette[buttonState.color]?.main || theme.palette.primary.main,
+    },
+    ...buttonState.customStyle, 
+  }}
+>
+  {buttonState.text}
+</Button>
+
               <Button
                 variant="outlined"
                 onClick={() => setOpenDialog(false)}
                 fullWidth={window.innerWidth < 600}
                 sx={{
                   "&:hover": {
-                    backgroundColor: "transparent", // transparent hover effect
+                    backgroundColor: "transparent", 
                   },
                 }}
               >
