@@ -22,7 +22,7 @@ import EducationPop from "../viewAll/popupContent/educationPop/EducationPop";
 import LifeStylePop from "../viewAll/popupContent/lifeStylePop/LifeStylePop";
 import PreferencePop from "../viewAll/popupContent/preferencePop/PreferencePop";
 import { LoadingComponent } from "../../../App";
-import { isSilverOrPremiumUser } from "../../../utils/common";
+import { isSilverOrPremiumUser, LoadingTextSpinner } from "../../../utils/common";
 import OthersPop from "../viewAll/popupContent/others/OthersPop";
 
 const itemsPerPage = 8;
@@ -257,7 +257,7 @@ const Search = () => {
       </Box>
 
       {isSearching || isFetching ? (
-        <LoadingComponent />
+        <LoadingTextSpinner />
       ) : (
         <>
           <Box

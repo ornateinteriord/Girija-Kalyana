@@ -18,7 +18,7 @@ import TokenService from "../../token/tokenService";
 import HomeUserTable from "../../userupgrade/HomeUserTable";
 import { useGetConnections, useGetMemberDetails } from "../../api/User/useGetProfileDetails";
 import { LoadingComponent, TableLoadingComponent } from "../../../App";
-import { isSilverOrPremiumUser } from "../../../utils/common";
+import { isSilverOrPremiumUser, LoadingTextSpinner } from "../../../utils/common";
 import { FaBriefcase, FaMapMarkerAlt } from "react-icons/fa";
 import AboutPop from "../viewAll/popupContent/abouPop/AboutPop";
 import FamilyPop from "../viewAll/popupContent/familyPop/FamilyPop";
@@ -179,7 +179,7 @@ useEffect(() => {
 >
  {isLoadingConnections ? (
   <Box sx={{ gridColumn: "1 / -1", textAlign: "center" }}>
-    <TableLoadingComponent />
+    <LoadingTextSpinner />
   </Box>
   ) : connectionsData?.connections?.length > 0 ? (
     connectionsData.connections.map((connection) => (
@@ -323,7 +323,7 @@ const ProfileCard = ({ profile, isSmallScreen, connection, handleOpenDialog }) =
           }}
         >
           <Avatar
-            src={profile?.image || "/default-profile.png"}
+            src={profile?.image}
             alt="Profile"
             sx={{ 
               width: "100%", 

@@ -256,7 +256,7 @@ const MyMatches = () => {
                 <Divider sx={{ my: 1, height:'1px' }} />
 
                 {/* Additional Details */}
-                <Box display="flex" justifyContent="space-around">
+                <Box display="flex" justifyContent="space-around" mb={1}>
                   <DetailItem label="Height" value={user.height || "N/A"} />
                   <DetailItem label="Religion" value={user.religion || "N/A"} />
                   <DetailItem label="Caste" value={user.caste || "N/A"} />
