@@ -531,7 +531,7 @@ const Register = () => {
               <TextField
                 fullWidth
                 label="Mobile Number"
-                type="tel"
+                type="number"
                 name="mobile_no"
                 sx={{ mb: 3 }}
                 value={formData.mobile_no}

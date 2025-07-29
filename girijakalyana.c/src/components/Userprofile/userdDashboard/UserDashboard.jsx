@@ -180,6 +180,7 @@ useEffect(() => {
  {isLoadingConnections ? (
   <Box sx={{ gridColumn: "1 / -1", textAlign: "center" }}>
     <LoadingTextSpinner />
+    <LoadingTextSpinner />
   </Box>
   ) : connectionsData?.connections?.length > 0 ? (
     connectionsData.connections.map((connection) => (
@@ -323,7 +324,7 @@ const ProfileCard = ({ profile, isSmallScreen, connection, handleOpenDialog }) =
           }}
         >
           <Avatar
-            src={profile?.image || "/default-profile.png"}
+            src={profile?.image}
             alt="Profile"
             sx={{ 
               width: "100%", 
