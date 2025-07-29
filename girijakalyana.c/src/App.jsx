@@ -21,6 +21,7 @@ import sidebarData from './components/PromotersDash/sidebar/data';
 import Expired from './components/PromotersDash/myReferals/Expired';
 import InActive from './components/PromotersDash/myReferals/InActive';
 import TeamUsers from './components/PromotersDash/myReferals/TeamUsers';
+import ActivationPending from './components/activationPending/activationPending';
 
 
 
@@ -196,8 +197,9 @@ const App = () => {
               <Route path="search" element={<Search />} />
             </Route>
             </Route>
-
+            
             {/* 404 Route */}
+            <Route path="activation-pending" element={<ActivationPending />} />
             <Route path="*" element={<div>404 Not Found</div>} />
           </Routes>
         </Router>

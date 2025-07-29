@@ -53,7 +53,7 @@ const MembershipDialog = ({ open, onClose, onSelectPlan }) => {
         </IconButton>
       </DialogTitle>
 
-      <DialogContent dividers sx={{ p: isMobile ? 2 : 3 }}>
+      <DialogContent dividers sx={{ p: isMobile ? 2 : 1.5 }}>
         <Typography
           variant="h5"
           component="h2"
