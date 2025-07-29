@@ -12,8 +12,8 @@ import {
   customStyles,
   getPromotersEarningsColumns,
 } from "../../../utils/DataTableColumnsProvider";
-import {  TableLoadingComponent } from "../../../App";
 import { usePromotersEarnings } from "../../api/Admin";
+import { LoadingTextSpinner } from "../../../utils/common";
 
 const PromotersEarningsData = () => {
   const [search, setSearch] = useState("");
@@ -88,7 +88,7 @@ const PromotersEarningsData = () => {
         }
         customStyles={customStyles}
         progressPending={isLoading}
-        progressComponent={<TableLoadingComponent />}
+        progressComponent={<LoadingTextSpinner />}
         persistTableHead
           highlightOnHover
       />

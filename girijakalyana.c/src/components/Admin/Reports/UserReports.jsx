@@ -11,24 +11,31 @@ import axios from "axios";
 import { FaSearch } from "react-icons/fa";
 import { getAllUserProfiles } from "../../api/Admin";
 import { toast } from "react-toastify";
-import {  TableLoadingComponent } from "../../../App";
 import DataTable from "react-data-table-component";
 import {
   customStyles,
   getUserReportsColumns,
 } from "../../../utils/DataTableColumnsProvider";
+import { LoadingTextSpinner } from "../../../utils/common";
+import PaginationDataTable from "../../common/PaginationDataTable";
 
 const UserReports = () => {
-  const { data: users = [], isLoading, isError, error } = getAllUserProfiles();
+  const { data , isPending:isLoading, isError, error, mutate : fetchUsers } = getAllUserProfiles();
   const [search, setSearch] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const users = data?.content || []
+  const [paginationModel,setPaginationModel] = useState({page:0,pageSize:50})
 
   useEffect(() => {
     if (isError) {
       toast.error(error.message);
     }
   }, [isError, error]);
+
+  useEffect(() => {
+    fetchUsers({page : paginationModel.page, pageSize: paginationModel.pageSize});
+  },[ paginationModel.page, paginationModel.pageSize]);
 
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
@@ -143,26 +150,16 @@ const UserReports = () => {
         </Box>
       </Grid>
 
-      <DataTable
+        <PaginationDataTable
         columns={getUserReportsColumns()}
         data={filteredRecords}
-        pagination
-        paginationPerPage={6}
-        paginationRowsPerPageOptions={[6, 10, 15, 20]}
-        paginationComponentOptions={{
-          rowsPerPageText: "Rows per page:",
-          rangeSeparatorText: "of",
-        }}
-        noDataComponent={
-          <Typography padding={3} textAlign="center">
-            No records found
-          </Typography>
-        }
         customStyles={customStyles}
-        progressPending={isLoading}
-        progressComponent={<TableLoadingComponent />}
-        persistTableHead
-        highlightOnHover
+        isLoading={isLoading}
+        totalRows={data?.totalRecords || 0}
+        paginationModel={paginationModel}
+        setPaginationModel={setPaginationModel}
+        noDataComponent={<Typography padding={3}>No data available</Typography>}
+        progressComponent={<LoadingTextSpinner />}
       />
     </Box>
   );

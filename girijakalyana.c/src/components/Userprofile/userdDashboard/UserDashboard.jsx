@@ -17,7 +17,7 @@ import { toast } from "react-toastify";
 import TokenService from "../../token/tokenService";
 import HomeUserTable from "../../userupgrade/HomeUserTable";
 import { useGetConnections, useGetMemberDetails } from "../../api/User/useGetProfileDetails";
-import { LoadingComponent, TableLoadingComponent } from "../../../App";
+import { LoadingComponent, } from "../../../App";
 import { isSilverOrPremiumUser, LoadingTextSpinner } from "../../../utils/common";
 import { FaBriefcase, FaMapMarkerAlt } from "react-icons/fa";
 import AboutPop from "../viewAll/popupContent/abouPop/AboutPop";
@@ -179,6 +179,7 @@ useEffect(() => {
 >
  {isLoadingConnections ? (
   <Box sx={{ gridColumn: "1 / -1", textAlign: "center" }}>
+    <LoadingTextSpinner />
     <LoadingTextSpinner />
   </Box>
   ) : connectionsData?.connections?.length > 0 ? (

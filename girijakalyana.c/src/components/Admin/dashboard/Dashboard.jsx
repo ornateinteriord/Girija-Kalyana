@@ -4,8 +4,8 @@ import { MdCurrencyRupee } from "react-icons/md";
 import { Link } from "react-router-dom";
 import "./dashboard.scss";
 import { getAllUserProfiles } from "../../api/Admin";
-import {  TableLoadingComponent } from "../../../App";
 import { toast } from "react-toastify";
+import { LoadingTextSpinner } from "../../../utils/common";
 
 // Reusable Card Component
 const DashboardCard = ({ count, label, icon, link, style }) => {
@@ -61,7 +61,7 @@ const AssistanceSuccessUsers = users.filter(user => user?.status?.toLowerCase() 
   return (
     <div className="dashboard-content-main">
       {/* Cards Section */}
-      {isLoading ? <TableLoadingComponent/> : (
+      {isLoading ? <LoadingTextSpinner/> : (
          <div className="card-div">
         {stats.map((stat, index) => (
           <DashboardCard

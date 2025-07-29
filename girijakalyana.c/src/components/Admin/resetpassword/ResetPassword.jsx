@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import DataTable from "react-data-table-component";
+import React, { useState, useEffect } from "react";
+import PaginationDataTable from "../../common/PaginationDataTable";
 import {
   TextField,
   InputAdornment,
@@ -14,13 +14,14 @@ import {
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 import { getAllUserProfiles, UserResetPassword } from "../../api/Admin";
-import { LoadingComponent, TableLoadingComponent } from "../../../App";
+import { LoadingComponent, } from "../../../App";
 import { toast } from "react-toastify";
 import {
   customStyles,
   getResetPasswordColumns,
 } from "../../../utils/DataTableColumnsProvider";
 import "./Resetpassword.scss";
+import { LoadingTextSpinner } from "../../../utils/common";
 
 const ResetPassword = () => {
   const [search, setSearch] = useState("");
@@ -28,14 +29,27 @@ const ResetPassword = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const { data: users = [], isFetching, isError, error } = getAllUserProfiles();
+  const { data, isPending: isLoading, isError, error, mutate: fetchUsers } = getAllUserProfiles();
+  const users = data?.content || [];
   const { mutateAsync: resetPassword, isPending } = UserResetPassword();
+  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 50 });
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(error.message);
+    }
+  }, [isError, error]);
+
+  // Fetch users whenever page or pageSize changes
+  useEffect(() => {
+    fetchUsers({ page: paginationModel.page, pageSize: paginationModel.pageSize });
+  }, [paginationModel.page, paginationModel.pageSize, fetchUsers]);
 
   if (isError) {
     toast.error(error.message);
   }
 
-  const filteredRecords = users.filter((record) => {
+  const filteredRows = users.filter((record) => {
     const isAdmin = record?.user_role?.toLowerCase() === "admin";
     return (
       !isAdmin &&
@@ -119,29 +133,17 @@ const ResetPassword = () => {
         </div>
      
 
-      <Paper sx={{ mt: 2 }}>
-        <DataTable
-          columns={getResetPasswordColumns(handleOpenDialog)}
-          data={filteredRecords}
-          customStyles={customStyles}
-          pagination
-          paginationPerPage={6}
-          paginationRowsPerPageOptions={[6, 10, 15, 20]}
-          paginationComponentOptions={{
-            rowsPerPageText: "Rows per page:",
-            rangeSeparatorText: "of",
-          }}
-          progressPending={isFetching}
-          progressComponent={<TableLoadingComponent />}
-          noDataComponent={
-            <Typography padding={3} textAlign="center">
-              No records found
-            </Typography>
-          }
-           persistTableHead
-          highlightOnHover
-        />
-      </Paper>
+      <PaginationDataTable
+        columns={getResetPasswordColumns(handleOpenDialog)}
+        data={filteredRows}
+        customStyles={customStyles}
+        isLoading={isLoading}
+        totalRows={data?.totalRecords || 0}
+        paginationModel={paginationModel}
+        setPaginationModel={setPaginationModel}
+        noDataComponent={<Typography padding={3}>No records found</Typography>}
+        progressComponent={<LoadingTextSpinner />}
+      />
 
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle
