@@ -34,7 +34,7 @@ const ImageVerificationData = () => {
   const upgradeUserMutation = UpgradeUserStatus();
 
   useEffect(() => {
-    fetchUsers({ page: paginationModel.page, pageSize: 10000});
+    fetchUsers({ page: paginationModel.page, pageSize:paginationModel.pageSize});
   }, [paginationModel.page, paginationModel.pageSize,]);
 
   useEffect(() => {

@@ -33,7 +33,7 @@ const UserData = () => {
 
   // Fetch users whenever page or pageSize changes
   useEffect(() => {
-    fetchUsers({ page: paginationModel.page, pageSize: 10000});
+    fetchUsers({ page: paginationModel.page, pageSize: paginationModel.pageSize});
   }, [paginationModel.page, paginationModel.pageSize, fetchUsers]);
 
   const upgradeUserMutation = UpgradeUserStatus();
