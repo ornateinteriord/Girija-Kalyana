@@ -404,7 +404,8 @@ const ProfileCard = ({ profile, isSmallScreen, connection, handleOpenDialog }) =
       py: 1,
       textTransform: "none",
       fontWeight: "bold",
-      width: '100%'  
+      width: '100%',  
+      maxWidth: '100%',
     }}
   >
     View More
