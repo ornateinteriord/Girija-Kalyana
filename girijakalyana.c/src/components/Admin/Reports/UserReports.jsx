@@ -17,6 +17,7 @@ import {
   getUserReportsColumns,
 } from "../../../utils/DataTableColumnsProvider";
 import { LoadingTextSpinner } from "../../../utils/common";
+import PaginationDataTable from "../../common/PaginationDataTable";
 
 const UserReports = () => {
   const { data , isPending:isLoading, isError, error, mutate : fetchUsers } = getAllUserProfiles();
@@ -24,7 +25,7 @@ const UserReports = () => {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const users = data?.content || []
-  const [paginationModel,setpaginationModel] = useState({page:0,pageSize:50})
+  const [paginationModel,setPaginationModel] = useState({page:0,pageSize:50})
 
   useEffect(() => {
     if (isError) {
@@ -34,7 +35,7 @@ const UserReports = () => {
 
   useEffect(() => {
     fetchUsers({page : paginationModel.page, pageSize: paginationModel.pageSize});
-  },[])
+  },[ paginationModel.page, paginationModel.pageSize]);
 
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
@@ -149,29 +150,16 @@ const UserReports = () => {
         </Box>
       </Grid>
 
-      <DataTable
+        <PaginationDataTable
         columns={getUserReportsColumns()}
         data={filteredRecords}
-        pagination
-        paginationDefaultPage={paginationModel.page + 1}
-        onChangePage={(page)=>setpaginationModel((prev)=>({...prev,page:page-1}))}
-        onChangeRowsPerPage={(pageSize)=>setpaginationModel((prev)=>({...prev,pageSize}))}
-        paginationPerPage={paginationModel.pageSize}
-        paginationRowsPerPageOptions={[6, 10, 15, 20,50]}
-        paginationComponentOptions={{
-          rowsPerPageText: "Rows per page:",
-          rangeSeparatorText: "of",
-        }}
-        noDataComponent={
-          <Typography padding={3} textAlign="center">
-            No records found
-          </Typography>
-        }
         customStyles={customStyles}
-        progressPending={isLoading}
+        isLoading={isLoading}
+        totalRows={data?.totalRecords || 0}
+        paginationModel={paginationModel}
+        setPaginationModel={setPaginationModel}
+        noDataComponent={<Typography padding={3}>No data available</Typography>}
         progressComponent={<LoadingTextSpinner />}
-        persistTableHead
-        highlightOnHover
       />
     </Box>
   );

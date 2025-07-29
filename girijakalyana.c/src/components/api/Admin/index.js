@@ -20,22 +20,7 @@ export const getAllUserProfiles = () => {
     },
   });
 };
-// export const useGetAllUsersProfiles = () => {
-//   return useMutation({
-//     mutationFn: async ({ page, pageSize }) => {
-//       const response = await post("/api/user/all-users-profiles", {
-//         page,
-//         pageSize,
-//       });
 
-//       if (response?.success) {
-//         return response;
-//       } else {
-//         throw new Error(response?.message || "Failed to fetch users");
-//       }
-//     },
-//   });
-// };
 export const UpgradeUserStatus = () => {
   const queryClient = useQueryClient();
   return useMutation({
