@@ -33,7 +33,7 @@ const UserData = () => {
 
   // Fetch users whenever page or pageSize changes
   useEffect(() => {
-    fetchUsers({ page: paginationModel.page, pageSize: paginationModel.pageSize });
+    fetchUsers({ page: paginationModel.page, pageSize: paginationModel.pageSize});
   }, [paginationModel.page, paginationModel.pageSize, fetchUsers]);
 
   const upgradeUserMutation = UpgradeUserStatus();
@@ -41,8 +41,9 @@ const UserData = () => {
   const handleUpgrade = async (regno, currentStatus) => {
     try {
       const newStatus = currentStatus === "active" ? "inactive" : "active";
+       const isProfileUpdate = newStatus === "active"; 
       await upgradeUserMutation.mutateAsync(
-        { regno, status: newStatus, },
+        { regno, status: newStatus,isProfileUpdate },
         {
           onSuccess: () => {
             setLocalUsers((prevUsers) =>

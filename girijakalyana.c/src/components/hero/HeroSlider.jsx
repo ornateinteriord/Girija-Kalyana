@@ -11,12 +11,14 @@ import Navbar from "../navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 import "./HeroSlider.scss";
 import useAuth from "../hook/UseAuth";
+import TokenService from "../token/tokenService";
 
 const HeroSlider = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   const navigate = useNavigate();
+  const isAdmin = TokenService.getRole()?.toLowerCase() === 'admin'
   const { isLoggedIn } = useAuth();
 
   const images = [
@@ -148,7 +150,7 @@ const HeroSlider = () => {
                   fontFamily: 'Outfit, sans-serif',
                   minWidth: isMobile ? '160px' : '200px',
                 }}
-                onClick={() => navigate('/user/userDashboard')}
+                onClick={() => navigate(isAdmin? '/admin/dashboard' : '/user/userDashboard')}
               >
                 Get Started
               </Button>

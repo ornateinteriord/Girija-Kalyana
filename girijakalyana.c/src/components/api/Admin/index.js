@@ -24,11 +24,11 @@ export const getAllUserProfiles = () => {
 export const UpgradeUserStatus = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ regno, status, image_verification,isRequestedForStatusChange }) => {
+    mutationFn: async ({ regno, status, image_verification,isProfileUpdate }) => {
       const response = await put(`/api/admin/upgrade-user/${regno}`, {
         status,
         image_verification,
-        isRequestedForStatusChange
+        isProfileUpdate
       });
       return response;
     },
