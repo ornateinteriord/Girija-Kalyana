@@ -22,6 +22,7 @@ import {
 import { getAllUserProfiles, UpgradeUserStatus } from "../../api/Admin";
 import { Close } from "@mui/icons-material";
 import { LoadingTextSpinner } from "../../../utils/common";
+import { toast } from "react-toastify";
 
 
 const ImageVerificationData = () => {
@@ -33,8 +34,8 @@ const ImageVerificationData = () => {
   const upgradeUserMutation = UpgradeUserStatus();
 
   useEffect(() => {
-    fetchUsers({ page: paginationModel.page, pageSize: paginationModel.pageSize });
-  }, [paginationModel.page, paginationModel.pageSize, fetchUsers]);
+    fetchUsers({ page: paginationModel.page, pageSize: 10000});
+  }, [paginationModel.page, paginationModel.pageSize,]);
 
   useEffect(() => {
     if (users.length > 0) {
@@ -55,6 +56,7 @@ const ImageVerificationData = () => {
         {
           regno,
           image_verification: newStatus,
+      
         },
         {
           onSuccess: () => {
@@ -143,7 +145,6 @@ export const ViewImagesComponent = ({ image, id, loading }) => {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-console.log(image,'user img')
   return (
     <>
       <Button
