@@ -33,7 +33,6 @@ const ResetPassword = () => {
   const users = data?.content || [];
   const { mutateAsync: resetPassword, isPending } = UserResetPassword();
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 50 });
-
   useEffect(() => {
     if (isError) {
       toast.error(error.message);
@@ -54,11 +53,11 @@ const ResetPassword = () => {
     return (
       !isAdmin &&
       [
-        record.first_name,
-        record.last_name,
-        record.username,
-        record.registration_no,
-        record.password,
+        record?.first_name,
+        record?.last_name,
+        record?.username,
+        record?.registration_no,
+        record?.password,
       ].some(
         (field) =>
           field && field.toString().toLowerCase().includes(search.toLowerCase())
@@ -93,6 +92,12 @@ const ResetPassword = () => {
       await resetPassword({
         regno: selectedUser.registration_no,
         password: newPassword,
+      },{
+        onSuccess:()=>{
+              fetchUsers({ page: paginationModel.page, pageSize: paginationModel.pageSize });
+        },onError:(error) => {
+          toast.error(error.message);
+        }
       });
       handleCloseDialog();
     } catch (error) {
@@ -156,9 +161,7 @@ const ResetPassword = () => {
           Change Password
         </DialogTitle>
         <DialogContent>
-          {isPending ? (
-            <LoadingComponent />
-          ) : (
+
             <>
               <TextField
                 label="New Password"
@@ -179,7 +182,6 @@ const ResetPassword = () => {
                 disabled={isPending}
               />
             </>
-          )}
         </DialogContent>
         <DialogActions>
           <Button
@@ -193,8 +195,9 @@ const ResetPassword = () => {
            color="white"
             onClick={handlePasswordReset}
             sx={{ color: "#fff",backgroundColor:"#4caf50","&:hover": {backgroundColor:"#388e3c",} }}
+            disabled={isPending || !newPassword || !confirmPassword || newPassword !== confirmPassword}
           >
-            Submit
+            {isPending ? "Submitting..." : "Submit"}
           </Button>
         </DialogActions>
       </Dialog>

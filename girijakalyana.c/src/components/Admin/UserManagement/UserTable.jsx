@@ -25,7 +25,7 @@ const UserTable = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 50 });
-  const { data,   isLoading, isError, error, mutate: fetchUsers } = getAllUserProfiles();
+  const { data,   isPending:isLoading, isError, error, mutate: fetchUsers } = getAllUserProfiles();
   const users = data?.content || [];
   const [filteredUsers, setFilteredUsers] = useState(users);
   const [searchTerm, setSearchTerm] = useState("");

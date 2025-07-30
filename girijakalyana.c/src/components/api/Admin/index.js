@@ -84,6 +84,19 @@ export const getAllAssistanceTransactions = () => {
     },
   });
 };
+export const getAllUserCounts = () => {
+  return useQuery({
+    queryKey: ["user-counts"],
+    queryFn: async () => {
+      const response = await get("/api/admin/dashboard-stats");
+      if (response.success) {
+        return response.counts;
+      } else {
+        throw new Error(response.message);
+      }
+    },
+  });
+};
 export const useOnlineTransactions = () => {
   return useQuery({
     queryKey: ["online-transactions"],

@@ -158,7 +158,7 @@ const UserData = () => {
         columns={getUserDataColumns(upgradeUserMutation, handleUpgrade)}
         data={filteredRows}
         customStyles={customStyles}
-        isLoading={isFetching}
+        isLoading={isFetching }
         totalRows={data?.totalRecords || 0}
         paginationModel={paginationModel}
         setPaginationModel={setPaginationModel}
