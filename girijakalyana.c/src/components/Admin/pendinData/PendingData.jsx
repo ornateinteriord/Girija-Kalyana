@@ -2,17 +2,14 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
-  Select,
-  MenuItem,
-  TextField,
   InputAdornment,
   Paper,
-  Stack,
+  TextField,
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
-import { getAllUserProfiles } from "../../api/Admin";
+import { getAllAssistancePending } from "../../api/Admin";
 import { toast } from "react-toastify";
-import DataTable from "react-data-table-component";
+import PaginationDataTable from "../../common/PaginationDataTable";
 import {
   customStyles,
   getAssistancePendingColumns,
@@ -20,8 +17,26 @@ import {
 import { LoadingTextSpinner } from "../../../utils/common";
 
 const PendingData = () => {
-  const { data: users = [], isLoading, isError, error } = getAllUserProfiles();
+  const [paginationModel, setPaginationModel] = useState({ 
+    page: 0, 
+    pageSize: 50 
+  });
+  const { 
+    data, 
+    isPending: isLoading, 
+    isError, 
+    error, 
+    mutate: fetchUsers 
+  } = getAllAssistancePending();
+  const users = data?.content || [];
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    fetchUsers({ 
+      page: paginationModel.page, 
+      pageSize: paginationModel.pageSize 
+    });
+  }, [paginationModel.page, paginationModel.pageSize, fetchUsers]);
 
   useEffect(() => {
     if (isError) {
@@ -29,27 +44,36 @@ const PendingData = () => {
     }
   }, [isError, error]);
 
-  const filteredRecords = users.filter((record) => {
-    const isAdmin = record?.user_role?.toLowerCase() === "admin";
-    const isPending = record?.status?.toLowerCase() === "pending"; // Check if status is "pending"
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+  };
 
+  const filteredRows = users.filter((data) => {
+    const isAdmin = data?.user_role?.toLowerCase() === "admin";
+   
     return (
       !isAdmin &&
-      isPending && // Only include pending users
-      [
-        record.registration_no?.toString().toLowerCase(),
-        record.first_name?.toLowerCase(),
-        record.username?.toLowerCase(),
-        record.mobile_no?.toString().toLowerCase(),
-        record.caste?.toString().toLowerCase(),
-        record.type_of_user?.toString().toLowerCase(),
-      ].some((field) => field?.includes(search.toLowerCase()))
+      (search === "" ||
+        data.registration_no
+          ?.toString()
+          .toLowerCase()
+          .includes(search.toLowerCase()) ||
+        data.first_name?.toLowerCase().includes(search.toLowerCase()) ||
+        data.username
+          ?.toString()
+          .toLowerCase()
+          .includes(search.toLowerCase()) ||
+        data.mobile_no
+          ?.toString()
+          .toLowerCase()
+          .includes(search.toLowerCase()) ||
+        data.caste?.toString().toLowerCase().includes(search.toLowerCase()) ||
+        data.type_of_user
+          ?.toString()
+          .toLowerCase()
+          .includes(search.toLowerCase()))
     );
   });
-
-  const handleSearch = (e) => {
-    setSearch(e.target.value);
-  };
 
   return (
     <Box p={5} marginTop={6}>
@@ -80,28 +104,20 @@ const PendingData = () => {
         />
       </Box>
 
-      <Paper>
-        <DataTable
-          columns={getAssistancePendingColumns()}
-          data={filteredRecords}
-          customStyles={customStyles}
-          pagination
-          paginationPerPage={6}
-          paginationRowsPerPageOptions={[6, 10, 15, 20]}
-          paginationComponentOptions={{
-            rowsPerPageText: "Rows per page:",
-            rangeSeparatorText: "of",
-            noRowsPerPage: false,
-          }}
-          noDataComponent={
-            <Typography padding={3}>No data available</Typography>
-          }
-          progressPending={isLoading}
-          progressComponent={<LoadingTextSpinner />}
-           persistTableHead
-          highlightOnHover
-        />
-      </Paper>
+      <PaginationDataTable
+        columns={getAssistancePendingColumns()}
+        data={filteredRows}
+        customStyles={customStyles}
+        isLoading={isLoading}
+        totalRows={data?.totalRecords || 0}
+        paginationModel={paginationModel}
+        setPaginationModel={setPaginationModel}
+        rowsPerPageOptions={[6, 10, 15, 20, 50, 1000]}
+        noDataComponent={<Typography padding={3}>No data available</Typography>}
+        progressComponent={<LoadingTextSpinner />}
+        persistTableHead
+        highlightOnHover
+      />
     </Box>
   );
 };

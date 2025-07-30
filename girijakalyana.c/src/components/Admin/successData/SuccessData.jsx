@@ -8,7 +8,7 @@ import {
   TextField,
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
-import { getAllUserProfiles } from "../../api/Admin";
+import { getAllAssistanceSuccess, getAllUserProfiles } from "../../api/Admin";
 import {
   customStyles,
   getAssistanceSuccessColumns,
@@ -18,7 +18,7 @@ import { LoadingTextSpinner } from "../../../utils/common";
 
 const SuccessData = () => {
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 50 });
-  const { data, isPending: isLoading, isError, error, mutate: fetchUsers } = getAllUserProfiles();
+  const { data, isPending: isLoading, isError, error, mutate: fetchUsers } = getAllAssistanceSuccess();
   const users = data?.content || [];
   const [search, setSearch] = useState("");
 
@@ -38,10 +38,9 @@ const SuccessData = () => {
 
   const filteredRows = users.filter((data) => {
     const isAdmin = data?.user_role?.toLowerCase() === "admin";
-    const isActive = data?.status?.toLowerCase() === "active";
+   
     return (
       !isAdmin &&
-      isActive &&
       (search === "" ||
         data.registration_no
           ?.toString()
