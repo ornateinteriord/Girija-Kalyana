@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './AdminDashboard.css';
-import { FaHome, FaUser, FaUsers, FaServer, FaReceipt, FaBars, FaChevronDown, FaChevronUp, FaDashcube, FaIdBadge } from 'react-icons/fa';
+import {  FaUser, FaUsers, FaServer, FaReceipt, FaBars, FaChevronDown, FaChevronUp, FaDashcube, FaIdBadge } from 'react-icons/fa';
 import { TbMessageReportFilled } from 'react-icons/tb';
 import { IoIosNotifications } from 'react-icons/io';
 import { Link, Outlet, useLocation } from 'react-router-dom';
@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { Collapse, List, ListItem, ListItemText, IconButton, Typography, Menu, MenuItem, Avatar, Badge, Dialog, DialogTitle, DialogContent, TextField, Button, DialogActions } from '@mui/material';
 import { IoMdNotifications } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
+import { getAllUserCounts } from '../api/Admin';
 
 const AdminDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -27,7 +28,7 @@ const AdminDashboard = () => {
   });
   const [activePath, setActivePath] = useState('');
   const location = useLocation();
-
+  
   const navigate = useNavigate();
   const adminName = "Admin";
   
@@ -36,7 +37,6 @@ const AdminDashboard = () => {
     if (!token) {
       navigate('/admin'); 
     }
-    // Set active path based on current location
     setActivePath(location.pathname);
   }, [location.pathname]);
 
@@ -48,12 +48,9 @@ const closeAllDropdowns = () => {
   setOpenPromoterReports(false);
 };
 
-  // Toggle Sidebar
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
-  // Handle dropdown toggles
   const toggleUserManagement = () => {
       closeAllDropdowns();
     setOpenUserManagement(!openUserManagement);
@@ -165,7 +162,7 @@ const closeAllDropdowns = () => {
   };
 const handleLogoutDialogOpen = () => {
   setLogoutDialogOpen(true);
-  handleMenuClose(); // Close the profile menu
+  handleMenuClose(); 
 };
 
 const handleLogoutDialogClose = () => {
