@@ -11,7 +11,6 @@ export const getAllUserProfiles = () => {
         page,
         pageSize,
       });
-  console.log("API response:", response);
       if (response?.success) {
         return response;
       
@@ -94,6 +93,38 @@ export const getAllUserCounts = () => {
         return response.counts;
       } else {
         throw new Error(response.message);
+      }
+    },
+  });
+};
+export const getAllAssistancePending = () => {
+ return useMutation({
+    mutationFn: async ({ page, pageSize }) => {
+      const response = await post("/api/admin/assistance-pending", {
+        page,
+        pageSize,
+      });
+      if (response?.success) {
+        return response;
+      
+      } else {
+        throw new Error(response?.message || "Failed to fetch users");
+      }
+    },
+  });
+};
+export const getAllAssistanceSuccess = () => {
+   return useMutation({
+    mutationFn: async ({ page, pageSize }) => {
+      const response = await post("/api/admin/assistance-success", {
+        page,
+        pageSize,
+      });
+      if (response?.success) {
+        return response;
+      
+      } else {
+        throw new Error(response?.message || "Failed to fetch users");
       }
     },
   });
