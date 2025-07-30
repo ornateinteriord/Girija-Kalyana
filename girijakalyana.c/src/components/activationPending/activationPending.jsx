@@ -1,9 +1,10 @@
-import { Box, Typography, Button, Paper, Avatar, Fade, Stack, useMediaQuery, useTheme } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Box, Typography, Button, Paper, Avatar, Fade, Stack, useMediaQuery, useTheme, Link } from "@mui/material";
+import {  useNavigate } from "react-router-dom";
 import { CheckCircleOutline, HourglassEmpty, MailOutline, Upgrade } from "@mui/icons-material";
 import TokenService from "../token/tokenService";
 import MembershipDialog from "../Userprofile/MembershipDailog/MembershipDailog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 
 const ActivationPending = () => {
   const [selectedPlan, setSelectedPlan] = useState(null);
@@ -12,11 +13,22 @@ const ActivationPending = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const handleLogout = () => {
-    navigate("/");
-    TokenService.removeToken();
-    window.dispatchEvent(new Event("storage"));
+  useEffect(() => {
+  const handleBackNavigation = () => {
+    TokenService.removeToken();           
+    window.dispatchEvent(new Event("storage")); 
   };
+  window.addEventListener("popstate", handleBackNavigation);
+  return () => {
+    window.removeEventListener("popstate", handleBackNavigation);
+  };
+}, []);
+
+  const handleLogout = () => {
+  TokenService.removeToken();           
+  window.dispatchEvent(new Event("storage")); 
+  navigate("/");                         
+};
 
   const handleUpgrade = () => {
     setOpen(true);
@@ -199,27 +211,30 @@ const ActivationPending = () => {
             </Button>
           </Stack>
 
-          <Typography
-            variant="caption"
-            display="block"
-            sx={{ 
-              mt: 2, 
-              color: "#777", 
-              fontSize: isMobile ? '0.65rem' : '0.7rem' 
-            }}
-          >
-            Need help? Contact{" "}
-            <Link
-              href="mailto:ornateinteriord@gmail.com"
-              underline="always"
-              sx={{ 
-                color: "#4dabf7", 
-                fontSize: isMobile ? '0.65rem' : '0.7rem' 
-              }}
-            >
-              ornateinteriord@gmail.com
-            </Link>
-          </Typography>
+         <Typography
+  variant="caption"
+  display="block"
+  sx={{ 
+    mt: 2, 
+    color: "#777", 
+    fontSize: isMobile ? '0.65rem' : '0.7rem' 
+  }}
+>
+  Need help? Contact{" "}
+  <Link
+    href="mailto:ornateinteriord@gmail.com?subject=Help%20Request"
+    target="_blank"
+    rel="noopener noreferrer"
+    underline="always"
+    sx={{
+      color: "#4dabf7",
+      fontSize: isMobile ? '0.65rem' : '0.7rem',
+      cursor: 'pointer'
+    }}
+  >
+    ornateinteriord@gmail.com
+  </Link>
+</Typography>
         </Paper>
       </Fade>
       

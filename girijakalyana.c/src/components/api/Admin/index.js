@@ -11,9 +11,10 @@ export const getAllUserProfiles = () => {
         page,
         pageSize,
       });
-
+  console.log("API response:", response);
       if (response?.success) {
         return response;
+      
       } else {
         throw new Error(response?.message || "Failed to fetch users");
       }

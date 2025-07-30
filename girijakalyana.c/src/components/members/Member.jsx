@@ -84,7 +84,7 @@ const Members = () => {
                       background: "linear-gradient(to right, #182848, #4d75d4)",
                       color: "#fff",
                       boxShadow: "0 8px 24px rgba(0,0,0,0.3)",
-                      height: "100%",
+                      height: "380px",
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "center",
