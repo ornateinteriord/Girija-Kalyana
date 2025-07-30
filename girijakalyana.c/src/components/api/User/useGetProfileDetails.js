@@ -21,6 +21,19 @@ export const useGetAllUsersProfiles = () => {
     },
   });
 };
+
+export const useDeleteImage = () => {
+  return useMutation({
+    mutationFn: async ({ regNo }) => {
+      const response = await del(`/api/user/delete-image/${regNo}`,);
+      if (response?.success) {
+        return response;
+      } else {
+        throw new Error(response?.message || "Failed to fetch users");
+      }
+    },
+  });
+};
 export const useGetMyMatches = () => {
   return useMutation({
     mutationFn: async ({ page, pageSize }) => {
