@@ -1,4 +1,4 @@
-import  { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -15,6 +15,7 @@ import { FaTrash, FaUpload } from "react-icons/fa";
 import toast from "react-hot-toast";
 import {
   getCloudinaryUrl,
+  useDeleteImage,
   useGetMemberDetails,
   useUpdateProfile,
 } from "../../../api/User/useGetProfileDetails";
@@ -24,7 +25,7 @@ const Photos = () => {
   const [formData, setFormData] = useState({});
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const registerNo = TokenService.getRegistrationNo();
-  const { data: userProfile } = useGetMemberDetails(registerNo);
+  const { data: userProfile, refetch : getMember } = useGetMemberDetails(registerNo);
   const { mutate: updateProfile, isPending: isUpdating } = useUpdateProfile();
   const cloudinary = getCloudinaryUrl();
   const fileInputRef = useRef(null);
@@ -103,18 +104,15 @@ const Photos = () => {
   const handleDeleteClick = () => {
     setOpenDeleteDialog(true);
   };
-
+  const DeleteImage = useDeleteImage();
   const handleDeleteConfirm = () => {
-    updateProfile(
+    DeleteImage.mutate(
+      { regNo: registerNo },
       {
-        registerNo,
-        image: null,
-        image_verification: null,
-      },
-      {
-        onSuccess: () => {
-          toast.success("Profile image deleted successfully");
+        onSuccess: (response) => {
+          toast.success(response.message);
           setFormData((prev) => ({ ...prev, previewImage: null, image: null }));
+          getMember();
           setOpenDeleteDialog(false);
         },
         onError: (error) => {
@@ -205,7 +203,7 @@ const Photos = () => {
             </Typography>
           </Box>
           <Box sx={{ mb: 2 }}>
-            <Typography sx={{ fontWeight: "bold" ,color:"#000" }}>
+            <Typography sx={{ fontWeight: "bold", color: "#000" }}>
               Image Verification Status:{" "}
               <Box
                 component="span"
@@ -226,27 +224,26 @@ const Photos = () => {
           <Box
             display="flex"
             gap={1}
-            flexWrap="wrap" 
-            alignItems="center" 
+            flexWrap="wrap"
+            alignItems="center"
             sx={{
-            
               "@media (max-width: 600px)": {
-                width:"100%",
-                flexDirection: "column", 
-                alignItems: "stretch", 
+                width: "100%",
+                flexDirection: "column",
+                alignItems: "stretch",
                 "& > button": {
-                  width: "100%", 
-                  margin: "4px 0 !important", 
+                  width: "100%",
+                  margin: "4px 0 !important",
                 },
               },
             }}
           >
             <Button
               variant="outlined"
-              component="label" 
+              component="label"
               startIcon={<FaUpload />}
               sx={{
-                width:"100%",
+                width: "100%",
                 color: "#1976d2",
                 borderColor: "#1976d2",
                 "&:hover": {
@@ -324,8 +321,8 @@ const Photos = () => {
           <Button onClick={handleDeleteCancel} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleDeleteConfirm} color="error" autoFocus>
-            Delete
+          <Button onClick={handleDeleteConfirm} color="error" autoFocus disabled={DeleteImage.isPending}>
+            {DeleteImage.isPending?'Deleting...':'Delete'}
           </Button>
         </DialogActions>
       </Dialog>
