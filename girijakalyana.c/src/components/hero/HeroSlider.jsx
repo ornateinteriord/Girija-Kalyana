@@ -138,9 +138,9 @@ const HeroSlider = () => {
                 variant="contained"
                 size={isMobile ? "small" : "large"}
                 sx={{
-                  backgroundColor: '#00796B',
+                  backgroundColor: '#34495e',
                   '&:hover': {
-                    backgroundColor: '#004D40',
+                    backgroundColor: '#34495e',
                   },
                   borderRadius: '8px',
                   textTransform: 'capitalize',
@@ -160,9 +160,9 @@ const HeroSlider = () => {
                   variant="contained"
                   size={isMobile ? "small" : "large"}
                   sx={{
-                    backgroundColor: '#00796B',
+                    backgroundColor: '#34495e',
                     '&:hover': {
-                      backgroundColor: '#004D40',
+                      backgroundColor: '#34495e',
                     },
                     borderRadius: '8px',
                     textTransform: 'capitalize',
@@ -181,10 +181,11 @@ const HeroSlider = () => {
                   variant="contained"
                   size={isMobile ? "small" : "large"}
                   sx={{
-                    backgroundColor: '#8E24AA',
-                    '&:hover': {
-                      backgroundColor: '#6A1B9A',
+                    backgroundColor: '#FFFF',
+                     '&:hover': {
+                      backgroundColor: '#FFFF',
                     },
+                     color:'#000',
                     borderRadius: '8px',
                     textTransform: 'capitalize',
                     px: isMobile ? 2 : 4,

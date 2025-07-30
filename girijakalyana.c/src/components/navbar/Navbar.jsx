@@ -252,15 +252,15 @@ const Navbar = () => {
                   size={isMobile ? "medium" : "large"}
                   onClick={handleOpen}
                   sx={{
-                    backgroundColor: "black",
+                    backgroundColor: "#FFFF",
                     minWidth: "120px",
-                    color: "#fff",
+                    color: "#000",
                     fontWeight: 700,
                     height: { xs: "36px", md: "42px" },
                     textTransform: "capitalize",
                     display: { xs: "none", sm: "inline-flex" },
                     "&:hover": {
-                      backgroundColor: "#333333",
+                      backgroundColor: "#eee",
                     },
                   }}
                 >

@@ -12,6 +12,8 @@ export const useSignupMutation = ()=>{
       },
       onSuccess: (response) => {
         if (response.success) {
+          TokenService.setToken(response.token);
+       window.dispatchEvent(new Event("storage")); 
           toast.success(response.message);
           navigate("/activation-pending");
         } else {
@@ -25,59 +27,58 @@ export const useSignupMutation = ()=>{
 }
 export const useLoginMutation = () => {
   const navigate = useNavigate();
+
   return useMutation({
     mutationFn: async (data) => {
       return await post("/api/auth/login", data);
     },
- onSuccess: (response) => {
-  if (response?.success && response?.token) {
-    TokenService.setToken(response.token);
-    window.dispatchEvent(new Event("storage")); 
-    const userStatus = response?.user?.status;
 
-       if (userStatus !== "active") {
-      toast.info(response.message)
-      navigate("/activation-pending");
-      return;
+    onSuccess: (response) => {
+      if (response?.success && response?.token) {
+        TokenService.setToken(response.token);
+        window.dispatchEvent(new Event("storage")); 
+
+        const userStatus = response?.user?.status;
+        const role = TokenService.getRole();
+
+        if (userStatus !== "active") {
+          toast.info(response.message || "Your account is not yet active");
+        navigate("/activation-pending");
+          return;
+        }
+
+        toast.success(response.message );
+
+        switch (role) {
+          case "FreeUser":
+          case "PremiumUser":
+          case "SilverUser":
+          case "Assistance":
+            navigate("/user/userDashboard");
+            break;
+          case "Admin":
+            navigate("/admin/dashboard");
+            break;
+          case "promoter":
+            navigate("/PromotAdmin");
+            break;
+          default:
+            localStorage.clear();
+            toast.error("Invalid user role");
+        }
+      } else {
+        toast.error(response?.message);
+        console.error("Login failed:", response?.message);
+      }
+    },
+
+    onError: (error) => {
+      toast.error(error?.message);
+      console.error("Login error:", error);
     }
-
-    toast.success(response.message );
-
-    if (userStatus !== "active") {
-      navigate("/activation-pending");
-      return;
-    }
-
-    const role = TokenService.getRole();
-
-    switch (role) {
-      case "FreeUser":
-      case "PremiumUser":
-      case "SilverUser":
-      case "Assistance":
-        navigate("/user/userDashboard");
-        break;
-      case "Admin":
-        navigate("/admin/dashboard");
-        break;
-      case "promoter":
-        navigate("/PromotAdmin");
-        break;
-      default:
-        console.error("Invalid role:", role);
-        localStorage.clear();
-        toast.error("Invalid user role");
-    }
-  } else {
-    toast.error(response?.message || "Login failed");
-    console.error("Login failed:", response?.message);
-  }
-},
-
   });
 };
 
- 
 
 export const useResetpassword = () => {
   return useMutation({
