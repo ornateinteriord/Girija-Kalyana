@@ -59,7 +59,7 @@ const services = [
             <div className="service-card" key={index}>
               <div className="icon-wrapper">{service.icon}</div>
               <h3 style={{textTransform: "capitalize",fontWeight:400,}}>{service.title}</h3>
-              <p style={{ color: '#fff' }}>{service.description}</p>
+              <p style={{ color: '#fff', }}>{service.description}</p>
               {index < services.length - 1 && (
                 <FaArrowAltCircleRight className="arrow-icon" />
               )}
