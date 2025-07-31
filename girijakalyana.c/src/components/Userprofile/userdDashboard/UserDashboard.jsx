@@ -168,7 +168,6 @@ useEffect(() => {
  {isLoadingConnections ? (
   <Box sx={{ gridColumn: "1 / -1", textAlign: "center" }}>
     <LoadingTextSpinner />
-    <LoadingTextSpinner />
   </Box>
   ) : connectionsData?.connections?.length > 0 ? (
     connectionsData.connections.map((connection) => (
