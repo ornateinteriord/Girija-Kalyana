@@ -1,5 +1,4 @@
-import React from "react";
-import { Box, Typography, Button, useTheme, useMediaQuery } from "@mui/material";
+import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import { styled } from "@mui/system";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -12,7 +11,8 @@ import { useNavigate } from "react-router-dom";
 import "./HeroSlider.scss";
 import useAuth from "../hook/UseAuth";
 import TokenService from "../token/tokenService";
-import ThemedButton from "../UI/button";
+import ThemedButton from "../UI/ThemedButton";
+
 
 
 

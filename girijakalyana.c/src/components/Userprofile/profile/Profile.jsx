@@ -17,7 +17,7 @@ import Others from "../profile/others/Others";
 import ParentsPrefer from "../profile/parentPreference/ParentsPrefer";
 import Photos from "../profile/photo/Photos";
 import PrivacySettings from "../profile/privacySettings/PrivacySettings";
-import PageTitle from "../../PageTitle";
+import PageTitle from "../../UI/PageTitle";
 
 
 
