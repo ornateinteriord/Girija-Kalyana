@@ -10,26 +10,26 @@ const stats = [
     {
       id: 1,
       title: 'Profiles',
-      value: `${dashboardstats?.stats?.totalProfiles || 0} +`,
-      icon: <FaUserFriends style={{ fontSize: 40, color: 'rgb(192, 9, 88)' }} />,
+      value: `${dashboardstats?.stats?.totalProfiles || 0}`,
+      icon: <FaUserFriends style={{ fontSize: 40, color: '#1a4f72' }} />,
       color: '#f8f9fa',
       textColor: 'rgb(192, 9, 88)',
      
     },
     {
       id: 2,
-      title: 'This Week Registrations',
-      value: `${dashboardstats?.stats?.thisWeekRegistrations || 0} +`,
-      icon: <FaCalendarWeek style={{ fontSize: 40, color: '#00bcd4' }} />,
+      title: 'This Week',
+      value: `${dashboardstats?.stats?.thisWeekRegistrations || 0}`,
+      icon: <FaCalendarWeek style={{ fontSize: 40, color: '#1a4f72' }} />,
       color: '#f8f9fa',
       textColor: '#00bcd4',
       
     },
     {
       id: 3,
-      title: 'This Month Registrations',
-      value: `${dashboardstats?.stats?.thisMonthRegistrations || 0} +`,
-      icon: <FaCalendarAlt style={{ fontSize: 40, color: '#ff5a5f' }} />,
+      title: 'This Month',
+      value: `${dashboardstats?.stats?.thisMonthRegistrations || 0}`,
+      icon: <FaCalendarAlt style={{ fontSize: 40, color: '#1a4f72' }} />,
       color: '#f8f9fa',
       textColor: '#ff5a5f',
      
@@ -64,14 +64,13 @@ const stats = [
   fontFamily: "Outfit",
 }}>
   <Box sx={{
-    maxWidth: 1200,
+    maxWidth: "100%",
     mx: 'auto',
     px: { xs: 2, sm: 4 },
   }}>
     <Typography variant="h4" sx={{ 
      
-      color: 'rgb(192, 9, 88)', 
-      fontWeight: 600,
+      color: '#1a4f72', 
       textAlign: 'center',
       fontSize: { xs: '1.75rem', md: '2.125rem' }
     }}>
@@ -84,16 +83,17 @@ const stats = [
           display: 'flex',
         }}>
           <Card sx={{ 
-            width: '100%',
+             width: { xs: '100%', sm: '280px' }, 
+             maxWidth: 340,
             height: '100%',
             minHeight: 220,
             borderRadius: 3,
-            backgroundColor: 'transparent', // Remove card background
-            boxShadow: 'none', // Remove shadow
+            backgroundColor: 'transparent', 
+            boxShadow: 'none', 
             display: 'flex',
             flexDirection: 'column',
             border: 'none',
-             // Remove border if any
+            
           }}>
             <CardContent sx={{ 
               flex: 1,
@@ -101,29 +101,29 @@ const stats = [
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              p: { xs: 3, md: 4 },
+              p: { xs: 3, md: 3 },
             }}>
               <Box sx={{ 
                 display: 'inline-flex',
                 p: 2,
-                mb: 3,
+                mb: 2,
                 borderRadius: '50%',
-                backgroundColor: `${stat.textColor}20`
+                color: "#1a4f72"
               }}>
                 {stat.icon}
               </Box>
               <Typography variant="h6" sx={{ 
-                color: stat.textColor,
+                color: "gray",
                 fontWeight: 600,
-                mb: 2,
-                fontSize: { xs: '1.1rem', md: '1.25rem' }
+                mb: 1.5,
+                fontSize: { xs: '1.1rem', md: '1.30rem' }
               }}>
                 {stat.title}
               </Typography>
               <Typography variant="h4" sx={{ 
-                color: stat.textColor,
+                color: "#000",
                 fontWeight: 700,
-                fontSize: { xs: '2rem', md: '2.5rem' },
+                fontSize: { xs: '1.5rem', md: '1.7rem' },
                 lineHeight: 1.2
               }}>
                 {stat.value}
@@ -137,7 +137,7 @@ const stats = [
 </Container>
 
       <Container sx={{ textAlign: 'center', marginTop: 5, fontFamily: "Outfit" }}>
-        <Typography variant="h4" sx={{ marginBottom: 4, color: '#ff5a5f', fontFamily: "Outfit sans-serif" }}>
+        <Typography variant="h4" sx={{ marginBottom: 4, color: '#1a4f72', fontFamily: "Outfit sans-serif" }}>
           Find your Special Someone
         </Typography>
         <Grid container spacing={4} justifyContent="center">
@@ -156,7 +156,7 @@ const stats = [
                     top: 10,
                     right: 10,
                     backgroundColor: '#fff',
-                    color: '#ff5a5f',
+                    color: '#000',
                     border: '2px solid #00bcd4',
                   },
                 }}
@@ -166,7 +166,7 @@ const stats = [
                   sx={{
                     padding: 3,
                     borderRadius: '50%',
-                    backgroundColor: 'rgb(192, 9, 88)',
+                    backgroundColor: '#1a4f72',
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',

@@ -24,7 +24,7 @@
   }
 
   .service-card {
-    background: #2c3e50;
+    background: #1a4f72;
     color: #fff;
     padding: 1.5rem;
     border-radius: 8px;
@@ -80,17 +80,17 @@
     padding: 0 1rem;
 
     #happy {
-      font-size: clamp(1.2rem, 3vw, 1.5rem);
-      font-weight: bold;
+      font-size: 20px;
+      font-weight: 400;
       margin-bottom: 0.5rem;
-      color: #2c3e50;
+      color: #1a4f72;
       font-family: "Outfit sans-serif";
     }
 
     p {
-      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      font-size: 20px;
       font-family: "Outfit sans-serif";
-      color: #2c3e50;
+      color: #1a4f72;
     }
   }
 

@@ -3,6 +3,7 @@ import "./ContactUs.scss";
 import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
 import { motion } from "framer-motion";
+import { FaMapMarkerAlt, FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 
 const ContactUs = () => {
   useEffect(() => {
@@ -44,7 +45,7 @@ const ContactUs = () => {
                 transition={{ type: "spring", stiffness: 300 }}
               >
                 <div className="icon-wrapper">
-                  <i className="fas fa-map-marker-alt"></i>
+                   <FaMapMarkerAlt className="icon" />
                 </div>
                 <h3>Our Office</h3>
                 <p>#148/E, 2nd Floor, 17th Main Vijaynagar,</p>
@@ -57,7 +58,7 @@ const ContactUs = () => {
                 transition={{ type: "spring", stiffness: 300 }}
               >
                 <div className="icon-wrapper">
-                  <i className="fas fa-envelope"></i>
+                  <FaEnvelope className="icon" /> 
                 </div>
                 <h3>Email Us</h3>
                 <p>contactusgirijakalyana@gmail.com</p>
@@ -70,7 +71,7 @@ const ContactUs = () => {
                 transition={{ type: "spring", stiffness: 300 }}
               >
                 <div className="icon-wrapper">
-                  <i className="fas fa-phone-alt"></i>
+                <FaPhoneAlt className="icon" />
                 </div>
                 <h3>Call Us</h3>
                 <p>+91 9148824442</p>
@@ -126,7 +127,6 @@ const ContactUs = () => {
                   <motion.button 
                     type="submit" 
                     className="subbtn"
-                    whileHover={{ scale: 1.05, boxShadow: "0 5px 15px rgba(52, 152, 219, 0.4)" }}
                     whileTap={{ scale: 0.95 }}
                   >
                     Send Message
@@ -134,7 +134,6 @@ const ContactUs = () => {
                   <motion.button 
                     type="reset" 
                     className="subbtn clear-btn"
-                    whileHover={{ scale: 1.05, boxShadow: "0 5px 15px rgba(231, 76, 60, 0.4)" }}
                     whileTap={{ scale: 0.95 }}
                   >
                     Clear Form
