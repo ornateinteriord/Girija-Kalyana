@@ -21,7 +21,7 @@ import { LoadingComponent, } from "../../../App";
 import { isSilverOrPremiumUser, LoadingTextSpinner } from "../../../utils/common";
 import { FaBriefcase, FaMapMarkerAlt } from "react-icons/fa";
 import ProfileDialog from "../ProfileDialog/ProfileDialog";
-import PageTitle from "../../PageTitle";
+import PageTitle from "../../UI/PageTitle";
 import UserCard, { ProfileInfo } from "../../common/UserCard";
 
 const UserDashboard = () => {

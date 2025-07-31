@@ -5,7 +5,7 @@ import Requests from "./insidepage/requests/Request";
 import Sent from "./sent/Sent";
 import TokenService from "../../token/tokenService";
 import { useGetInterestCounts } from "../../api/User/useGetProfileDetails";
-import PageTitle from "../../PageTitle";
+import PageTitle from "../../UI/PageTitle";
 
 const MyInterest = () => {
   const registrationNo = TokenService.getRegistrationNo();

@@ -194,34 +194,65 @@ const Navbar = () => {
           </Typography>
 
           {/* Desktop Menu */}
-          <Box 
-            sx={{ 
-              display: { xs: "none", md: "flex" },
-              flexGrow: 1,
-              justifyContent: "center",
-              marginLeft: "20px"
-            }}
-          >
-            {menuItems.map((item) => (
-              <Button
-                key={item.text}
-                component={Link}
-                to={item.path}
-                sx={{
-                  color: "#fff",
-                  fontWeight: "bold",
-                  fontSize: "1rem",
-                  textTransform: "capitalize",
-                  margin: "0 8px",
-                  "&:hover": {
-                  color:"aqua",
-                  },
-                }}
-              >
-                {item.text}
-              </Button>
-            ))}
-          </Box>
+       <Box 
+  sx={{ 
+    display: { xs: "none", md: "flex" },
+    flexGrow: 1,
+    justifyContent: "center",
+    marginLeft: "20px"
+  }}
+>
+  {menuItems.map((item) => {
+    // Get the current path (assuming you're using React Router)
+    const currentPath = window.location.pathname;
+    // Check if this item is active
+    const isActive = currentPath === item.path;
+    
+    return (
+      <Button
+        key={item.text}
+        component={Link}
+        to={item.path}
+        sx={{
+          color: "#fff",
+          fontWeight: 600,  
+          fontSize: "1rem",
+          textTransform: "capitalize",
+          margin: "0 8px",
+          position: "relative",
+          "&:hover": {
+            color: "#fff",  
+            backgroundColor: "transparent",  
+            "&::after": { 
+              content: '""',
+              position: "absolute",
+              bottom: "4px",
+              left: "8px",
+              right: "8px",
+              height: "2px",
+              backgroundColor: "aqua",  
+              transform: "scaleX(1)",  
+              transition: "transform 0.3s ease"
+            }
+          },
+          "&::after": {  
+            content: '""',
+            position: "absolute",
+            bottom: "4px",
+            left: "8px",
+            right: "8px",
+            height: "2px",
+            backgroundColor: "aqua",
+            transform: isActive ? "scaleX(1)" : "scaleX(0)",  
+            transition: "transform 0.3s ease"
+          }
+        }}
+      >
+        {item.text}
+      </Button>
+    );
+  })}
+</Box>
 
           {/* Auth Buttons */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>

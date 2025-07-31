@@ -17,7 +17,7 @@ import LifeStylePop from "../viewAll/popupContent/lifeStylePop/LifeStylePop";
 import PreferencePop from "../viewAll/popupContent/preferencePop/PreferencePop";
 import { LoadingTextSpinner } from "../../../utils/common";
 import OthersPop from "../viewAll/popupContent/others/OthersPop";
-import PageTitle from "../../PageTitle";
+import PageTitle from "../../UI/PageTitle";
 import UserCard from "../../common/UserCard";
 
 const itemsPerPage = 8;

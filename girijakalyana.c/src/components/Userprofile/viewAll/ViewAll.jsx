@@ -15,7 +15,7 @@ import TokenService from "../../token/tokenService";
 import ProfileDialog from "../ProfileDialog/ProfileDialog";
 import GenderFilter from "../../../utils/Filters/GenderFilter";
 import { LoadingTextSpinner } from "../../../utils/common";
-import PageTitle from "../../PageTitle";
+import PageTitle from "../../UI/PageTitle";
 import UserCard from "../../common/UserCard";
 
 const itemsPerPage = 8;

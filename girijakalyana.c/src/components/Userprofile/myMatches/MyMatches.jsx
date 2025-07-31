@@ -11,7 +11,7 @@ import ProfileDialog from "../ProfileDialog/ProfileDialog";
 import {
   LoadingTextSpinner,
 } from "../../../utils/common";
-import PageTitle from "../../PageTitle";
+import PageTitle from "../../UI/PageTitle";
 import UserCard from "../../common/UserCard";
 
 const MyMatches = () => {

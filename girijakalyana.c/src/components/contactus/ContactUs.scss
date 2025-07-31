@@ -15,15 +15,15 @@
     h2 {
       margin-top: 40px;
       font-size: 2.5rem;
-      color: #7f8c8d;
+      color: #1a4f72;
       margin-bottom: 1rem;
-      font-weight: 700;
+      font-weight: 600;
     }
     
     p {
       font-size: 1.1rem;
-      color: #7f8c8d;
-      max-width: 700px;
+      color: #1a4f72;
+      max-width: 500px;
       margin: 0 auto;
       line-height: 1.6;
     }
@@ -53,12 +53,12 @@
           padding: 1.8rem;
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
           transition: all 0.3s ease;
-          border-left: 4px solid #3498db;
+          border-left: 4px solid #1a4f72;
 
           .icon-wrapper {
             width: 60px;
             height: 60px;
-            background: linear-gradient(45deg, #3498db, #9b59b6);
+            background: #1a4f72;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -94,9 +94,10 @@
         overflow: hidden;
 
         .form-header {
-          background: linear-gradient(45deg, #3498db, #9b59b6);
+          height: 90px;
+          background: #1a4f72;
           color: white;
-          padding: 1.5rem;
+          padding: 1.2rem;
           text-align: center;
 
           h3 {
@@ -177,14 +178,20 @@
               font-weight: 600;
               cursor: pointer;
               transition: all 0.3s ease;
-              background: linear-gradient(45deg, #3498db, #9b59b6);
+              background:#27ae60;
+               &:hover {
+             background-color: #1e8449;
+              }
               color: white;
               text-transform: uppercase;
               letter-spacing: 0.5px;
             }
 
             .clear-btn {
-              background: linear-gradient(45deg, #e74c3c, #f39c12);
+              background:#1a4f72;
+              &:hover {
+             background-color: #245a7e;
+              }
               width: 100%; // Full width clear button
             }
           }
@@ -236,6 +243,11 @@
       }
     }
   }
+  .form-header{
+      h3{
+        text-align: center;
+      }
+    }
 }
 
 @media (max-width: 768px) {
@@ -251,7 +263,11 @@
         font-size: 1rem;
       }
     }
-
+.form-header{
+      h3{
+        text-align: center;
+      }
+    }
     .contact-content-wrapper {
       .contact-main-content {
         .contact-details {
@@ -287,11 +303,17 @@
         font-size: 1.8rem;
       }
     }
+    .form-header{
+      h3{
+        text-align: center;
+      }
+    }
 
     .contact-content-wrapper {
       .contact-main-content {
         .contact-card, .contact-form-container {
           padding: 1rem;
+
         }
       }
 
