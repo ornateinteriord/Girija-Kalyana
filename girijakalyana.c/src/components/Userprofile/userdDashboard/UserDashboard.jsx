@@ -20,13 +20,9 @@ import { useGetConnections, useGetMemberDetails } from "../../api/User/useGetPro
 import { LoadingComponent, } from "../../../App";
 import { isSilverOrPremiumUser, LoadingTextSpinner } from "../../../utils/common";
 import { FaBriefcase, FaMapMarkerAlt } from "react-icons/fa";
-import AboutPop from "../viewAll/popupContent/abouPop/AboutPop";
-import FamilyPop from "../viewAll/popupContent/familyPop/FamilyPop";
-import EducationPop from "../viewAll/popupContent/educationPop/EducationPop";
-import LifeStylePop from "../viewAll/popupContent/lifeStylePop/LifeStylePop";
-import PreferencePop from "../viewAll/popupContent/preferencePop/PreferencePop";
-import OthersPop from "../viewAll/popupContent/others/OthersPop";
 import ProfileDialog from "../ProfileDialog/ProfileDialog";
+import PageTitle from "../../PageTitle";
+import UserCard, { ProfileInfo } from "../../common/UserCard";
 
 const UserDashboard = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -73,21 +69,6 @@ useEffect(() => {
   const handleOpenDialog = (user) => {
     setSelectedUser(user);
     setOpenDialog(true);
-  };
-
-  const renderDialogContent = () => {
-    if (!selectedUser) return null;
-
-    const contentMap = {
-      0: <AboutPop userDetails={selectedUser} />,
-      1: <FamilyPop userDetails={selectedUser} />,
-      2: <EducationPop userDetails={selectedUser} />,
-      3: <LifeStylePop userDetails={selectedUser} />,
-      4: <PreferencePop userDetails={selectedUser} />,
-      5: <OthersPop userDetails={selectedUser} />
-    };
-
-    return contentMap[currentTab] || null;
   };
 
   if (isLoadingProfile) return <LoadingComponent />;
@@ -143,20 +124,7 @@ useEffect(() => {
             gap={isSmallScreen ? 1 : 0}
             mb={2}
           >
-            <Typography
-              variant={isSmallScreen ? "h5" : "h4"}
-              fontWeight="bold"
-              sx={{ 
-                color: "#212121",
-                fontSize: {
-                  xs: "1.3rem",
-                  sm: "1.75rem",
-                },
-                alignSelf: isSmallScreen ? "flex-start" : "center"
-              }}
-            >
-              Interested Profiles
-            </Typography>
+            <PageTitle title="Interested Profiles" />
            {!isLoadingConnections && (
   <Typography variant="body2" color="#616161">
     Showing {connectionsData?.connections?.length || 0} of {connectionsData?.totalRecords || 0} connections
@@ -180,16 +148,14 @@ useEffect(() => {
  {isLoadingConnections ? (
   <Box sx={{ gridColumn: "1 / -1", textAlign: "center" }}>
     <LoadingTextSpinner />
-    <LoadingTextSpinner />
   </Box>
   ) : connectionsData?.connections?.length > 0 ? (
     connectionsData.connections.map((connection) => (
-      <ProfileCard 
+      <UserCard 
         key={connection._id}
         profile={connection.profile} 
-        isSmallScreen={isSmallScreen}
         connection={connection}
-        handleOpenDialog={handleOpenDialog}
+        onViewMore={handleOpenDialog}
       />
     ))
   ) : (
@@ -232,16 +198,14 @@ useEffect(() => {
           selectedUser={selectedUser}
           currentTab={currentTab}
           setCurrentTab={setCurrentTab}
-          loggedInUserId={registerNo}
           isLoading={false}
-          renderDialogContent={renderDialogContent}
         />
       )}
     </Box>
   );
 };
 
-const ProfileCard = ({ profile, isSmallScreen, connection, handleOpenDialog }) => {
+const ProfileCard = ({ profile, connection, handleOpenDialog }) => {
   return (
     <Card
       sx={{
@@ -417,15 +381,5 @@ const ProfileCard = ({ profile, isSmallScreen, connection, handleOpenDialog }) =
   );
 };
 
-const ProfileInfo = ({ label, value }) => (
-  <Box textAlign="center" sx={{ px: 1 }}>
-    <Typography variant="caption" color="text.secondary">
-      {label}
-    </Typography>
-    <Typography variant="subtitle2" fontWeight="bold">
-      {value}
-    </Typography>
-  </Box>
-);
 
 export default UserDashboard;

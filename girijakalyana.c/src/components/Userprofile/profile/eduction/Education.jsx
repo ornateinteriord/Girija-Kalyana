@@ -74,12 +74,11 @@ const Education = () => {
   };
 
   const handleClear = () => {
-    setFormData({
-      educational_qualification: "",
-      occupation: "",
-      income_per_month: "",
-      occupation_country: ""
-    });
+    if (userProfile) {
+      setFormData({
+        ...userProfile,
+      });
+    }
   };
 
   return (
@@ -174,7 +173,7 @@ const Education = () => {
                   width: isMobile ? '100%' : '130px'
                 }}
               >
-                Clear
+                Reset
               </Button>
               <Button
                 onClick={handleSave}
