@@ -21,7 +21,6 @@ import EducationPop from "../viewAll/popupContent/educationPop/EducationPop";
 import LifeStylePop from "../viewAll/popupContent/lifeStylePop/LifeStylePop";
 import PreferencePop from "../viewAll/popupContent/preferencePop/PreferencePop";
 import ProfileDialog from "../ProfileDialog/ProfileDialog";
-import GenderFilter from "../../../utils/Filters/GenderFilter";
 import OthersPop from "../viewAll/popupContent/others/OthersPop";
 import { isSilverOrPremiumUser, LoadingTextSpinner } from "../../../utils/common";
 import PageTitle from "../../PageTitle";
@@ -33,7 +32,6 @@ const MyMatches = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [openDialog, setOpenDialog] = useState(null);
   const [currentTab, setCurrentTab] = useState(0);
-  const [selectedStatus, setSelectedStatus] = useState("all");
   const itemsPerPage = 8;
   const registerNo = TokenService.getRegistrationNo();
 
@@ -50,23 +48,12 @@ const MyMatches = () => {
     setOpenDialog(true);
   }, []);
 
-   const filteredUsers = useMemo(() => {
-    if (!data?.content) return [];
+  
 
-    return data.content.filter((user) => {
-      if (selectedStatus !== "all" && user.gender !== selectedStatus)
-        return false;
-      return true;
-    });
-  }, [data, selectedStatus]);
 
-  const handleStatusChange = (value) => {
-    setSelectedStatus(value);
-    setCurrentPage(1); 
-  };
     useEffect(() => {
       fetchProfiles({ page: currentPage - 1, pageSize: itemsPerPage });
-    }, [currentPage, selectedStatus, fetchProfiles]);
+    }, [currentPage, fetchProfiles]);
 
     const totalPages = useMemo(() => {
         return data ? Math.ceil(data.totalRecords / itemsPerPage) : 1;
@@ -113,16 +100,11 @@ const MyMatches = () => {
         {/* Left-aligned heading */}
         <PageTitle title="My Matches" />
 
-        {/* Right-aligned filter */}
-        <GenderFilter
-          selectedStatus={selectedStatus}
-          handleStatusChange={handleStatusChange}
-        />
       </Box>
 
       { isUsersLoading ? (
         <LoadingTextSpinner />
-      ) : filteredUsers.length === 0 ? (
+      ) : data?.content?.length === 0 ? (
         <Typography variant="h6" textAlign="center" mt={4}>
           No matches found based on your preferences.
         </Typography>
@@ -144,7 +126,7 @@ const MyMatches = () => {
   }}
 >
 
-          {filteredUsers?.map((user) => {
+          {data?.content?.map((user) => {
            return(
             <Card
               key={user.registration_no}
