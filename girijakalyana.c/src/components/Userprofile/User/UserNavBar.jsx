@@ -44,7 +44,7 @@ const UserNavBar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
   const [openChangePasswordDialog, setOpenChangePasswordDialog] = useState(false);
-  const isLargeScreen = useMediaQuery('(min-width:790px)');
+  const isLargeScreen = useMediaQuery('(min-width:900px)');
   const location = useLocation();
   const navigation = useNavigate();
 
@@ -202,6 +202,10 @@ const UserNavBar = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  useEffect(()=>{
+    setIsSidebarOpen(isLargeScreen)
+  },[isLargeScreen])
 
   // On first render, ensure we're on the dashboard if no specific route is set
   useEffect(() => {

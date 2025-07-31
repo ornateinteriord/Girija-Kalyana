@@ -53,10 +53,12 @@ const Others = () => {
   };
 
   const handleReset = () => {
-    setFormData(prev => ({
-      ...prev,
-      otherInfo: "Not Specified"
-    }));
+    if (userProfile) {
+      setFormData({
+        ...userProfile,
+        // otherInfo:"Not Specified"
+      });
+    }
   };
 
   useEffect(() => {

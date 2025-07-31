@@ -28,6 +28,7 @@ import LifeStylePop from "./popupContent/lifeStylePop/LifeStylePop";
 import PreferencePop from "./popupContent/preferencePop/PreferencePop";
 import { isSilverOrPremiumUser, LoadingTextSpinner } from "../../../utils/common";
 import OthersPop from "./popupContent/others/OthersPop";
+import PageTitle from "../../PageTitle";
 
 const itemsPerPage = 8;
 
@@ -253,20 +254,18 @@ const ViewAll = () => {
           mb: 3,
         }}
       >
-        <Typography
-          variant="h5"
-          fontWeight="bold"
-          sx={{ fontSize: { xs: "1.5rem", sm: "1.75rem" } }}
-        >
-          Profiles
-        </Typography>
+        <PageTitle title="Profiles" />
 
         <GenderFilter
           selectedStatus={selectedStatus}
           handleStatusChange={handleStatusChange}
         />
       </Box>
-
+ { !isLoading &&  filteredUsers?.length === 0 ? (
+        <Typography variant="h6" textAlign="center" mt={4}>
+          No records to display.
+        </Typography>
+      ) : (
       <Box
         sx={{
           display: "grid",
@@ -281,6 +280,7 @@ const ViewAll = () => {
       >
         {filteredUsers.map(renderUserCard)}
       </Box>
+      )}
 
       {selectedUser && (
         <ProfileDialog

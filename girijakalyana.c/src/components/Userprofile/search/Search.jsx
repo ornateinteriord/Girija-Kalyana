@@ -24,6 +24,7 @@ import PreferencePop from "../viewAll/popupContent/preferencePop/PreferencePop";
 import { LoadingComponent } from "../../../App";
 import { isSilverOrPremiumUser, LoadingTextSpinner } from "../../../utils/common";
 import OthersPop from "../viewAll/popupContent/others/OthersPop";
+import PageTitle from "../../PageTitle";
 
 const itemsPerPage = 8;
 
@@ -212,6 +213,7 @@ const Search = () => {
 
   return (
     <Box sx={{ p: { xs: 1, sm: 2 }, backgroundColor: "#f9f9f9" }}>
+      <PageTitle title="Search Profiles" />
       <Box
         sx={{
           display: "flex",
@@ -222,9 +224,7 @@ const Search = () => {
           mb: 3,
         }}
       >
-        <Typography variant="h4" fontWeight="bold" sx={{ color: "#1a4f72" }}>
-          Search Results
-        </Typography>
+        
 
         <Box display="flex" gap={1} width={{ xs: "100%", sm: "70%" }}>
           <TextField
