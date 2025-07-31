@@ -24,6 +24,7 @@ import ProfileDialog from "../ProfileDialog/ProfileDialog";
 import GenderFilter from "../../../utils/Filters/GenderFilter";
 import OthersPop from "../viewAll/popupContent/others/OthersPop";
 import { isSilverOrPremiumUser, LoadingTextSpinner } from "../../../utils/common";
+import PageTitle from "../../PageTitle";
 
 
 
@@ -110,16 +111,7 @@ const MyMatches = () => {
         }}
       >
         {/* Left-aligned heading */}
-        <Typography
-          variant="h5"
-          fontWeight="bold"
-          sx={{
-            alignSelf: { xs: "flex-start", sm: "center" },
-            fontSize: { xs: "1.5rem", sm: "1.75rem" },
-          }}
-        >
-          My Matches
-        </Typography>
+        <PageTitle title="My Matches" />
 
         {/* Right-aligned filter */}
         <GenderFilter

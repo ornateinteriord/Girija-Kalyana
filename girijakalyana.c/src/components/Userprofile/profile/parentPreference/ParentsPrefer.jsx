@@ -71,16 +71,11 @@ const ParentsPrefer = () => {
   };
 
   const handleClear = () => {
-    setFormData({
-      caste_preference: "",
-      from_age_preference: "",
-      to_age_preference: "",
-      from_height_preference: "",
-      to_height_preference: "",
-      occupation_country_preference: "",
-      maritalstatus_preference: "",
-      education_preference: ""
-    });
+     if (userProfile) {
+      setFormData({
+        ...userProfile,
+      });
+    }
   };
 
   const formFields = [
@@ -203,7 +198,7 @@ const ParentsPrefer = () => {
             width: { xs: "100%", sm: "130px" }
           }}
         >
-          Clear
+          Reset
         </Button>
         <Button
           onClick={handleSave}

@@ -17,6 +17,7 @@ import Others from "../profile/others/Others";
 import ParentsPrefer from "../profile/parentPreference/ParentsPrefer";
 import Photos from "../profile/photo/Photos";
 import PrivacySettings from "../profile/privacySettings/PrivacySettings";
+import PageTitle from "../../PageTitle";
 
 
 
@@ -50,13 +51,10 @@ const Profile = () => {
   return (
     <Box
     sx={{
-      bgcolor: 'background.paper',
       borderRadius: 2,
-      boxShadow: 2,
       p: { xs: 1, sm: 3, md: 2 },
       maxWidth: 1200,
       justifySelf:{md:'start'},
-      // mx: 'auto',
       width: { 
         xs: '40%',  
         sm: '90%',  
@@ -73,9 +71,7 @@ const Profile = () => {
       }
     }}
   >        
-            <Typography variant="h5" fontWeight={700} mt={0}  color="#34495e">
-              My Profile
-            </Typography>
+           <PageTitle title="My Profile" />
             {/* <Divider /> */}
           
 

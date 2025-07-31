@@ -5,6 +5,7 @@ import Requests from "./insidepage/requests/Request";
 import Sent from "./sent/Sent";
 import TokenService from "../../token/tokenService";
 import { useGetInterestCounts,} from "../../api/User/useGetProfileDetails";
+import PageTitle from "../../PageTitle";
 
 
 
@@ -55,14 +56,12 @@ const MyInterest = () => {
   };
 
   return (
-    <Box sx={{ padding: 0, backgroundColor: "#f9f9f9", minHeight: "100vh" }}>
-      {/* Header */}
-      <Box sx={{ marginBottom: 2 }}>
-        <Typography variant="h5" fontWeight={900} color="#34495e">
-          Interested Profiles
-        </Typography>
+    <Box sx={{ p: { xs: 1, sm: 3, md: 2 }, backgroundColor: "#f9f9f9", minHeight: "100vh" }}>
+     
+  
+        <PageTitle title="Interested Profiles" />
 
-      </Box>
+     
 
       {/* Tabs Section */}
     <Tabs

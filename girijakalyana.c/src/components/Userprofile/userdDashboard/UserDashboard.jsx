@@ -27,6 +27,7 @@ import LifeStylePop from "../viewAll/popupContent/lifeStylePop/LifeStylePop";
 import PreferencePop from "../viewAll/popupContent/preferencePop/PreferencePop";
 import OthersPop from "../viewAll/popupContent/others/OthersPop";
 import ProfileDialog from "../ProfileDialog/ProfileDialog";
+import PageTitle from "../../PageTitle";
 
 const UserDashboard = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -143,20 +144,7 @@ useEffect(() => {
             gap={isSmallScreen ? 1 : 0}
             mb={2}
           >
-            <Typography
-              variant={isSmallScreen ? "h5" : "h4"}
-              fontWeight="bold"
-              sx={{ 
-                color: "#212121",
-                fontSize: {
-                  xs: "1.3rem",
-                  sm: "1.75rem",
-                },
-                alignSelf: isSmallScreen ? "flex-start" : "center"
-              }}
-            >
-              Interested Profiles
-            </Typography>
+            <PageTitle title="Interested Profiles" />
            {!isLoadingConnections && (
   <Typography variant="body2" color="#616161">
     Showing {connectionsData?.connections?.length || 0} of {connectionsData?.totalRecords || 0} connections
