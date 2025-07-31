@@ -15,6 +15,7 @@ import TokenService from "../token/tokenService";
 import ThemedButton from "../UI/button";
 
 
+
 const HeroSlider = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
