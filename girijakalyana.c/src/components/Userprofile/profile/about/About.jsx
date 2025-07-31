@@ -7,7 +7,6 @@ import {
   Stack,
   CircularProgress,
 } from "@mui/material";
-import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 import TokenService from "../../../token/tokenService";
@@ -17,6 +16,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
+import { calculateAge } from "../../../../utils/common";
 
 const About = () => {
   const registerNo = TokenService.getRegistrationNo();
