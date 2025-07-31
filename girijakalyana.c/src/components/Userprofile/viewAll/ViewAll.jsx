@@ -261,7 +261,11 @@ const ViewAll = () => {
           handleStatusChange={handleStatusChange}
         />
       </Box>
-
+ { !isLoading &&  filteredUsers?.length === 0 ? (
+        <Typography variant="h6" textAlign="center" mt={4}>
+          No records to display.
+        </Typography>
+      ) : (
       <Box
         sx={{
           display: "grid",
@@ -276,6 +280,7 @@ const ViewAll = () => {
       >
         {filteredUsers.map(renderUserCard)}
       </Box>
+      )}
 
       {selectedUser && (
         <ProfileDialog

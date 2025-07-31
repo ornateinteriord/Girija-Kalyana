@@ -13,7 +13,6 @@ import {
   Avatar,
   useMediaQuery,
   useTheme,
-  Chip,
 } from "@mui/material";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import rawJsonData from "../Userprofile/profile/eduction/jsondata/data.json";
@@ -42,12 +41,6 @@ const Register = () => {
 
   const [citySuggestions, setCitySuggestions] = useState(datas.cities || []);
   const [talukSuggestions, setTalukSuggestions] = useState([]);
-  const [occupationSuggestions, setOccupationSuggestions] = useState(datas.occupationValues || []);
-  const [educationSuggestions, setEducationSuggestions] = useState(datas.qualificationValues || []);
-  const [incomeSuggestions, setIncomeSuggestions] = useState(datas.incomeValues || []);
-  const [countrySuggestions, setCountrySuggestions] = useState(datas.countries || []);
-  const [languageSuggestions, setLanguageSuggestions] = useState(datas.languageValues || []);
-  const [casteSuggestions, setCasteSuggestions] = useState(datas.casteValues || []);
 
   const getUserRole = () => {
     switch (planType) {
@@ -277,9 +270,9 @@ const Register = () => {
                   value={formData.gender}
                   onChange={handleChange}
                 >
-                  <MenuItem value="Male">Male</MenuItem>
-                  <MenuItem value="Female">Female</MenuItem>
-                  <MenuItem value="Other">Other</MenuItem>
+                  <MenuItem value="BrideGroom">Male</MenuItem>
+                  <MenuItem value="Bride">Female</MenuItem>
+                  
                 </Select>
               </FormControl>
 
@@ -340,7 +333,7 @@ const Register = () => {
               >
                 <Box sx={{ flex: '1 1 48%', minWidth: '200px' }}>
                   <CustomAutocomplete
-                    options={educationSuggestions}
+                    options={datas.qualificationValues??[]}
                     label="Educational Qualification"
                     name="educational_qualification"
                     value={formData.educational_qualification}
@@ -350,7 +343,7 @@ const Register = () => {
                 </Box>
                 <Box sx={{ flex: '1 1 48%', minWidth: '200px' }}>
                   <CustomAutocomplete
-                    options={occupationSuggestions}
+                    options={datas.occupationValues ?? []}
                     label="Occupation"
                     name="occupation"
                     value={formData.occupation}
@@ -361,7 +354,7 @@ const Register = () => {
 
                 <Box sx={{ flex: '1 1 48%', minWidth: '200px' }}>
                   <CustomAutocomplete
-                    options={incomeSuggestions}
+                    options={datas.incomeValues??[]}
                     label="Income Per Annum"
                     name="income_per_month"
                     value={formData.income_per_month}
@@ -371,7 +364,7 @@ const Register = () => {
                 </Box>
                 <Box sx={{ flex: '1 1 48%', minWidth: '200px' }}>
                   <CustomAutocomplete
-                    options={countrySuggestions}
+                    options={datas.countries ?? []}
                     label="Country"
                     name="country"
                     value={formData.country}
@@ -382,7 +375,7 @@ const Register = () => {
 
                 <Box sx={{ flex: '1 1 48%', minWidth: '200px' }}>
                   <CustomAutocomplete
-                    options={languageSuggestions}
+                    options={datas.languageValues  ?? []}
                     label="Mother Tongue"
                     name="mother_tongue"
                     value={formData.mother_tongue}
@@ -434,7 +427,7 @@ const Register = () => {
               />
 
               <CustomAutocomplete
-                options={casteSuggestions}
+                options={datas.casteValues ?? []}
                 label="Caste"
                 name="caste"
                 value={formData.caste}
@@ -454,7 +447,7 @@ const Register = () => {
               />
 
               <CustomAutocomplete
-                options={countrySuggestions}
+                options={datas.countries ?? []}
                 label="Occupation Country"
                 name="occupation_country"
                 value={formData.occupation_country}
