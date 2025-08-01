@@ -169,7 +169,7 @@ const Register = () => {
           py: 4,
           px: { xs: 1, sm: 2 },
           mt: "10px",
-          width: "85%",
+          width: isMobile ? "100%" : "85%",
           display: "flex",
           justifyContent: "center",
           justifySelf: "center",
@@ -200,6 +200,7 @@ const Register = () => {
                 display: "flex",
                 alignItems: "center",
                 gap: 2,
+                mt:isMobile ? "15px" : ""
               }}
             >
               <Avatar sx={{ bgcolor: "primary.main" }}>
@@ -208,7 +209,9 @@ const Register = () => {
               <Typography
                 variant={isMobile ? "h5" : "h4"}
                 component="h1"
-                sx={{ fontWeight: 500 }}
+                sx={{ fontWeight: 500,
+                 
+                 }}
               >
                 Register Here!
               </Typography>
@@ -588,7 +591,7 @@ const Register = () => {
               alignItems: "center",
               justifyContent: "center",
               gap: 2,
-              flexDirection:"row",
+              flexDirection:isMobile ? "row" : "row",
             }}
           >
             <input type="hidden" name="user_role" value={formData.user_role} />
