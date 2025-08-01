@@ -166,6 +166,7 @@
 
           .button-group {
             display: flex;
+              flex-direction: row;
             gap: 15px;
             margin-top: 1.5rem;
             width: 100%; // Full width button group
@@ -319,7 +320,7 @@
 
         }
       }
-
+   
       .full-width-map-container {
         padding: 1rem;
         
@@ -328,5 +329,10 @@
         }
       }
     }
+       .button-group{
+       
+          flex-direction: row;
+      }
+
   }
 }
