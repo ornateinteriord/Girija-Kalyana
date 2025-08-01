@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {   
+import {
   Box,
   Paper,
   Typography,
@@ -54,36 +54,36 @@ const Register = () => {
 
   const initialFormState = {
     user_role: getUserRole(),
-    marital_status: '',
-    profilefor: '',
-    gender: '',
-    date_of_birth: '',
-    age: '',
-    educational_qualification: '',
-    occupation: '',
-    income_per_month: '',
-    country: '',
-    mother_tongue: '',
-    name_of_parent: '',
-    parent_name: '',
-    religion: 'Hindu',
-    caste: '',
-    address: '',
-    occupation_country: '',
-    state: '',
-    city: '',
-    first_name: '',
-    last_name: '',
-    username: '',
-    mobile_no: '',
-    password: '',
-    confirmPassword: ''
+    marital_status: "",
+    profilefor: "",
+    gender: "",
+    date_of_birth: "",
+    age: "",
+    educational_qualification: "",
+    occupation: "",
+    income_per_month: "",
+    country: "",
+    mother_tongue: "",
+    name_of_parent: "",
+    parent_name: "",
+    religion: "Hindu",
+    caste: "",
+    address: "",
+    occupation_country: "",
+    state: "",
+    city: "",
+    first_name: "",
+    last_name: "",
+    username: "",
+    mobile_no: "",
+    password: "",
+    confirmPassword: "",
   };
 
   const [formData, setFormData] = useState(initialFormState);
 
   useEffect(() => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       user_role: getUserRole(),
     }));
@@ -91,9 +91,10 @@ const Register = () => {
 
   useEffect(() => {
     if (formData.state) {
-      const filteredCities = datas.cities?.filter(city => 
-        city.toLowerCase().includes(formData.state.toLowerCase())
-      ) || [];
+      const filteredCities =
+        datas.cities?.filter((city) =>
+          city.toLowerCase().includes(formData.state.toLowerCase())
+        ) || [];
       setCitySuggestions(filteredCities);
     }
   }, [formData.state]);
@@ -110,11 +111,20 @@ const Register = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === 'district') {
-      const selectedDistrict = datas.districts?.find(
-        (d) => d.name.toLowerCase() === value.toLowerCase()
-      );
-      setTalukSuggestions(selectedDistrict?.taluks || []);
+    // For mobile number field - only allow numbers up to 10 digits
+    if (name === "mobile_no") {
+      if (value === "" || /^\d{0,10}$/.test(value)) {
+        setFormData((prev) => ({ ...prev, [name]: value }));
+      }
+      return;
+    }
+
+    // For age field - only allow numbers
+    if (name === "age") {
+      if (value === "" || /^\d+$/.test(value)) {
+        setFormData((prev) => ({ ...prev, [name]: value }));
+      }
+      return;
     }
 
     if (name === "date_of_birth") {
@@ -124,11 +134,14 @@ const Register = () => {
         [name]: value,
         age: age.toString(),
       }));
+    } else if (name === "district") {
+      const selectedDistrict = datas.districts?.find(
+        (d) => d.name.toLowerCase() === value.toLowerCase()
+      );
+      setTalukSuggestions(selectedDistrict?.taluks || []);
+      setFormData((prev) => ({ ...prev, [name]: value }));
     } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
@@ -146,6 +159,11 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (!/^[0-9]{10}$/.test(formData.mobile_no)) {
+      toast.error("Please enter a valid 10-digit mobile number");
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match");
       return;
@@ -157,6 +175,11 @@ const Register = () => {
         },
       });
     } catch (error) {}
+  };
+
+  const isValidAge = (value) => {
+    if (value === "") return true; // Allow empty field
+    return /^\d+$/.test(value); // Check if it's only digits
   };
 
   return (
@@ -190,9 +213,9 @@ const Register = () => {
               justifyContent: "space-between",
               alignItems: "center",
               mb: 2,
-              flexDirection: { xs: "column", sm: "row" }, 
+              flexDirection: { xs: "column", sm: "row" },
               gap: 1,
-              width: "100%"
+              width: "100%",
             }}
           >
             <Box
@@ -200,7 +223,7 @@ const Register = () => {
                 display: "flex",
                 alignItems: "center",
                 gap: 2,
-                mt:isMobile ? "15px" : ""
+                mt: isMobile ? "15px" : "",
               }}
             >
               <Avatar sx={{ bgcolor: "primary.main" }}>
@@ -209,9 +232,7 @@ const Register = () => {
               <Typography
                 variant={isMobile ? "h5" : "h4"}
                 component="h1"
-                sx={{ fontWeight: 500,
-                 
-                 }}
+                sx={{ fontWeight: 500 }}
               >
                 Register Here!
               </Typography>
@@ -219,19 +240,19 @@ const Register = () => {
 
             <Box
               sx={{
-                fontSize: { xs: '18px', sm: '22px' }, 
+                fontSize: { xs: "18px", sm: "22px" },
                 backgroundColor: "transparent",
-                color: 'black',
+                color: "black",
                 py: 1,
                 borderRadius: 1,
                 fontWeight: 500,
               }}
             >
-              Registering as:{' '}
-              <Box 
+              Registering as:{" "}
+              <Box
                 component="span"
                 sx={{
-                  color: "primary.main"  
+                  color: "primary.main",
                 }}
               >
                 {getUserRole()}
@@ -334,19 +355,22 @@ const Register = () => {
               <TextField
                 fullWidth
                 label="Age"
-                type="number"
+                type="text" // Changed from "number" to "text"
                 sx={{ mb: 3 }}
                 name="age"
                 value={formData.age}
                 onChange={handleChange}
                 InputLabelProps={{ shrink: !!formData.age }}
+                error={!isValidAge(formData.age)} // Show error state if not valid
+                helperText={
+                  !isValidAge(formData.age) ? "Please enter a valid number" : ""
+                }
               />
-
               <Typography
                 variant="h6"
                 sx={{ mb: 2, color: "primary.main", fontWeight: 600 }}
               >
-               SOCIAL & CAREER DETAILS
+                SOCIAL & CAREER DETAILS
               </Typography>
 
               <Box
@@ -356,56 +380,56 @@ const Register = () => {
                   gap: 2,
                 }}
               >
-                <Box sx={{ flex: '1 1 48%', minWidth: '200px' }}>
+                <Box sx={{ flex: "1 1 48%", minWidth: "200px" }}>
                   <CustomAutocomplete
-                    options={datas.qualificationValues??[]}
+                    options={datas.qualificationValues ?? []}
                     label="Educational Qualification"
                     name="educational_qualification"
                     value={formData.educational_qualification}
                     onChange={handleChange}
-                    sx={{ width: '100%', mb: 2 }}
+                    sx={{ width: "100%", mb: 2 }}
                   />
                 </Box>
-                <Box sx={{ flex: '1 1 48%', minWidth: '200px' }}>
+                <Box sx={{ flex: "1 1 48%", minWidth: "200px" }}>
                   <CustomAutocomplete
                     options={datas.occupationValues ?? []}
                     label="Occupation"
                     name="occupation"
                     value={formData.occupation}
                     onChange={handleChange}
-                    sx={{ width: '100%', mb: 2 }}
+                    sx={{ width: "100%", mb: 2 }}
                   />
                 </Box>
 
-                <Box sx={{ flex: '1 1 48%', minWidth: '200px' }}>
+                <Box sx={{ flex: "1 1 48%", minWidth: "200px" }}>
                   <CustomAutocomplete
-                    options={datas.incomeValues??[]}
+                    options={datas.incomeValues ?? []}
                     label="Income Per Annum"
                     name="income_per_month"
                     value={formData.income_per_month}
                     onChange={handleChange}
-                    sx={{ width: '100%', mb: 2 }}
+                    sx={{ width: "100%", mb: 2 }}
                   />
                 </Box>
-                <Box sx={{ flex: '1 1 48%', minWidth: '200px' }}>
+                <Box sx={{ flex: "1 1 48%", minWidth: "200px" }}>
                   <CustomAutocomplete
                     options={datas.countries ?? []}
                     label="Country"
                     name="country"
                     value={formData.country}
                     onChange={handleChange}
-                    sx={{ width: '100%', mb: 2 }}
+                    sx={{ width: "100%", mb: 2 }}
                   />
                 </Box>
 
-                <Box sx={{ flex: '1 1 48%', minWidth: '200px' }}>
+                <Box sx={{ flex: "1 1 48%", minWidth: "200px" }}>
                   <CustomAutocomplete
-                    options={datas.languageValues  ?? []}
+                    options={datas.languageValues ?? []}
                     label="Mother Tongue"
                     name="mother_tongue"
                     value={formData.mother_tongue}
                     onChange={handleChange}
-                    sx={{ width: '100%', mb: 2 }}
+                    sx={{ width: "100%", mb: 2 }}
                   />
                 </Box>
               </Box>
@@ -548,12 +572,24 @@ const Register = () => {
               <TextField
                 fullWidth
                 label="Mobile Number"
-                type="number"
+                type="text" // Changed from "number" to "text" for better control
                 name="mobile_no"
                 sx={{ mb: 3 }}
                 value={formData.mobile_no}
                 onChange={handleChange}
                 required
+                inputProps={{
+                  maxLength: 10, // Limit to 10 digits for Indian numbers
+                  pattern: "[0-9]*", // Ensures only numbers are entered
+                }}
+                error={
+                  formData.mobile_no && !/^[0-9]{10}$/.test(formData.mobile_no)
+                }
+                helperText={
+                  formData.mobile_no && !/^[0-9]{10}$/.test(formData.mobile_no)
+                    ? "Please enter a valid 10-digit mobile number"
+                    : ""
+                }
               />
             </Box>
           </Box>
@@ -591,7 +627,7 @@ const Register = () => {
               alignItems: "center",
               justifyContent: "center",
               gap: 2,
-              flexDirection:isMobile ? "row" : "row",
+              flexDirection: isMobile ? "row" : "row",
             }}
           >
             <input type="hidden" name="user_role" value={formData.user_role} />
