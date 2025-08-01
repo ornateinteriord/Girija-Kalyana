@@ -254,7 +254,7 @@ const ProfileDialog = ({
               <Box textAlign="center" sx={{ width: "100%" }}>
                 <Typography
                   variant="h5"
-                  fontWeight="bold"
+                  fontWeight="500px"
                   sx={{ fontSize: { xs: "1.3rem", sm: "1.5rem" } }}
                 >
                   {selectedUser?.first_name} {selectedUser?.last_name}
@@ -280,8 +280,8 @@ const ProfileDialog = ({
                         : selectedUser?.type_of_user === "FreeUser"
                         ? "#87CEEB"
                         : "gray",
-                    color: "black",
-                    fontWeight: "bold",
+                    color: "#fff",
+                    fontWeight: "500px",
                   }}
                 />
               </Box>
@@ -358,7 +358,7 @@ const ProfileDialog = ({
               />
               <Typography
                 variant="body1"
-                fontWeight="bold"
+                fontWeight="500px"
                 color="#000"
                 sx={{ fontSize: { xs: "0.9rem", sm: "1rem" } }}
               >

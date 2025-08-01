@@ -16,7 +16,7 @@ const PageTitle = ({
       <Typography
         variant="h5"
         sx={{
-          fontWeight: 700,
+          fontWeight: 500,
           color: "#212121",
           fontSize: fontSize[size]
         }}

@@ -97,7 +97,7 @@ const PrivacySettings = () => {
         sx={{
           textAlign: "start",
           marginBottom: isMobile ? "10px" : "24px",
-          fontWeight: "bold",
+          fontWeight: "500px",
           color: "#34495e",
           fontSize: "1.75rem",
         }}

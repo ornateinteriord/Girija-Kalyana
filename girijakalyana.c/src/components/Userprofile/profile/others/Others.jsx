@@ -84,7 +84,7 @@ const Others = () => {
           sx={{
             fontSize: isMobile ? "1.4rem" : "1.7rem",
             color: "#34495e", 
-            fontWeight: 700
+            fontWeight: 500
           }}
         >
           Other Information

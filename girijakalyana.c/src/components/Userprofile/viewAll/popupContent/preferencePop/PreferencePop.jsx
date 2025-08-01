@@ -28,7 +28,7 @@ const PreferencePop = ({ userDetails }) => {
   return (
     <Box sx={{ padding: 2, backgroundColor: "#f5f5f5", borderRadius: 2 }}>
       <Stack spacing={2}>
-        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+        <Typography variant="h6" sx={{ fontWeight: "500px" }}>
           Partner Preferences
         </Typography>
         <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
@@ -40,7 +40,7 @@ const PreferencePop = ({ userDetails }) => {
                     component="th"
                     scope="row"
                     sx={{
-                      fontWeight: "bold",
+                      fontWeight: "500px",
                       width: "40%",
                       backgroundColor: "#f9f9f9",
                     }}

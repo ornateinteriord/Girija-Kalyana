@@ -91,7 +91,7 @@ const Education = () => {
       }}
     >
       <Stack spacing={3}>
-        <Typography variant="h5" gutterBottom sx={{ color: "#34495e", fontWeight: 'bold' }}>
+        <Typography variant="h5" gutterBottom sx={{ color: "#34495e", fontWeight: '500px' }}>
           Education & Occupation
         </Typography>
         <form>

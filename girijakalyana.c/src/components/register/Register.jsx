@@ -28,7 +28,6 @@ import dayjs from "dayjs";
 import { LoadingComponent } from "../../App";
 import CustomAutocomplete from "../Autocomplete/CustomAutocomplete";
 
-
 const datas = rawJsonData.reduce((acc, curr) => ({ ...acc, ...curr }), {});
 
 const Register = () => {
@@ -53,12 +52,38 @@ const Register = () => {
     }
   };
 
-  const [formData, setFormData] = useState({
+  const initialFormState = {
     user_role: getUserRole(),
-  });
+    marital_status: '',
+    profilefor: '',
+    gender: '',
+    date_of_birth: '',
+    age: '',
+    educational_qualification: '',
+    occupation: '',
+    income_per_month: '',
+    country: '',
+    mother_tongue: '',
+    name_of_parent: '',
+    parent_name: '',
+    religion: 'Hindu',
+    caste: '',
+    address: '',
+    occupation_country: '',
+    state: '',
+    city: '',
+    first_name: '',
+    last_name: '',
+    username: '',
+    mobile_no: '',
+    password: '',
+    confirmPassword: ''
+  };
+
+  const [formData, setFormData] = useState(initialFormState);
 
   useEffect(() => {
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       user_role: getUserRole(),
     }));
@@ -107,6 +132,17 @@ const Register = () => {
     }
   };
 
+  const calculateAge = (dob) => {
+    const birthDate = new Date(dob);
+    const difference = Date.now() - birthDate.getTime();
+    const ageDate = new Date(difference);
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
+  };
+
+  const handleClear = () => {
+    setFormData(initialFormState);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -129,17 +165,17 @@ const Register = () => {
       {isPending && <LoadingComponent />}
       <Box
         sx={{
-          backgroundColor: "#f5f7fa",
           minHeight: "100vh",
           py: 4,
           px: { xs: 1, sm: 2 },
           mt: "10px",
-          width: "100%",
+          width: "85%",
           display: "flex",
           justifyContent: "center",
+          justifySelf: "center",
         }}
       >
-        <Paper
+        <Box
           component="form"
           onSubmit={handleSubmit}
           sx={{
@@ -151,55 +187,56 @@ const Register = () => {
           <Box
             sx={{
               display: "flex",
+              justifyContent: "space-between",
               alignItems: "center",
-              justifyContent: "center",
               mb: 2,
-              mt: 0.5,
-              gap: 2,
-              flexDirection: "row",
+              flexDirection: { xs: "column", sm: "row" }, 
+              gap: 1,
+              width: "100%"
             }}
           >
-            <Avatar sx={{ bgcolor: "primary.main" }}>
-              <HowToRegIcon />
-            </Avatar>
-            <Typography
-              variant={isMobile ? "h5" : "h4"}
-              component="h1"
-              sx={{ fontWeight: 600, textAlign: "center" }}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+              }}
             >
-              REGISTER HERE!
-            </Typography>
+              <Avatar sx={{ bgcolor: "primary.main" }}>
+                <HowToRegIcon />
+              </Avatar>
+              <Typography
+                variant={isMobile ? "h5" : "h4"}
+                component="h1"
+                sx={{ fontWeight: 500 }}
+              >
+                Register Here!
+              </Typography>
+            </Box>
 
+            <Box
+              sx={{
+                fontSize: { xs: '18px', sm: '22px' }, 
+                backgroundColor: "transparent",
+                color: 'black',
+                py: 1,
+                borderRadius: 1,
+                fontWeight: 500,
+              }}
+            >
+              Registering as:{' '}
+              <Box 
+                component="span"
+                sx={{
+                  color: "primary.main"  
+                }}
+              >
+                {getUserRole()}
+              </Box>
+            </Box>
           </Box>
 
-    <Divider sx={{ height: "1px", mb: isMobile ? 1 : 2 }} />
-  <Box
-  sx={{
-    fontSize: '22px',
-    backgroundColor:"transparent",
-    color: 'black',
-    py: 1,
-    mb: 0,
-    borderRadius: 1,
-    textAlign: 'center',
-    fontWeight: 'bold',
-
-  }}
->
-  Registering as:{' '}
-  <Box 
-    component="span"
-    sx={{
-      color: theme =>
-        planType === 'SilverUser' ? theme.palette.secondary.main :
-        planType === 'PremiumUser' ? '#FFD700' : 
-        '#000',
-      textTransform: 'capitalize'  
-    }}
-  >
-    {getUserRole()}
-  </Box>
-</Box>
+          <Divider sx={{ height: "1px", mb: isMobile ? 1 : 2 }} />
 
           <Box
             sx={{
@@ -258,7 +295,6 @@ const Register = () => {
                 >
                   <MenuItem value="BrideGroom">Male</MenuItem>
                   <MenuItem value="Bride">Female</MenuItem>
-                  
                 </Select>
               </FormControl>
 
@@ -458,7 +494,6 @@ const Register = () => {
                 onChange={handleChange}
                 sx={{ mb: 3 }}
               />
-
             </Box>
           </Box>
 
@@ -552,26 +587,46 @@ const Register = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              gap: 2,
+              flexDirection:"row",
             }}
           >
             <input type="hidden" name="user_role" value={formData.user_role} />
+            <Button
+              type="button"
+              variant="outlined"
+              size="large"
+              onClick={handleClear}
+              sx={{
+                fontWeight: 600,
+                width: { xs: "100%", sm: "50%", md: "20%" },
+                textTransform: "capitalize",
+                color: "#fff",
+                background: "#1a4f72",
+                "&:hover": {
+                  background: "#245a7e",
+                },
+              }}
+            >
+              Clear
+            </Button>
             <Button
               type="submit"
               variant="contained"
               size="large"
               disabled={isPending}
               sx={{
-                backgroundColor: "orange",
-                "&:hover": { backgroundColor: "darkorange" },
+                backgroundColor: "#27ae60",
+                "&:hover": { backgroundColor: "#1e8449" },
                 fontWeight: 600,
-                width: { xs: "100%", sm: "50%", md: "30%" },
+                width: { xs: "100%", sm: "50%", md: "20%" },
                 textTransform: "capitalize",
               }}
             >
-              Registration Submit
+              Submit
             </Button>
           </Box>
-        </Paper>
+        </Box>
       </Box>
       <Footer />
     </>
