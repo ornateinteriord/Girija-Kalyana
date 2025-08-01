@@ -82,7 +82,7 @@ const UserCard = ({
             top: 12,
             left: connection ? 12 : "auto",
             right: connection ? "auto" : 12,
-            fontWeight: "bold",
+            fontWeight: 500,
             fontSize: { xs: "0.6rem", sm: "0.7rem" },
             backgroundColor: "#FFD700",
             zIndex: 1,
@@ -121,7 +121,7 @@ const UserCard = ({
           textAlign: "center",
         }}
       >
-        <Typography fontWeight="bold" sx={{ color: "#000", mb: 0.5 }}>
+        <Typography fontWeight="500px" sx={{ color: "#000", mb: 0.5 }}>
           {profile?.first_name} {profile?.last_name}
         </Typography>
         <Typography color="text.secondary">{age || "N/A"} yrs</Typography>
@@ -163,7 +163,7 @@ const UserCard = ({
         />
 
         <Box display="flex" justifyContent="space-around" width="100%" mb={1}>
-          <ProfileInfo label="Height" value={profile?.height || "N/A"} />
+          <ProfileInfo label="Heigh"  font value={profile?.height || "N/A"} />
           <ProfileInfo label="Religion" value={profile?.religion || "N/A"} />
           <ProfileInfo label="Caste" value={profile?.caste || "N/A"} />
         </Box>
@@ -177,7 +177,7 @@ const UserCard = ({
                 sx={{
                   background: "#fff",
                   color: "red",
-                  fontWeight: "bold",
+                  fontWeight: 500,
                   borderColor: "red",
                   textTransform: "capitalize",
                 }}
@@ -210,7 +210,7 @@ const UserCard = ({
                   borderRadius: 2,
                   py: 1,
                   textTransform: "none",
-                  fontWeight: "bold",
+                  fontWeight: 500,
                   fontSize: { xs: "0.8rem", sm: "0.9rem" },
                 }}
               >
@@ -227,7 +227,7 @@ const UserCard = ({
                     borderRadius: 2,
                     py: 1,
                     textTransform: "none",
-                    fontWeight: "bold",
+                    fontWeight: 500,
                     fontSize: { xs: "0.8rem", sm: "0.7rem" },
                     "&:hover": { backgroundColor: "transparent" },
                   }}
@@ -250,7 +250,7 @@ export const ProfileInfo = ({ label, value }) => (
     <Typography
       variant="body2"
       color="text.secondary"
-      sx={{ fontWeight: "bold", color: "#000" }}
+      sx={{ fontWeight: 500, color: "#000" }}
     >
       {label}
     </Typography>

@@ -13,11 +13,11 @@
     margin-bottom: 3rem;
     
     h2 {
-      margin-top: 40px;
+      margin-top: 50px;
       font-size: 2.5rem;
       color: #1a4f72;
       margin-bottom: 1rem;
-      font-weight: 600;
+      font-weight: 500;
     }
     
     p {
@@ -25,7 +25,7 @@
       color: #1a4f72;
       max-width: 500px;
       margin: 0 auto;
-      line-height: 1.6;
+      line-height: 1;
     }
   }
 
@@ -49,8 +49,8 @@
 
         .contact-card {
           background: white;
-          border-radius: 15px;
-          padding: 1.8rem;
+          border-radius: 10px;
+          padding: 1rem;
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
           transition: all 0.3s ease;
           border-left: 4px solid #1a4f72;
@@ -70,6 +70,7 @@
           }
 
           h3 {
+            font-weight: 500;
             font-size: 1.4rem;
             margin-bottom: 1rem;
             color: #2c3e50;
@@ -88,22 +89,22 @@
         flex: 1;
         min-width: 300px;
         background: white;
-        border-radius: 15px;
+        border-radius: 10px;
         padding: 0;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         overflow: hidden;
 
         .form-header {
-          height: 90px;
+          height: 70px;
           background: #1a4f72;
           color: white;
-          padding: 1.2rem;
+          padding: 0.2rem;
           text-align: center;
 
           h3 {
             font-size: 1.6rem;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
+            margin-bottom: 0;
+            font-weight: 400;
           }
 
           p {
@@ -174,8 +175,9 @@
               padding: 1rem;
               border: none;
               border-radius: 8px;
+             text-transform: capitalize;
               font-size: 1rem;
-              font-weight: 600;
+              font-weight: 500;
               cursor: pointer;
               transition: all 0.3s ease;
               background:#27ae60;
@@ -183,12 +185,12 @@
              background-color: #1e8449;
               }
               color: white;
-              text-transform: uppercase;
               letter-spacing: 0.5px;
             }
 
             .clear-btn {
               background:#1a4f72;
+              text-transform: capitalize;
               &:hover {
              background-color: #245a7e;
               }
@@ -208,6 +210,7 @@
       margin-top: 1rem;
 
       h3 {
+        font-weight: 500;
         font-size: 1.5rem;
         margin-bottom: 1.2rem;
         color: #2c3e50;

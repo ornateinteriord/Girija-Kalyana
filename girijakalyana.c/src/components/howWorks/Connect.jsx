@@ -136,7 +136,7 @@ const stats = [
   </Box>
 </Container>
 
-      <Container sx={{ textAlign: 'center', marginTop: 5, fontFamily: "Outfit" }}>
+      <Container sx={{ textAlign: 'center', marginTop: {xs:0,md:5}, fontFamily: "Outfit" }}>
         <Typography variant="h4" sx={{ marginBottom: 4, color: '#1a4f72', fontFamily: "Outfit sans-serif" }}>
           Find your Special Someone
         </Typography>

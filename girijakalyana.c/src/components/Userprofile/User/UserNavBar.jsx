@@ -264,7 +264,7 @@ const UserNavBar = () => {
                 src={userProfile?.image}
                 sx={{
                   color: "black",
-                  fontWeight: "bold",
+                  fontWeight: "500px",
                   textTransform: "uppercase",
                 }}
               >
@@ -345,7 +345,7 @@ const UserNavBar = () => {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle sx={{fontWeight:'bold'}} id="alert-dialog-title">{"Confirm Logout"}</DialogTitle>
+          <DialogTitle sx={{fontWeight:'500px'}} id="alert-dialog-title">{"Confirm Logout"}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               Are you sure you want to logout from your account?
@@ -354,11 +354,11 @@ const UserNavBar = () => {
           <DialogActions>
             <Button onClick={handleCloseLogoutDialog} 
             sx={{textTransform:'capitalize',fontSize:'18px',
-            fontWeight:'bold',"&:hover": {
+            fontWeight:'500px',"&:hover": {
         backgroundColor: "transparent"}}}>Cancel</Button>
             <Button onClick={handleConfirmLogout} 
             sx={{textTransform:'capitalize',fontSize:'18px',
-            fontWeight:'bold',"&:hover": {
+            fontWeight:'500px',"&:hover": {
         backgroundColor: "transparent"}}} autoFocus color="error">
               Logout
             </Button>

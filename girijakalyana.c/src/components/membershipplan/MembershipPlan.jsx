@@ -69,21 +69,23 @@ const handlePlanSelection = (planName) => {
       }}>
         <Box width={'100%'} padding={'20px'}>
           <Typography 
-            component="h1" 
+            component="h4" 
             sx={{ 
-                fontSize: isMobile? "26px":"50px",
-              textAlign: 'center', 
-              mb: 0,
-              fontWeight: 700,
+                fontSize: isMobile? "28px":"40px",
+              textAlign: 'left', 
+              mt:1,
+              mb: isMobile? 1 : 3,
+              fontWeight: 500,
               color: theme.palette.primary.main,
-              background: 'linear-gradient(90deg, #3f51b5, #9c27b0)',
+              background: '#1a4f72',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent'
             }}
           >
             Find Your Perfect Match
           </Typography>
-
+      <Divider sx={{
+        height: '1px',my:1}} />
          <Box
   sx={{
     display: 'flex',
@@ -111,10 +113,11 @@ const handlePlanSelection = (planName) => {
     >
       <Typography
         sx={{
-          fontSize:isMobile? "16px" : "25px",
+          fontSize:isMobile? "18px" : "23px",
           mb: 0,
-          fontWeight: 600,
-          color: theme.palette.primary.dark,
+          fontWeight: 500,
+          color: '#1a4f72',
+          textAlign: 'left',
         }}
       >
         Why Choose Our Membership?
@@ -124,14 +127,14 @@ const handlePlanSelection = (planName) => {
         {benefits.map((item, index) => (
           <ListItem key={index} sx={{ px: 0 }}>
             <ListItemIcon sx={{ minWidth: 36 }}>{item.icon}</ListItemIcon>
-            <Typography variant="body1">{item.text}</Typography>
+            <Typography variant="body1" color='#000'>{item.text}</Typography>
           </ListItem>
         ))}
       </List>
 
       <Divider sx={{ height:'1px',  my:isMobile?1:1 }} />
 
-      <Typography variant="body1" sx={{ mb: 2 ,textAlign:'start'}}>
+      <Typography variant="body1" sx={{ mb: 2 ,textAlign:'start',color:'#000'}}>
         Our membership plans are designed to help you find your perfect match with premium features and exclusive benefits.
       </Typography>
 
@@ -143,7 +146,7 @@ const handlePlanSelection = (planName) => {
           border: `1px dashed ${theme.palette.primary.light}`,
         }}
       >
-        <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
+        <Typography variant="body2" color='#000'>
           "Join thousands of happy couples who found their life partners through our platform."
         </Typography>
       </Box>
@@ -161,8 +164,9 @@ const handlePlanSelection = (planName) => {
       component="h2"
       sx={{
         textAlign: isMobile ? 'center' : 'left',
+        fontSize:isMobile? "27px" : "30px",
         mb: 2,
-        fontWeight: 600,
+        fontWeight: 500,
         color: theme.palette.text.secondary,
         textTransform:'capitalize'
       }}
@@ -232,7 +236,7 @@ const handlePlanSelection = (planName) => {
                   py: 0.5,
                   borderRadius: 1,
                   fontSize: '0.75rem',
-                  fontWeight: 700,
+                  fontWeight: 500,
                 }}
               >
                 {plan.discount}
@@ -242,7 +246,7 @@ const handlePlanSelection = (planName) => {
                 variant="h5"
                 component="h3"
                 sx={{
-                  fontWeight: 700,
+                  fontWeight: 500,
                   mb: 1,
                   color: 'white',
                 }}
@@ -314,7 +318,7 @@ const handlePlanSelection = (planName) => {
               <Typography
                 variant="subtitle1"
                 sx={{
-                  fontWeight: 600,
+                  fontWeight: 500,
                   mb: 1,
                   opacity: 0.9,
                 }}
@@ -376,17 +380,17 @@ const handlePlanSelection = (planName) => {
   variant="h5" 
   sx={{ 
     mb:isMobile? 0 : 3,
-    fontWeight: 600,
-    color: theme => theme.palette.primary.main,
+    fontWeight: 500,
+    color: '#000',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 1,
-    flexDirection: { xs: 'column', sm: 'row' }, // stack on mobile, inline on larger screens
-    textAlign: 'center', // center align text on small screens
+    flexDirection: { xs: 'column', sm: 'row' }, 
+    textAlign: 'center', 
   }}
 >
-  <VerifiedUser color="primary" sx={{ fontSize: 40 }} />
+  <VerifiedUser  sx={{ fontSize: 40,color:'#1a4f72' }} />
   Trusted By Thousands of Users
 </Typography>
 
@@ -409,11 +413,11 @@ const handlePlanSelection = (planName) => {
       minWidth:isMobile?"100%": 280,
     }}
   >
-    <Shield sx={{ fontSize: 50, color: theme.palette.success.main, mb: 1 }} />
-    <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+    <Shield sx={{ fontSize: 50, color:"#1a4f72", mb: 1 }} />
+    <Typography variant="h6" sx={{ fontWeight: 500, mb: 1,  }}>
       Secure Payment
     </Typography>
-    <Typography variant="body2">
+    <Typography variant="body2" color='#000'>
       Your information is protected by 256-bit SSL encryption and secure payment gateways.
     </Typography>
   </Box>
@@ -428,11 +432,11 @@ const handlePlanSelection = (planName) => {
       minWidth:isMobile?"100%": 280,
     }}
   >
-    <VerifiedUser sx={{ fontSize: 50, color: theme.palette.success.main, mb: 2 }} />
-    <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+    <VerifiedUser sx={{ fontSize: 50, color: '#1a4f72', mb: 2 }} />
+    <Typography variant="h6" sx={{ fontWeight: 500, mb: 1,color:'#000' }}>
       Verified Profiles
     </Typography>
-    <Typography variant="body2">
+    <Typography variant="body2" color='#000'>
       Every profile undergoes strict verification to ensure authenticity.
     </Typography>
   </Box>
@@ -447,11 +451,11 @@ const handlePlanSelection = (planName) => {
        minWidth:isMobile?"100%": 280,
     }}
   >
-    <CreditCard sx={{ fontSize: 50, color: theme.palette.success.main, mb: 2 }} />
-    <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+    <CreditCard sx={{ fontSize: 50, color:'#1a4f72', mb: 2 }} />
+    <Typography variant="h6" sx={{ fontWeight: 500, mb: 1,color:'#000' }}>
       Payment Options
     </Typography>
-    <Typography variant="body2" sx={{ mb: 1.5 }}>
+    <Typography variant="body2" sx={{ mb: 1.5,color:'#000' }}>
       We accept all major payment methods:
     </Typography>
     <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>

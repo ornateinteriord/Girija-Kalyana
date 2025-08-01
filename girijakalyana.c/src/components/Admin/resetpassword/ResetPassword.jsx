@@ -110,7 +110,7 @@ const ResetPassword = () => {
       
         <Typography
           variant="h4"
-          fontWeight={600}
+          fontWeight={500}
           color="#34495e"
           fontFamily={"Outfit sans-serif"}
           sx={{textAlign:{xs:"center",sm:"left"},mb:"10px"}}
@@ -155,7 +155,7 @@ const ResetPassword = () => {
           sx={{
             color: "#34495e",
             textTransform: "capitalize",
-            fontWeight: 700,
+            fontWeight: 400,
           }}
         >
           Change Password
@@ -187,14 +187,14 @@ const ResetPassword = () => {
           <Button
             onClick={handleCloseDialog}
             disabled={isPending}
-             sx={{ color: "#fff",backgroundColor:"#f44336","&:hover": {backgroundColor:"#d32f2f",} }}
+             sx={{ color: "#fff",backgroundColor:"#f44336","&:hover": {backgroundColor:"#d32f2f"},fontWeight: 400, }}
           >
             Cancel
           </Button>
           <Button
            color="white"
             onClick={handlePasswordReset}
-            sx={{ color: "#fff",backgroundColor:"#4caf50","&:hover": {backgroundColor:"#388e3c",} }}
+            sx={{ color: "#fff",backgroundColor:"#4caf50","&:hover": {backgroundColor:"#388e3c",},fontWeight: 400, }}
             disabled={isPending || !newPassword || !confirmPassword || newPassword !== confirmPassword}
           >
             {isPending ? "Submitting..." : "Submit"}

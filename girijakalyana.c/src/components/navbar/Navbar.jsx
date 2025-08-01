@@ -311,7 +311,7 @@ const Navbar = () => {
         sx={{
           "& .MuiDrawer-paper": {
             width: "280px",
-            background: 'linear-gradient(to right, #182848, #4d75d4)',
+            background: '#1a4f72',
             color: "#fff",
           },
         }}
@@ -379,13 +379,13 @@ const Navbar = () => {
                   toggleMobileMenu();
                 }}
                 sx={{
-                  backgroundColor: "black",
-                  color: "#fff",
+                  backgroundColor: "#fff",
+                  color: "#000",
                   fontWeight: 700,
                   height: "42px",
                   textTransform: "capitalize",
                   "&:hover": {
-                    backgroundColor: "#333333",
+                    backgroundColor: "#eee",
                   },
                 }}
               >
@@ -401,13 +401,13 @@ const Navbar = () => {
                     toggleMobileMenu();
                   }}
                   sx={{
-                    backgroundColor: "black",
-                    color: "#fff",
+                    backgroundColor: "#fff",
+                    color: "#000",
                     fontWeight: 700,
                     height: "42px",
                     textTransform: "capitalize",
                     "&:hover": {
-                      backgroundColor: "#333333",
+                      backgroundColor: "#eee",
                     },
                   }}
                 >

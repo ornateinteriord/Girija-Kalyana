@@ -203,7 +203,7 @@ const Photos = () => {
             </Typography>
           </Box>
           <Box sx={{ mb: 2 }}>
-            <Typography sx={{ fontWeight: "bold", color: "#000" }}>
+            <Typography sx={{ fontWeight: "500px", color: "#000" }}>
               Image Verification Status:{" "}
               <Box
                 component="span"

@@ -144,7 +144,7 @@ const ParentsPrefer = () => {
         variant="h6"
         sx={{
           textAlign: "start",
-          fontWeight: 700,
+          fontWeight: 500,
           fontSize: { xs: "23px", sm: "22px" },
           color: "#34495e",
           marginBottom: { xs: "16px", sm: "24px" },

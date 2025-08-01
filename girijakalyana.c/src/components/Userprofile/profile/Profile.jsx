@@ -100,35 +100,35 @@ const Profile = () => {
               // sx={{ mb: 0 }}
             >
 
-              <Tab label="About" sx={{fontWeight:700,"&:hover": {
+              <Tab label="About" sx={{fontWeight:500,"&:hover": {
             backgroundColor: "transparent", 
             
           },}} />
-              <Tab label="Family & Religious" sx={{fontWeight:700,"&:hover": {
+              <Tab label="Family & Religious" sx={{fontWeight:500,"&:hover": {
                  backgroundColor: "transparent", 
             
           },}} />
-              <Tab label="Education" sx={{fontWeight:700,"&:hover": {
+              <Tab label="Education" sx={{fontWeight:500,"&:hover": {
             backgroundColor: "transparent", 
             
           },}}/>
-              <Tab label="Photos" sx={{fontWeight:700,"&:hover": {
+              <Tab label="Photos" sx={{fontWeight:500,"&:hover": {
             backgroundColor: "transparent", 
             
           },}}/>
-              <Tab label="LifeStyle" sx={{fontWeight:700,"&:hover": {
+              <Tab label="LifeStyle" sx={{fontWeight:500,"&:hover": {
             backgroundColor: "transparent", 
             
           },}}/>
-              <Tab label="Partner's Preference" sx={{fontWeight:700,"&:hover": {
+              <Tab label="Partner's Preference" sx={{fontWeight:500,"&:hover": {
             backgroundColor: "transparent", 
             
           },}}/>
-              <Tab label="Others" sx={{fontWeight:700,"&:hover": {
+              <Tab label="Others" sx={{fontWeight:500,"&:hover": {
             backgroundColor: "transparent", 
             
           },}}/>
-              <Tab label="Privacy Setting" sx={{fontWeight:700,"&:hover": {
+              <Tab label="Privacy Setting" sx={{fontWeight:500,"&:hover": {
             backgroundColor: "transparent", 
             
           },}}/>
