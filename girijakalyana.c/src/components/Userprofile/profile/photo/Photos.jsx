@@ -20,6 +20,7 @@ import {
   useUpdateProfile,
 } from "../../../api/User/useGetProfileDetails";
 import TokenService from "../../../token/tokenService";
+import { LoadingComponent } from "../../../../App";
 
 const Photos = () => {
   const [formData, setFormData] = useState({});
@@ -28,7 +29,6 @@ const Photos = () => {
   const { data: userProfile, refetch : getMember } = useGetMemberDetails(registerNo);
   const { mutate: updateProfile, isPending: isUpdating } = useUpdateProfile();
   const cloudinary = getCloudinaryUrl();
-  const fileInputRef = useRef(null);
 
   const handleFileChange = async (event) => {
     const input = event.target;
@@ -70,10 +70,6 @@ const Photos = () => {
       });
       input.value = null;
     }
-  };
-
-  const handleUploadClick = () => {
-    fileInputRef.current.click();
   };
 
   const handleSave = () => {
@@ -279,7 +275,7 @@ const Photos = () => {
             >
               {isUpdating ? "Saving..." : "Save"}
             </Button>
-            {(userProfile?.image || formData.image) && (
+            {(userProfile?.image) && (
               <Button
                 variant="contained"
                 color="error"
@@ -300,6 +296,8 @@ const Photos = () => {
           </Box>
         </Box>
       </Card>
+
+      {cloudinary.isPending && <LoadingComponent />}
 
       {/* Delete Confirmation Dialog */}
       <Dialog
