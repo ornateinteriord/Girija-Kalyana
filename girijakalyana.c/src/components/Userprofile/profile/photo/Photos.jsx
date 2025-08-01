@@ -262,7 +262,7 @@ const Photos = () => {
               variant="contained"
               size="small"
               onClick={handleSave}
-              disabled={isUpdating || !formData.image}
+              disabled={isUpdating || !formData.image || cloudinary.isPending}
               sx={{
                 height: "35px",
                 backgroundColor: "#34495e",
