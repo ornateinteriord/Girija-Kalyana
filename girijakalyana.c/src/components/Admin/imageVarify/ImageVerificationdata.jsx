@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import DataTable from "react-data-table-component";
+import PaginationDataTable from "../../common/PaginationDataTable";
 import {
   Box,
   Typography,
@@ -20,14 +20,22 @@ import {
   getImageVerificationColumns,
 } from "../../../utils/DataTableColumnsProvider";
 import { getAllUserProfiles, UpgradeUserStatus } from "../../api/Admin";
-import { TableLoadingComponent } from "../../../App";
 import { Close } from "@mui/icons-material";
+import { LoadingTextSpinner } from "../../../utils/common";
+import { toast } from "react-toastify";
+
 
 const ImageVerificationData = () => {
-  const { data: users = [], isLoading, isError, error } = getAllUserProfiles();
+  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 50 });
+  const { data, isPending: isLoading, isError, error, mutate: fetchUsers } = getAllUserProfiles();
+  const users = data?.content || [];
   const [localUsers, setLocalUsers] = useState(users);
   const [search, setSearch] = useState("");
   const upgradeUserMutation = UpgradeUserStatus();
+
+  useEffect(() => {
+    fetchUsers({ page: paginationModel.page, pageSize:paginationModel.pageSize});
+  }, [paginationModel.page, paginationModel.pageSize,]);
 
   useEffect(() => {
     if (users.length > 0) {
@@ -48,6 +56,7 @@ const ImageVerificationData = () => {
         {
           regno,
           image_verification: newStatus,
+      
         },
         {
           onSuccess: () => {
@@ -115,29 +124,17 @@ const ImageVerificationData = () => {
       </Box>
 
       {/* Data Table */}
-      <DataTable
-        columns={getImageVerificationColumns(
-          upgradeUserMutation,
-          handleStatusUpdate
-        )}
+      <PaginationDataTable
+        columns={getImageVerificationColumns(upgradeUserMutation, handleStatusUpdate)}
         data={filteredRows}
-        pagination
-        paginationPerPage={6}
-        paginationRowsPerPageOptions={[6, 10, 15, 20]}
-        paginationComponentOptions={{
-          rowsPerPageText: "Rows per page:",
-          rangeSeparatorText: "of",
-        }}
-        noDataComponent={
-          <Typography padding={3} textAlign="center">
-            No records found
-          </Typography>
-        }
         customStyles={customStyles}
-        progressPending={isLoading}
-        progressComponent={<TableLoadingComponent />}
-        persistTableHead
-        highlightOnHover
+        isLoading={isLoading}
+        totalRows={data?.totalRecords || 0}
+        paginationModel={paginationModel}
+        setPaginationModel={setPaginationModel}
+        rowsPerPageOptions={[6, 10, 15, 20, 50]}
+        noDataComponent={<Typography padding={3} textAlign="center">No records found</Typography>}
+        progressComponent={<LoadingTextSpinner />}
       />
     </Box>
   );
@@ -148,7 +145,6 @@ export const ViewImagesComponent = ({ image, id, loading }) => {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-console.log(image,'user img')
   return (
     <>
       <Button

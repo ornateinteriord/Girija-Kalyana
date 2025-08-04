@@ -133,9 +133,15 @@ export const getImageVerificationColumns = (upgradeUserMutation,handleStatusUpda
           sx={{backgroundColor:row.image_verification ==="active" ?"orange":"green","&:hover":{backgroundColor:row.image_verification ==="active" ?"orange":"green"}}}
           size="small"
           onClick={() => handleStatusUpdate(row.registration_no, row.image_verification)}
-          disabled={upgradeUserMutation.isLoading || !row.image }
+          disabled={
+            (upgradeUserMutation.isPending && upgradeUserMutation.variables?.regno === row.registration_no) || !row.image
+          }
         >
-          {row.image_verification === "active" ? "pending" : "active"}
+          {upgradeUserMutation.isPending && upgradeUserMutation.variables?.regno === row.registration_no
+            ? "Processing..."
+            : row.image_verification === "active"
+            ? "pending"
+            : "active"}
         </Button>
       ),
     },
@@ -529,12 +535,13 @@ export const getUserDataColumns = (upgradeUserMutation, handleUpgrade) => [
         <Button
           variant="contained"
           size="small"
+          disabled={upgradeUserMutation.isPending && upgradeUserMutation.variables?.regno === row.registration_no}
           sx={{ textTransform: "capitalize",   backgroundColor: row.status === "active" ? "#f44336" : "#4caf50","&:hover": {
       backgroundColor: row.status === "active" ? "#d32f2f" : "#388e3c", 
     }, }}
           onClick={() => handleUpgrade(row.registration_no, row.status)}
         >
-          {upgradeUserMutation.isLoading && 
+          {upgradeUserMutation.isPending && 
             upgradeUserMutation.variables?.regno === row.registration_no
             ? "Processing..."
             : row.status === "active"

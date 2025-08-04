@@ -194,34 +194,65 @@ const Navbar = () => {
           </Typography>
 
           {/* Desktop Menu */}
-          <Box 
-            sx={{ 
-              display: { xs: "none", md: "flex" },
-              flexGrow: 1,
-              justifyContent: "center",
-              marginLeft: "20px"
-            }}
-          >
-            {menuItems.map((item) => (
-              <Button
-                key={item.text}
-                component={Link}
-                to={item.path}
-                sx={{
-                  color: "#fff",
-                  fontWeight: "bold",
-                  fontSize: "1rem",
-                  textTransform: "capitalize",
-                  margin: "0 8px",
-                  "&:hover": {
-                  color:"aqua",
-                  },
-                }}
-              >
-                {item.text}
-              </Button>
-            ))}
-          </Box>
+       <Box 
+  sx={{ 
+    display: { xs: "none", md: "flex" },
+    flexGrow: 1,
+    justifyContent: "center",
+    marginLeft: "20px"
+  }}
+>
+  {menuItems.map((item) => {
+    // Get the current path (assuming you're using React Router)
+    const currentPath = window.location.pathname;
+    // Check if this item is active
+    const isActive = currentPath === item.path;
+    
+    return (
+      <Button
+        key={item.text}
+        component={Link}
+        to={item.path}
+        sx={{
+          color: "#fff",
+          fontWeight: 600,  
+          fontSize: "1rem",
+          textTransform: "capitalize",
+          margin: "0 8px",
+          position: "relative",
+          "&:hover": {
+            color: "#fff",  
+            backgroundColor: "transparent",  
+            "&::after": { 
+              content: '""',
+              position: "absolute",
+              bottom: "4px",
+              left: "8px",
+              right: "8px",
+              height: "2px",
+              backgroundColor: "aqua",  
+              transform: "scaleX(1)",  
+              transition: "transform 0.3s ease"
+            }
+          },
+          "&::after": {  
+            content: '""',
+            position: "absolute",
+            bottom: "4px",
+            left: "8px",
+            right: "8px",
+            height: "2px",
+            backgroundColor: "aqua",
+            transform: isActive ? "scaleX(1)" : "scaleX(0)",  
+            transition: "transform 0.3s ease"
+          }
+        }}
+      >
+        {item.text}
+      </Button>
+    );
+  })}
+</Box>
 
           {/* Auth Buttons */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
@@ -252,15 +283,15 @@ const Navbar = () => {
                   size={isMobile ? "medium" : "large"}
                   onClick={handleOpen}
                   sx={{
-                    backgroundColor: "black",
+                    backgroundColor: "#FFFF",
                     minWidth: "120px",
-                    color: "#fff",
+                    color: "#000",
                     fontWeight: 700,
                     height: { xs: "36px", md: "42px" },
                     textTransform: "capitalize",
                     display: { xs: "none", sm: "inline-flex" },
                     "&:hover": {
-                      backgroundColor: "#333333",
+                      backgroundColor: "#eee",
                     },
                   }}
                 >
@@ -280,7 +311,7 @@ const Navbar = () => {
         sx={{
           "& .MuiDrawer-paper": {
             width: "280px",
-            background: 'linear-gradient(to right, #182848, #4d75d4)',
+            background: '#1a4f72',
             color: "#fff",
           },
         }}
@@ -348,13 +379,13 @@ const Navbar = () => {
                   toggleMobileMenu();
                 }}
                 sx={{
-                  backgroundColor: "black",
-                  color: "#fff",
+                  backgroundColor: "#fff",
+                  color: "#000",
                   fontWeight: 700,
                   height: "42px",
                   textTransform: "capitalize",
                   "&:hover": {
-                    backgroundColor: "#333333",
+                    backgroundColor: "#eee",
                   },
                 }}
               >
@@ -370,13 +401,13 @@ const Navbar = () => {
                     toggleMobileMenu();
                   }}
                   sx={{
-                    backgroundColor: "black",
-                    color: "#fff",
+                    backgroundColor: "#fff",
+                    color: "#000",
                     fontWeight: 700,
                     height: "42px",
                     textTransform: "capitalize",
                     "&:hover": {
-                      backgroundColor: "#333333",
+                      backgroundColor: "#eee",
                     },
                   }}
                 >

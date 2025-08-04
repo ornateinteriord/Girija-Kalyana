@@ -18,9 +18,9 @@ import {
   customStyles,
   getNotificationDataColumns,
 } from "../../../utils/DataTableColumnsProvider";
-import {  TableLoadingComponent } from "../../../App";
 import { getAllNews, useAddNews } from "../../api/Admin";
 import { toast } from "react-toastify";
+import { LoadingTextSpinner } from "../../../utils/common";
 
 const NotificationData = () => {
   const { data: records = [], isLoading, isError, error } = getAllNews();
@@ -173,7 +173,7 @@ const NotificationData = () => {
         }
         customStyles={customStyles}
         progressPending={isLoading}
-        progressComponent={<TableLoadingComponent />}
+        progressComponent={<LoadingTextSpinner />}
         persistTableHead
         highlightOnHover
       />

@@ -1,4 +1,4 @@
-import  { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -15,19 +15,20 @@ import { FaTrash, FaUpload } from "react-icons/fa";
 import toast from "react-hot-toast";
 import {
   getCloudinaryUrl,
+  useDeleteImage,
   useGetMemberDetails,
   useUpdateProfile,
 } from "../../../api/User/useGetProfileDetails";
 import TokenService from "../../../token/tokenService";
+import { LoadingComponent } from "../../../../App";
 
 const Photos = () => {
   const [formData, setFormData] = useState({});
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const registerNo = TokenService.getRegistrationNo();
-  const { data: userProfile } = useGetMemberDetails(registerNo);
+  const { data: userProfile, refetch : getMember } = useGetMemberDetails(registerNo);
   const { mutate: updateProfile, isPending: isUpdating } = useUpdateProfile();
   const cloudinary = getCloudinaryUrl();
-  const fileInputRef = useRef(null);
 
   const handleFileChange = async (event) => {
     const input = event.target;
@@ -71,10 +72,6 @@ const Photos = () => {
     }
   };
 
-  const handleUploadClick = () => {
-    fileInputRef.current.click();
-  };
-
   const handleSave = () => {
     if (!formData.image) {
       toast.error("Please upload an image first");
@@ -103,18 +100,15 @@ const Photos = () => {
   const handleDeleteClick = () => {
     setOpenDeleteDialog(true);
   };
-
+  const DeleteImage = useDeleteImage();
   const handleDeleteConfirm = () => {
-    updateProfile(
+    DeleteImage.mutate(
+      { regNo: registerNo },
       {
-        registerNo,
-        image: null,
-        image_verification: null,
-      },
-      {
-        onSuccess: () => {
-          toast.success("Profile image deleted successfully");
+        onSuccess: (response) => {
+          toast.success(response.message);
           setFormData((prev) => ({ ...prev, previewImage: null, image: null }));
+          getMember();
           setOpenDeleteDialog(false);
         },
         onError: (error) => {
@@ -205,7 +199,7 @@ const Photos = () => {
             </Typography>
           </Box>
           <Box sx={{ mb: 2 }}>
-            <Typography sx={{ fontWeight: "bold" ,color:"#000" }}>
+            <Typography sx={{ fontWeight: "500px", color: "#000" }}>
               Image Verification Status:{" "}
               <Box
                 component="span"
@@ -226,27 +220,26 @@ const Photos = () => {
           <Box
             display="flex"
             gap={1}
-            flexWrap="wrap" 
-            alignItems="center" 
+            flexWrap="wrap"
+            alignItems="center"
             sx={{
-            
               "@media (max-width: 600px)": {
-                width:"100%",
-                flexDirection: "column", 
-                alignItems: "stretch", 
+                width: "100%",
+                flexDirection: "column",
+                alignItems: "stretch",
                 "& > button": {
-                  width: "100%", 
-                  margin: "4px 0 !important", 
+                  width: "100%",
+                  margin: "4px 0 !important",
                 },
               },
             }}
           >
             <Button
               variant="outlined"
-              component="label" 
+              component="label"
               startIcon={<FaUpload />}
               sx={{
-                width:"100%",
+                width: "100%",
                 color: "#1976d2",
                 borderColor: "#1976d2",
                 "&:hover": {
@@ -269,7 +262,7 @@ const Photos = () => {
               variant="contained"
               size="small"
               onClick={handleSave}
-              disabled={isUpdating || !formData.image}
+              disabled={isUpdating || !formData.image || cloudinary.isPending}
               sx={{
                 height: "35px",
                 backgroundColor: "#34495e",
@@ -282,7 +275,7 @@ const Photos = () => {
             >
               {isUpdating ? "Saving..." : "Save"}
             </Button>
-            {(userProfile?.image || formData.image) && (
+            {(userProfile?.image) && (
               <Button
                 variant="contained"
                 color="error"
@@ -304,6 +297,8 @@ const Photos = () => {
         </Box>
       </Card>
 
+      {cloudinary.isPending && <LoadingComponent />}
+
       {/* Delete Confirmation Dialog */}
       <Dialog
         open={openDeleteDialog}
@@ -324,8 +319,8 @@ const Photos = () => {
           <Button onClick={handleDeleteCancel} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleDeleteConfirm} color="error" autoFocus>
-            Delete
+          <Button onClick={handleDeleteConfirm} color="error" autoFocus disabled={DeleteImage.isPending}>
+            {DeleteImage.isPending?'Deleting...':'Delete'}
           </Button>
         </DialogActions>
       </Dialog>

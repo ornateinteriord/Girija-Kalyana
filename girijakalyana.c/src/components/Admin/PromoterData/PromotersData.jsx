@@ -14,7 +14,7 @@ import DataTable from "react-data-table-component";
 import { customStyles, getPromotersDataColumns } from "../../../utils/DataTableColumnsProvider";
 
 import { usePromoters, useUpdatePromoterStatus } from "../../api/Admin";
-import { TableLoadingComponent } from "../../../App";
+import { LoadingTextSpinner } from "../../../utils/common";
 
 
 const PromotersData = () => {
@@ -112,7 +112,7 @@ const PromotersData = () => {
         }}
         customStyles={customStyles}
         progressPending={isLoading || updateStatusMutation.isLoading}
-        progressComponent={<TableLoadingComponent />}
+        progressComponent={<LoadingTextSpinner />}
         noDataComponent={
           <Typography padding={3} textAlign="center">
             No records found

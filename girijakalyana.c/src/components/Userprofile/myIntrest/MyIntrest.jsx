@@ -1,13 +1,11 @@
-import React, { useEffect, useState} from "react";
-import { Box, Divider, Tab, Tabs, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, Tab, Tabs } from "@mui/material";
 import Accepted from "./insidepage/accepted/Accepted";
 import Requests from "./insidepage/requests/Request";
 import Sent from "./sent/Sent";
 import TokenService from "../../token/tokenService";
-import { useGetInterestCounts,} from "../../api/User/useGetProfileDetails";
-
-
-
+import { useGetInterestCounts } from "../../api/User/useGetProfileDetails";
+import PageTitle from "../../UI/PageTitle";
 
 const MyInterest = () => {
   const registrationNo = TokenService.getRegistrationNo();
@@ -18,28 +16,25 @@ const MyInterest = () => {
     sent: 0,
   });
 
-  const { data: countsData , refetch : refetchCounts} = useGetInterestCounts(registrationNo);
-  
- 
+  const { data: countsData, refetch: refetchCounts } =
+    useGetInterestCounts(registrationNo);
 
- useEffect(() => {
-  if (countsData) {
-    setCounts({
-      requests: countsData.received || 0,
-      sent: countsData.sent || 0,
-      accepted: countsData.accepted || 0,
-    });
-  }
-}, [countsData]);
+  useEffect(() => {
+    if (countsData) {
+      setCounts({
+        requests: countsData.received || 0,
+        sent: countsData.sent || 0,
+        accepted: countsData.accepted || 0,
+      });
+    }
+  }, [countsData]);
 
   const handleTabChange = (event, newValue) => {
-    if (event && typeof event.preventDefault === 'function') {
+    if (event && typeof event.preventDefault === "function") {
       event.preventDefault();
     }
     setTabValue(newValue);
   };
-
- 
 
   const renderContents = () => {
     switch (tabValue) {
@@ -55,36 +50,42 @@ const MyInterest = () => {
   };
 
   return (
-    <Box sx={{ padding: 0, backgroundColor: "#f9f9f9", minHeight: "100vh" }}>
-      {/* Header */}
-      <Box sx={{ marginBottom: 2 }}>
-        <Typography variant="h5" fontWeight={900} color="#34495e">
-          Interested Profiles
-        </Typography>
-
-      </Box>
-
+    <Box
+      sx={{
+        p: { xs: 1, sm: 3, md: 2 },
+        backgroundColor: "#f9f9f9",
+        minHeight: "100vh",
+      }}
+    >
+      <PageTitle title="Interested Profiles" />
       {/* Tabs Section */}
-    <Tabs
-  value={tabValue}
-  onChange={handleTabChange}
-  variant="scrollable"
-  scrollButtons="auto"
-  sx={{
-    mb: 2,
-    "& .MuiTab-root:hover": {
-      backgroundColor: "rgba(0, 0, 0, 0.04)", 
-    },
-  }}
->
-  <Tab label={`Accepted (${counts.accepted})`} />
-  <Tab label={`Requests (${counts.requests})`} />
-  <Tab label={`Sent (${counts.sent})`} />
-</Tabs>
-
+      <Tabs
+        value={tabValue}
+        onChange={handleTabChange}
+        variant="scrollable"
+        scrollButtons="auto"
+        sx={{
+          mb: 2,
+          "& .MuiTab-root:hover": {
+            backgroundColor: "rgba(0, 0, 0, 0.04)",
+          },
+        }}
+      >
+        <Tab label={`Accepted (${counts.accepted})`} />
+        <Tab label={`Requests (${counts.requests})`} />
+        <Tab label={`Sent (${counts.sent})`} />
+      </Tabs>
 
       {/* Content Section */}
-      <Box sx={{ padding: 0, backgroundColor: "#fff", borderRadius: 2, boxShadow: 1, color: "black" }}>
+      <Box
+        sx={{
+          padding: 0,
+          backgroundColor: "#fff",
+          borderRadius: 2,
+          boxShadow: 1,
+          color: "black",
+        }}
+      >
         {renderContents()}
       </Box>
     </Box>

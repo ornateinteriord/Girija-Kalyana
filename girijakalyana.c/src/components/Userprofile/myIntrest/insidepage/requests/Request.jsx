@@ -3,8 +3,8 @@ import { Box, Typography, Pagination } from "@mui/material";
 import { useGetReceivedInterests, useUpdateInterestStatus } from "../../../../api/User/useGetProfileDetails";
 import TokenService from "../../../../token/tokenService";
 import toast from "react-hot-toast";
-import InterestCard from "../../../intrestCard/IntrestCard";
 import { LoadingTextSpinner } from "../../../../../utils/common";
+import UserCard from "../../../../common/UserCard";
 
 const Requests = ({refetchCounts}) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -75,10 +75,11 @@ const Requests = ({refetchCounts}) => {
           <Typography variant="h6">No pending requests found</Typography>
         ) : (
           interests.map((interest) => (
-            <InterestCard
+            <UserCard
               key={interest._id}
-              senderData={interest.sender}
-              handleResponse={handleInterestResponse}
+              profile={interest.sender}
+              onResponse={handleInterestResponse}
+              showResponseButtons={true}
             />
           ))
         )}

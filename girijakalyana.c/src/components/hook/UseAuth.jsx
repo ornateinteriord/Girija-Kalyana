@@ -14,7 +14,6 @@ const useAuth = () => {
     };
 
     handleStorageChange();
-
     window.addEventListener("storage", handleStorageChange);
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);

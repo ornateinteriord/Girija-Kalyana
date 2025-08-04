@@ -62,15 +62,11 @@ const LifeStyle = () => {
   };
 
   const handleClear = () => {
-    setFormData({
-      drink: "",
-      smoke: "",
-      diet: "",
-      sunsign: "",
-      bloodgroup: "",
-      body_type: "",
-      skin_type: ""
-    });
+     if (userProfile) {
+      setFormData({
+        ...userProfile,
+      });
+    }
   };
 
   useEffect(() => {
@@ -93,7 +89,7 @@ const LifeStyle = () => {
           sx={{
             fontSize: isMobile ? "1.4rem" : "1.7rem",
             color: "#34495e", 
-            fontWeight: 700
+            fontWeight: 500
           }}
         >
           Life Style & Appearance
@@ -230,7 +226,7 @@ const LifeStyle = () => {
             width: isMobile ? "100%" : "130px"
           }}
         >
-          Clear
+          Reset
         </Button>
         <Button
           onClick={handleSave}

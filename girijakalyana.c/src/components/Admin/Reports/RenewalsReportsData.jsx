@@ -14,7 +14,7 @@ import {
   customStyles,
   getRenewalsReportColumns,
 } from "../../../utils/DataTableColumnsProvider";
-import { LoadingComponent, TableLoadingComponent } from "../../../App";
+import { LoadingTextSpinner } from "../../../utils/common";
 
 const RenewalsReportsData = () => {
   const [records, setRecords] = useState([]);
@@ -152,7 +152,7 @@ const RenewalsReportsData = () => {
         }
         customStyles={customStyles}
         progressPending={false}
-        progressComponent={<TableLoadingComponent />}
+        progressComponent={<LoadingTextSpinner />}
         persistTableHead
         highlightOnHover
       />

@@ -71,16 +71,11 @@ const ParentsPrefer = () => {
   };
 
   const handleClear = () => {
-    setFormData({
-      caste_preference: "",
-      from_age_preference: "",
-      to_age_preference: "",
-      from_height_preference: "",
-      to_height_preference: "",
-      occupation_country_preference: "",
-      maritalstatus_preference: "",
-      education_preference: ""
-    });
+     if (userProfile) {
+      setFormData({
+        ...userProfile,
+      });
+    }
   };
 
   const formFields = [
@@ -149,7 +144,7 @@ const ParentsPrefer = () => {
         variant="h6"
         sx={{
           textAlign: "start",
-          fontWeight: 700,
+          fontWeight: 500,
           fontSize: { xs: "23px", sm: "22px" },
           color: "#34495e",
           marginBottom: { xs: "16px", sm: "24px" },
@@ -203,7 +198,7 @@ const ParentsPrefer = () => {
             width: { xs: "100%", sm: "130px" }
           }}
         >
-          Clear
+          Reset
         </Button>
         <Button
           onClick={handleSave}

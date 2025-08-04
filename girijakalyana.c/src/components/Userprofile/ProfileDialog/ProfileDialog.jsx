@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import profileimg from "../../../assets/profile.jpg";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -20,6 +19,13 @@ import TokenService from "../../token/tokenService";
 import MembershipDialog from "../MembershipDailog/MembershipDailog";
 import { membershipOptions } from "../MembershipDailog/MemberShipPlans";
 import Profileimage from "../../../assets/profile.jpg";
+import { calculateAge } from "../../../utils/common";
+import AboutPop from "../viewAll/popupContent/abouPop/AboutPop";
+import FamilyPop from "../viewAll/popupContent/familyPop/FamilyPop";
+import EducationPop from "../viewAll/popupContent/educationPop/EducationPop";
+import LifeStylePop from "../viewAll/popupContent/lifeStylePop/LifeStylePop";
+import PreferencePop from "../viewAll/popupContent/preferencePop/PreferencePop";
+import OthersPop from "../viewAll/popupContent/others/OthersPop";
 
 const ProfileDialog = ({
   openDialog,
@@ -27,16 +33,37 @@ const ProfileDialog = ({
   selectedUser,
   currentTab,
   setCurrentTab,
-  loggedInUserId,
   isLoading,
-  renderDialogContent,
 }) => {
-  const tabLabels = ["About", "Family", "Education", "LifeStyle", "Preference", "Others"];
+  const tabLabels = [
+    "About",
+    "Family",
+    "Education",
+    "LifeStyle",
+    "Preference",
+    "Others",
+  ];
   const [localInterestStatus, setLocalInterestStatus] = useState("none");
   const [isStatusLoading, setIsStatusLoading] = useState(false);
   const [membershipDialogOpen, setMembershipDialogOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const loggedInUserRole = TokenService.getRole();
+  const loggedInUserId = TokenService.getRegistrationNo();
+
+  const renderDialogContent = () => {
+    if (!selectedUser) return null;
+
+    const contentMap = {
+      0: <AboutPop userDetails={selectedUser} />,
+      1: <FamilyPop userDetails={selectedUser} />,
+      2: <EducationPop userDetails={selectedUser} />,
+      3: <LifeStylePop userDetails={selectedUser} />,
+      4: <PreferencePop userDetails={selectedUser} />,
+      5: <OthersPop userDetails={selectedUser} />,
+    };
+
+    return contentMap[currentTab] || null;
+  };
 
   const fetchStatus = async () => {
     if (
@@ -79,16 +106,6 @@ const ProfileDialog = ({
     loggedInUserId,
     selectedUser?.registration_no,
   ]);
-
-  const calculateAge = (dob) => {
-    if (!dob) return null;
-    const birthDate = new Date(dob);
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
-    return age;
-  };
 
   const getButtonState = () => {
     if (isStatusLoading) {
@@ -237,7 +254,7 @@ const ProfileDialog = ({
               <Box textAlign="center" sx={{ width: "100%" }}>
                 <Typography
                   variant="h5"
-                  fontWeight="bold"
+                  fontWeight="500px"
                   sx={{ fontSize: { xs: "1.3rem", sm: "1.5rem" } }}
                 >
                   {selectedUser?.first_name} {selectedUser?.last_name}
@@ -263,8 +280,8 @@ const ProfileDialog = ({
                         : selectedUser?.type_of_user === "FreeUser"
                         ? "#87CEEB"
                         : "gray",
-                    color: "black",
-                    fontWeight: "bold",
+                    color: "#fff",
+                    fontWeight: "500px",
                   }}
                 />
               </Box>
@@ -315,7 +332,6 @@ const ProfileDialog = ({
             </Box>
           </Box>
 
-          {/* Footer with action buttons */}
           <Box
             sx={{
               display: "flex",
@@ -342,7 +358,7 @@ const ProfileDialog = ({
               />
               <Typography
                 variant="body1"
-                fontWeight="bold"
+                fontWeight="500px"
                 color="#000"
                 sx={{ fontSize: { xs: "0.9rem", sm: "1rem" } }}
               >
@@ -360,36 +376,46 @@ const ProfileDialog = ({
                 },
               }}
             >
-              <Button
-                variant="contained"
-                color={buttonState.color}
-                onClick={handleButtonClick}
-                disabled={isLoading}
-                startIcon={
-                  isLoading || isStatusLoading ? (
-                    <CircularProgress size={20} />
-                  ) : (
-                    <FaHeart />
-                  )
-                }
-                fullWidth={window.innerWidth < 600}
-                sx={
-                  buttonState.customStyle || {
+              {loggedInUserId !== selectedUser?.registration_no && (
+                <Button
+                  variant="contained"
+                  color={buttonState.color}
+                  onClick={handleButtonClick}
+                  disabled={isLoading}
+                  startIcon={
+                    isLoading || isStatusLoading ? (
+                      <CircularProgress size={20} />
+                    ) : (
+                      <FaHeart />
+                    )
+                  }
+                  fullWidth={window.innerWidth < 600}
+                  sx={{
                     textTransform: "none",
                     fontSize: { xs: "0.8rem", sm: "0.9rem" },
                     padding: { xs: "6px 12px", sm: "8px 16px" },
-                  }
-                }
-              >
-                {buttonState.text}
-              </Button>
+                    backgroundColor: (theme) =>
+                      theme.palette[buttonState.color]?.main ||
+                      theme.palette.primary.main,
+                    "&:hover": {
+                      backgroundColor: (theme) =>
+                        theme.palette[buttonState.color]?.main ||
+                        theme.palette.primary.main,
+                    },
+                    ...buttonState.customStyle,
+                  }}
+                >
+                  {buttonState.text}
+                </Button>
+              )}
+
               <Button
                 variant="outlined"
                 onClick={() => setOpenDialog(false)}
                 fullWidth={window.innerWidth < 600}
                 sx={{
                   "&:hover": {
-                    backgroundColor: "transparent", // transparent hover effect
+                    backgroundColor: "transparent",
                   },
                 }}
               >

@@ -7,7 +7,6 @@ import {
   Stack,
   CircularProgress,
 } from "@mui/material";
-import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 import TokenService from "../../../token/tokenService";
@@ -17,6 +16,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
+import { calculateAge } from "../../../../utils/common";
 
 const About = () => {
   const registerNo = TokenService.getRegistrationNo();
@@ -91,7 +91,7 @@ const About = () => {
       >
         <Typography
           variant="h5"
-          fontWeight="bold"
+          fontWeight="500px"
           fontSize={{ xs: '1.3rem', sm: '1.7rem' }}
           sx={{color:'#34495e'}}
         >
@@ -109,7 +109,7 @@ const About = () => {
         >
           {/* Personal Details */}
           <Box>
-            <Typography variant="h6" fontWeight={600} mb={2}>
+            <Typography variant="h6" fontWeight={500} mb={2}>
               Personal Details
             </Typography>
             <Stack spacing={2}>
@@ -150,7 +150,7 @@ const About = () => {
 
           {/* Contact Details */}
           <Box>
-            <Typography variant="h6" fontWeight={600} mb={2}>
+            <Typography variant="h6" fontWeight={500} mb={2}>
               Contact Details
             </Typography>
             <Stack spacing={2}>
@@ -169,7 +169,7 @@ const About = () => {
         >
           {/* Location Details */}
           <Box>
-            <Typography variant="h6" fontWeight={600} mb={2}>
+            <Typography variant="h6" fontWeight={500} mb={2}>
               Location Details
             </Typography>
             <Stack spacing={2}>
@@ -181,7 +181,7 @@ const About = () => {
 
           {/* Additional Details */}
           <Box>
-            <Typography variant="h6" fontWeight={600} mb={2}>
+            <Typography variant="h6" fontWeight={500} mb={2}>
               Additional Details
             </Typography>
             <Stack spacing={2}>

@@ -40,15 +40,15 @@ const Members = () => {
         <Typography
           variant="h4"
           sx={{
-            color: "#63084e",
-            fontWeight: "bold",
+            color: "#1a4f72",
+            textTransform: "capitalize",
             fontFamily: "Outfit, sans-serif",
             fontSize: { xs: "1.5rem", sm: "2rem" },
             mb: 5,
             mt: 3,
           }}
         >
-          RECENT REGISTERS
+          Recent Registers
         </Typography>
 
         <Box sx={{ px: { xs: 0, sm: 2 } }}>
@@ -69,7 +69,7 @@ const Members = () => {
                 <Box
                   sx={{
                     px: { xs: 1, sm: 0 },
-                    pb: 2,
+                    pb: 4,
                     transition: "transform 0.3s ease",
                     "&:hover": {
                       transform: "translateY(-5px)",
@@ -79,24 +79,26 @@ const Members = () => {
                   <Paper
                     elevation={6}
                     sx={{
-                      borderRadius: 4,
-                      p: 3,
-                      background: "linear-gradient(to right, #182848, #4d75d4)",
-                      color: "#fff",
-                      boxShadow: "0 8px 24px rgba(0,0,0,0.3)",
-                      height: "100%",
+                      borderRadius: 2,
+                      p: 4,
+                      background:
+                        "linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%)",
+                      boxShadow: "0 8px 24px rgba(0, 0, 0, 0.13)",
+                      height: "380px",
                       display: "flex",
                       flexDirection: "column",
-                      justifyContent: "center",
+                      justifyContent: "start",
+                      alignItems: "start",
+                      textAlign: "start",
                     }}
                   >
                     <Typography
                       variant="h5"
                       sx={{
-                        textAlign: "center",
-                        fontWeight: "bold",
+                        textAlign: "left",
+                        fontWeight: 700,
                         mb: 2,
-                        textShadow: "0 2px 4px rgba(0, 0, 0, 0.4)",
+                        textShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
                       }}
                     >
                       Girija ❤️ Kalyana
@@ -125,9 +127,10 @@ const Members = () => {
                           <Typography
                             variant="body1"
                             sx={{
-                              fontWeight: "bold",
+                              textAlign: "left",
+                              fontWeight: 600,
                               width: "100px",
-                              color: "#fff",
+                              color: "#000",
                             }}
                           >
                             {item.label}
@@ -135,7 +138,9 @@ const Members = () => {
                           <Typography
                             variant="body1"
                             sx={{
-                              color: "#fff",
+                              fontWeight: 400,
+                              textAlign: "left",
+                              color: "#000",
                               wordBreak: "break-word",
                             }}
                           >

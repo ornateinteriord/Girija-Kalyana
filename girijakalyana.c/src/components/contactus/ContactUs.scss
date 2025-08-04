@@ -13,19 +13,19 @@
     margin-bottom: 3rem;
     
     h2 {
-      margin-top: 40px;
+      margin-top: 50px;
       font-size: 2.5rem;
-      color: #7f8c8d;
+      color: #1a4f72;
       margin-bottom: 1rem;
-      font-weight: 700;
+      font-weight: 500;
     }
     
     p {
       font-size: 1.1rem;
-      color: #7f8c8d;
-      max-width: 700px;
+      color: #1a4f72;
+      max-width: 500px;
       margin: 0 auto;
-      line-height: 1.6;
+      line-height: 1;
     }
   }
 
@@ -49,16 +49,16 @@
 
         .contact-card {
           background: white;
-          border-radius: 15px;
-          padding: 1.8rem;
+          border-radius: 10px;
+          padding: 1rem;
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
           transition: all 0.3s ease;
-          border-left: 4px solid #3498db;
+          border-left: 4px solid #1a4f72;
 
           .icon-wrapper {
             width: 60px;
             height: 60px;
-            background: linear-gradient(45deg, #3498db, #9b59b6);
+            background: #1a4f72;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -70,6 +70,7 @@
           }
 
           h3 {
+            font-weight: 500;
             font-size: 1.4rem;
             margin-bottom: 1rem;
             color: #2c3e50;
@@ -88,21 +89,22 @@
         flex: 1;
         min-width: 300px;
         background: white;
-        border-radius: 15px;
+        border-radius: 10px;
         padding: 0;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         overflow: hidden;
 
         .form-header {
-          background: linear-gradient(45deg, #3498db, #9b59b6);
+          height: 70px;
+          background: #1a4f72;
           color: white;
-          padding: 1.5rem;
+          padding: 0.2rem;
           text-align: center;
 
           h3 {
             font-size: 1.6rem;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
+            margin-bottom: 0;
+            font-weight: 400;
           }
 
           p {
@@ -164,6 +166,7 @@
 
           .button-group {
             display: flex;
+              flex-direction: row;
             gap: 15px;
             margin-top: 1.5rem;
             width: 100%; // Full width button group
@@ -173,18 +176,25 @@
               padding: 1rem;
               border: none;
               border-radius: 8px;
+             text-transform: capitalize;
               font-size: 1rem;
-              font-weight: 600;
+              font-weight: 500;
               cursor: pointer;
               transition: all 0.3s ease;
-              background: linear-gradient(45deg, #3498db, #9b59b6);
+              background:#27ae60;
+               &:hover {
+             background-color: #1e8449;
+              }
               color: white;
-              text-transform: uppercase;
               letter-spacing: 0.5px;
             }
 
             .clear-btn {
-              background: linear-gradient(45deg, #e74c3c, #f39c12);
+              background:#1a4f72;
+              text-transform: capitalize;
+              &:hover {
+             background-color: #245a7e;
+              }
               width: 100%; // Full width clear button
             }
           }
@@ -201,6 +211,7 @@
       margin-top: 1rem;
 
       h3 {
+        font-weight: 500;
         font-size: 1.5rem;
         margin-bottom: 1.2rem;
         color: #2c3e50;
@@ -236,6 +247,11 @@
       }
     }
   }
+  .form-header{
+      h3{
+        text-align: center;
+      }
+    }
 }
 
 @media (max-width: 768px) {
@@ -251,7 +267,11 @@
         font-size: 1rem;
       }
     }
-
+.form-header{
+      h3{
+        text-align: center;
+      }
+    }
     .contact-content-wrapper {
       .contact-main-content {
         .contact-details {
@@ -287,14 +307,20 @@
         font-size: 1.8rem;
       }
     }
+    .form-header{
+      h3{
+        text-align: center;
+      }
+    }
 
     .contact-content-wrapper {
       .contact-main-content {
         .contact-card, .contact-form-container {
           padding: 1rem;
+
         }
       }
-
+   
       .full-width-map-container {
         padding: 1rem;
         
@@ -303,5 +329,10 @@
         }
       }
     }
+       .button-group{
+       
+          flex-direction: row;
+      }
+
   }
 }

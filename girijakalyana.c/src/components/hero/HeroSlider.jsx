@@ -1,5 +1,4 @@
-import React from "react";
-import { Box, Typography, Button, useTheme, useMediaQuery } from "@mui/material";
+import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import { styled } from "@mui/system";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -11,12 +10,18 @@ import Navbar from "../navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 import "./HeroSlider.scss";
 import useAuth from "../hook/UseAuth";
+import TokenService from "../token/tokenService";
+import ThemedButton from "../UI/ThemedButton";
+
+
+
 
 const HeroSlider = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   const navigate = useNavigate();
+  const isAdmin = TokenService.getRole()?.toLowerCase() === 'admin'
   const { isLoggedIn } = useAuth();
 
   const images = [
@@ -131,39 +136,25 @@ const HeroSlider = () => {
               mt: isMobile ? 1 : 2,
             }}
           >
-            {isLoggedIn ? (
-              <Button
-                variant="contained"
+           {isLoggedIn ? (
+              <ThemedButton
+                title="Get Started"
                 size={isMobile ? "small" : "large"}
                 sx={{
-                  backgroundColor: '#00796B',
-                  '&:hover': {
-                    backgroundColor: '#004D40',
-                  },
-                  borderRadius: '8px',
-                  textTransform: 'capitalize',
                   px: isMobile ? 2 : 4,
                   py: isMobile ? 1.5 : 1.5,
                   fontSize: isMobile ? '1rem' : '1rem',
                   fontFamily: 'Outfit, sans-serif',
                   minWidth: isMobile ? '160px' : '200px',
                 }}
-                onClick={() => navigate('/user/userDashboard')}
-              >
-                Get Started
-              </Button>
+                onClick={() => navigate(isAdmin? '/admin/dashboard' : '/user/userDashboard')}
+              />
             ) : (
               <>
-                <Button
-                  variant="contained"
+                <ThemedButton
+                  title="Free Register"
                   size={isMobile ? "small" : "large"}
                   sx={{
-                    backgroundColor: '#00796B',
-                    '&:hover': {
-                      backgroundColor: '#004D40',
-                    },
-                    borderRadius: '8px',
-                    textTransform: 'capitalize',
                     px: isMobile ? 2 : 4,
                     py: isMobile ? 1.5 : 1.5,
                     fontSize: isMobile ? '1rem' : '1rem',
@@ -171,20 +162,15 @@ const HeroSlider = () => {
                     minWidth: isMobile ? '120px' : '160px',
                   }}
                   onClick={() => navigate('/register')}
-                >
-                  Free Register
-                </Button>
+                />
 
-                <Button
-                  variant="contained"
+                <ThemedButton
+                  title="Premium"
                   size={isMobile ? "small" : "large"}
                   sx={{
-                    backgroundColor: '#8E24AA',
-                    '&:hover': {
-                      backgroundColor: '#6A1B9A',
-                    },
-                    borderRadius: '8px',
-                    textTransform: 'capitalize',
+                    backgroundColor: '#FFFF',
+                    '&:hover': { backgroundColor: '#FFFF' },
+                    color:'#000',
                     px: isMobile ? 2 : 4,
                     py: isMobile ? 1.5 : 1.5,
                     fontSize: isMobile ? '1rem' : '1rem',
@@ -192,9 +178,7 @@ const HeroSlider = () => {
                     minWidth: isMobile ? '120px' : '160px',
                   }}
                   onClick={() => navigate('/membership')}
-                >
-                  Premium
-                </Button>
+                />
               </>
             )}
           </Box>

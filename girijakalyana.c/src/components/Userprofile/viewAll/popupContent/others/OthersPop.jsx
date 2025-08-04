@@ -15,7 +15,7 @@ const OthersPop = ({ userDetails }) => {
       <Typography 
         variant="h6" 
         sx={{ 
-          fontWeight: "bold", 
+          fontWeight: "500px", 
           mb: 2,
           color: "#000"
         }}

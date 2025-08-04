@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import DataTable from "react-data-table-component";
+import PaginationDataTable from "../../common/PaginationDataTable";
 import {
   TextField,
   Select,
@@ -16,19 +16,25 @@ import {
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 import { getAllUserProfiles } from "../../api/Admin";
-import {  TableLoadingComponent } from "../../../App";
 import toast from "react-hot-toast";
 import { customStyles, getUserTableColumns } from "../../../utils/DataTableColumnsProvider";
+import { LoadingTextSpinner } from "../../../utils/common";
 
 const UserTable = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   
-  const { data: users = [], isLoading, isError, error } = getAllUserProfiles();
-  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 50 });
+  const { data,   isPending:isLoading, isError, error, mutate: fetchUsers } = getAllUserProfiles();
+  const users = data?.content || [];
+  const [filteredUsers, setFilteredUsers] = useState(users);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUserType, setSelectedUserType] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("status");
+
+  useEffect(() => {
+    fetchUsers({ page: paginationModel.page, pageSize: paginationModel.pageSize });
+  }, [paginationModel.page, paginationModel.pageSize, fetchUsers]);
 
   useEffect(() => {
     if (isError) {
@@ -39,6 +45,8 @@ const UserTable = () => {
   useEffect(() => {
     if (users && users.length > 0) {
       filterUsers(searchTerm, selectedUserType, selectedStatus);
+    } else {
+      setFilteredUsers([]);
     }
   }, [users, searchTerm, selectedUserType, selectedStatus]);
 
@@ -108,11 +116,7 @@ const UserTable = () => {
     setFilteredUsers(filtered);
   };
 
-  const paginationComponentOptions = {
-    rowsPerPageText: 'Show',
-    rangeSeparatorText: 'of',
-    noRowsPerPage: false,
-  };
+
 
 
 
@@ -211,26 +215,22 @@ const UserTable = () => {
       </Stack>
       
       {/* DataTable */}
-      <Paper sx={{ borderRadius: '10px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-        <DataTable
-          columns={getUserTableColumns(formatUserRole)}
-          data={filteredUsers}
-          customStyles={customStyles}
-          pagination
-          paginationPerPage={6}
-          paginationRowsPerPageOptions={[6, 10, 15, 20]}
-          paginationComponentOptions={paginationComponentOptions}
-          noDataComponent={
-            <Typography padding={3} textAlign="center" fontFamily="Outfit">
-              No users found matching your criteria.
-            </Typography>
-          }
-          progressPending={isLoading}
-          progressComponent={ <TableLoadingComponent />}
-          persistTableHead
-          highlightOnHover
-        />
-      </Paper>
+      <PaginationDataTable
+        columns={getUserTableColumns(formatUserRole)}
+        data={filteredUsers}
+        customStyles={customStyles}
+        isLoading={isLoading}
+        totalRows={data?.totalRecords || 0}
+        paginationModel={paginationModel}
+        setPaginationModel={setPaginationModel}
+        rowsPerPageOptions={[6, 10, 15, 20, 50,1000]}
+        noDataComponent={
+          <Typography padding={3} textAlign="center" fontFamily="Outfit">
+            No users found matching your criteria.
+          </Typography>
+        }
+        progressComponent={<LoadingTextSpinner />}
+      />
     </Box>
   );
 };

@@ -74,12 +74,11 @@ const Education = () => {
   };
 
   const handleClear = () => {
-    setFormData({
-      educational_qualification: "",
-      occupation: "",
-      income_per_month: "",
-      occupation_country: ""
-    });
+    if (userProfile) {
+      setFormData({
+        ...userProfile,
+      });
+    }
   };
 
   return (
@@ -92,7 +91,7 @@ const Education = () => {
       }}
     >
       <Stack spacing={3}>
-        <Typography variant="h5" gutterBottom sx={{ color: "#34495e", fontWeight: 'bold' }}>
+        <Typography variant="h5" gutterBottom sx={{ color: "#34495e", fontWeight: '500px' }}>
           Education & Occupation
         </Typography>
         <form>
@@ -174,7 +173,7 @@ const Education = () => {
                   width: isMobile ? '100%' : '130px'
                 }}
               >
-                Clear
+                Reset
               </Button>
               <Button
                 onClick={handleSave}

@@ -30,7 +30,7 @@ const LifeStylePop = ({ userDetails }) => {
   return (
     <Box sx={{ padding: 2, backgroundColor: "#f5f5f5", borderRadius: 2 }}>
       <Stack spacing={2}>
-        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+        <Typography variant="h6" sx={{ fontWeight: "500px" }}>
           Lifestyle Details
         </Typography>
         <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
@@ -42,7 +42,7 @@ const LifeStylePop = ({ userDetails }) => {
                     component="th"
                     scope="row"
                     sx={{
-                      fontWeight: "bold",
+                      fontWeight: "500px",
                       width: "40%",
                       backgroundColor: "#f9f9f9",
                     }}

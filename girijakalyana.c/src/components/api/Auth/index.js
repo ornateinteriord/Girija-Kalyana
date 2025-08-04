@@ -4,15 +4,18 @@ import { toast } from "react-toastify";
 import TokenService from "../../token/tokenService";
 import { get, post } from "../authHooks";
 
-
 export const useSignupMutation = ()=>{
+  const navigate = useNavigate();
   return useMutation({
       mutationFn: async (data) => {
         return await post("/api/auth/signup", data);
       },
       onSuccess: (response) => {
         if (response.success) {
+          TokenService.setToken(response.token);
+       window.dispatchEvent(new Event("storage")); 
           toast.success(response.message);
+          navigate("/activation-pending");
         } else {
           console.error(response.message);
         }
@@ -29,20 +32,28 @@ export const useLoginMutation = () => {
     mutationFn: async (data) => {
       return await post("/api/auth/login", data);
     },
+
     onSuccess: (response) => {
       if (response?.success && response?.token) {
         TokenService.setToken(response.token);
-        window.dispatchEvent(new Event("storage")); // For sync
+        window.dispatchEvent(new Event("storage")); 
+
+        const userStatus = response?.user?.status;
+        const role = TokenService.getRole();
+
+        if (userStatus !== "active") {
+          toast.info(response.message || "Your account is not yet active");
+        navigate("/activation-pending");
+          return;
+        }
 
         toast.success(response.message );
 
-        const role = TokenService.getRole();
         switch (role) {
           case "FreeUser":
           case "PremiumUser":
           case "SilverUser":
-            case "Assistance":
-            
+          case "Assistance":
             navigate("/user/userDashboard");
             break;
           case "Admin":
@@ -52,20 +63,19 @@ export const useLoginMutation = () => {
             navigate("/PromotAdmin");
             break;
           default:
-            console.error("Invalid role:", role);
             localStorage.clear();
             toast.error("Invalid user role");
         }
       } else {
-        toast.error(response?.message || "Login failed");
+        toast.error(response?.message);
         console.error("Login failed:", response?.message);
       }
     },
-    onError: (err) => {
-      const message =
-        err?.response?.data?.message || "Login failed. Please try again.";
-      toast.error(message);
-    },
+
+    onError: (error) => {
+      toast.error(error?.message);
+      console.error("Login error:", error);
+    }
   });
 };
 

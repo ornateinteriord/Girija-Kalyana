@@ -21,6 +21,7 @@ import sidebarData from './components/PromotersDash/sidebar/data';
 import Expired from './components/PromotersDash/myReferals/Expired';
 import InActive from './components/PromotersDash/myReferals/InActive';
 import TeamUsers from './components/PromotersDash/myReferals/TeamUsers';
+import ActivationPending from './components/activationPending/activationPending';
 
 
 
@@ -100,29 +101,7 @@ export const LoadingComponent = () => {
   );
 };
 
-export const TableLoadingComponent = () => {
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '100%',
-        height: '200px', // Adjust height as needed
-        backgroundColor: 'transparent',
-      }}
-    >
-      <CircularProgress 
-        size={64}  
-        thickness={3.6} 
-        sx={{
-          color: "1a4f72",
-          animationDuration: '800ms', 
-        }} 
-      />
-    </Box>
-  );
-};
+
 
 const App = () => {
   return (
@@ -196,8 +175,9 @@ const App = () => {
               <Route path="search" element={<Search />} />
             </Route>
             </Route>
-
+            
             {/* 404 Route */}
+            <Route path="activation-pending" element={<ActivationPending />} />
             <Route path="*" element={<div>404 Not Found</div>} />
           </Routes>
         </Router>
