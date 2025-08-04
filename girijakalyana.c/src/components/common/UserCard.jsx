@@ -168,7 +168,14 @@ const UserCard = ({
           <ProfileInfo label="Caste" value={profile?.caste || "N/A"} />
         </Box>
 
-        <Box display="flex" flexDirection="row" gap={1} width="100%" mt="auto">
+        <Box
+          display="flex"
+          justifyContent="center"
+          gap={1}
+          width="100%"
+          mt="auto"
+          flexWrap="wrap"
+        >
           {showResponseButtons ? (
             <>
               <Button
@@ -206,7 +213,7 @@ const UserCard = ({
                 color="primary"
                 onClick={() => onViewMore(profile)}
                 sx={{
-                  flex: 1,
+                  minWidth: "120px",
                   borderRadius: 2,
                   py: 1,
                   textTransform: "none",
