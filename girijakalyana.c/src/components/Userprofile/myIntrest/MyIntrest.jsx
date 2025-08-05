@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Tab, Tabs } from "@mui/material";
+import { Box, Tab, Tabs, Typography } from "@mui/material";
 import Accepted from "./insidepage/accepted/Accepted";
 import Requests from "./insidepage/requests/Request";
 import Sent from "./sent/Sent";
@@ -52,20 +52,22 @@ const MyInterest = () => {
   return (
     <Box
       sx={{
-        p: { xs: 1, sm: 3, md: 2 },
-        backgroundColor: "#f9f9f9",
+        p: { xs: 0, sm: 3, md: 2 },
         minHeight: "100vh",
       }}
     >
-      <PageTitle title="Interested Profiles" />
-      {/* Tabs Section */}
+       <Typography variant="h5" sx={{ fontSize: { xs: '21px', sm: '25px' }, color: '#34495e',
+           mt:{xs:1},mb:{xs:1,md:2} }} fontWeight="500px">
+                Interested Profiles
+             </Typography>
+ 
       <Tabs
         value={tabValue}
         onChange={handleTabChange}
         variant="scrollable"
         scrollButtons="auto"
         sx={{
-          mb: 2,
+          mb: {xs: 1, sm: 2},
           "& .MuiTab-root:hover": {
             backgroundColor: "rgba(0, 0, 0, 0.04)",
           },

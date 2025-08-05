@@ -427,17 +427,17 @@ const Navbar = () => {
         fullWidth
         PaperProps={{
           sx: {
-            borderRadius: "12px",
-            padding: "10px",
+            borderRadius: "10px",
+            padding: "0px",
           }
         }}
       >
         <DialogTitle
           sx={{
             textAlign: "center",
-            fontWeight: "bold",
+            fontWeight: 500,
             fontSize: "1.5rem",
-            paddingBottom: "20px",
+            paddingBottom: "10px",
           }}
         >
           Login

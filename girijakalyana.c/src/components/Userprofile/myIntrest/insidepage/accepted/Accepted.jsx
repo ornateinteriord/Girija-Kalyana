@@ -73,6 +73,7 @@ const Accepted = () => {
                 onChange={handlePageChange}
                 shape="rounded"
                 color="primary"
+                size={window.innerWidth < 600 ? "small" : "medium"}
               />
             </Box>
           )}

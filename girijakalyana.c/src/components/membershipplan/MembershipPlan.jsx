@@ -113,7 +113,7 @@ const handlePlanSelection = (planName) => {
     >
       <Typography
         sx={{
-          fontSize:isMobile? "18px" : "23px",
+          fontSize:isMobile? "16px" : "23px",
           mb: 0,
           fontWeight: 500,
           color: '#1a4f72',
@@ -146,7 +146,7 @@ const handlePlanSelection = (planName) => {
           border: `1px dashed ${theme.palette.primary.light}`,
         }}
       >
-        <Typography variant="body2" color='#000'>
+        <Typography variant="body2" color='#000' textAlign="center">
           "Join thousands of happy couples who found their life partners through our platform."
         </Typography>
       </Box>

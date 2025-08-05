@@ -62,7 +62,7 @@ const ViewAll = () => {
   }, []);
 
   return (
-    <Box sx={{ p: { xs: 1, sm: 2 }, backgroundColor: "#f9f9f9" }}>
+    <Box sx={{ p: { xs: 2, sm: 2 } }}>
       <Box
         sx={{
           display: "flex",
@@ -73,7 +73,10 @@ const ViewAll = () => {
           mb: 3,
         }}
       >
-        <PageTitle title="Profiles" />
+        <Typography variant="h5" sx={{ fontSize: { xs: '21px', sm: '25px' }, color: '#34495e',
+                   mt:{xs:0},mb:{xs:1,md:2} }} fontWeight="500px">
+                       Profiles
+                     </Typography>
 
         <GenderFilter
           selectedStatus={selectedStatus}

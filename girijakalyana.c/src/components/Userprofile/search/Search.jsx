@@ -65,8 +65,11 @@ const Search = () => {
   };
 
   return (
-    <Box sx={{ p: { xs: 1, sm: 2 }, backgroundColor: "#f9f9f9" }}>
-      <PageTitle title="Search Profiles" />
+    <Box sx={{ p: { xs: 1, sm: 2 },  }}>
+         <Typography variant="h5" sx={{ fontSize: { xs: '21px', sm: '25px' }, color: '#34495e',
+                         mt:{xs:0},mb:{xs:1,md:2} }} fontWeight="500px">
+                             Search Profiles
+                           </Typography>
       <Box
         sx={{
           display: "flex",
@@ -157,6 +160,7 @@ const Search = () => {
                 shape="rounded"
                 onChange={(e, page) => setCurrentPage(page)}
                 color="primary"
+                  size={window.innerWidth < 600 ? "small" : "medium"}
               />
             </Box>
           )}

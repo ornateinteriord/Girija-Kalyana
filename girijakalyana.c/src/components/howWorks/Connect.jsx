@@ -137,7 +137,10 @@ const stats = [
 </Container>
 
       <Container sx={{ textAlign: 'center', marginTop: {xs:0,md:5}, fontFamily: "Outfit" }}>
-        <Typography variant="h4" sx={{ marginBottom: 4, color: '#1a4f72', fontFamily: "Outfit sans-serif" }}>
+        <Typography variant="h4"  sx={{ marginBottom: 4, 
+          color: '#1a4f72', fontFamily: "Outfit sans-serif",
+           fontSize: { xs: '1.60rem', md: '2.125rem' }
+          }}>
           Find your Special Someone
         </Typography>
         <Grid container spacing={4} justifyContent="center">

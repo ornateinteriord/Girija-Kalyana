@@ -81,10 +81,8 @@ const PrivacySettings = () => {
   return (
     <Box
       sx={{
-        padding:isMobile ? "16px" : "24px",
+        padding:isMobile ? "0px" : "24px",
         backgroundColor: "#f9f9f9",
-        borderRadius: "12px",
-        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
         maxWidth: "100%",
         margin: "auto",
         fontFamily: "Roboto, sans-serif",
@@ -97,9 +95,10 @@ const PrivacySettings = () => {
         sx={{
           textAlign: "start",
           marginBottom: isMobile ? "10px" : "24px",
-          fontWeight: "500px",
+          fontWeight: "400px",
           color: "#34495e",
           fontSize: "1.75rem",
+          mt:{xs: 1},
         }}
       >
         Privacy Settings

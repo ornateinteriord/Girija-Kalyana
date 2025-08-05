@@ -93,6 +93,7 @@ const Requests = ({refetchCounts}) => {
             onChange={(_, page) => setCurrentPage(page)}
             shape="rounded"
             color="primary"
+            size={window.innerWidth < 600 ? "small" : "medium"}
           />
         </Box>
       )}
