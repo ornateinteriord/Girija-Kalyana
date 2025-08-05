@@ -71,33 +71,18 @@ const About = () => {
   return (
     <Box
       sx={{
-        bgcolor: 'background.paper',
         borderRadius: 2,
-        boxShadow: 1,
-        p: { xs: 1, sm: 3, md: 2 },
-        maxWidth: 1200,
+        p: { xs: 0, sm: 2, md: 2 },
+        maxWidth: '100%',
         mx: 'auto',
         width: '100%',
       }}
     >
-      {/* Header */}
-      <Box
-        display="flex"
-        flexDirection={{ xs: "row", sm: "row" }}
-        justifyContent="space-between"
-        alignItems={{ xs: "center", sm: "center" }}
-        mb={3}
-        gap={2}
-      >
-        <Typography
-          variant="h5"
-          fontWeight="500px"
-          fontSize={{ xs: '1.3rem', sm: '1.7rem' }}
-          sx={{color:'#34495e'}}
-        >
-          Profile Information
-        </Typography>
-      </Box>
+
+     <Typography variant="h5" sx={{ fontSize: { xs: '21px', sm: '25px' }, color: '#34495e',
+           mt:{xs:1},mb:{xs:1,md:2} }} fontWeight="500px">
+            Profile Information
+             </Typography>
 
       {/* Form Sections */}
       <Box display="flex" flexDirection="column" gap={4}>

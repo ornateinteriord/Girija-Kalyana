@@ -86,8 +86,9 @@ const Education = () => {
       sx={{
         borderRadius: "8px",
         width: { xs: "100%", sm: "90%", md: "85%", lg: "100%" },
-        p: { xs: 1, sm: 4 },
-        boxSizing: 'border-box'
+        p: { xs: 0, sm: 3, md: 2 },
+        boxSizing: 'border-box',
+         mt:{xs:1},
       }}
     >
       <Stack spacing={3}>

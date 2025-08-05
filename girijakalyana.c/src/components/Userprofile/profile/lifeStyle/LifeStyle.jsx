@@ -77,10 +77,9 @@ const LifeStyle = () => {
 
   return (
     <Box sx={{ 
-      fontFamily: "Outfit, sans-serif", 
-      padding: isMobile ? 1 : 3,
+      padding: isMobile ? 0 : 3,
       width: "100%",
-      maxWidth: "1200px",
+      maxWidth: "100%",
       margin: "0 auto"
     }}>
       <Box mb={3}>
@@ -89,7 +88,8 @@ const LifeStyle = () => {
           sx={{
             fontSize: isMobile ? "1.4rem" : "1.7rem",
             color: "#34495e", 
-            fontWeight: 500
+            fontWeight: 400,
+            mt:{xs: 1,},
           }}
         >
           Life Style & Appearance

@@ -25,7 +25,10 @@ import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import convertFromBase64 from "../profile/photo/Photos";
 import useStore from "../../../store";
 import TokenService from "../../token/tokenService";
-import { useChangePassword, useGetMemberDetails } from "../../api/User/useGetProfileDetails";
+import {
+  useChangePassword,
+  useGetMemberDetails,
+} from "../../api/User/useGetProfileDetails";
 import { toast } from "react-toastify";
 import { LoadingComponent } from "../../../App";
 import SidebarMenu from "../../sidebar/SidebarMenu";
@@ -43,15 +46,16 @@ const UserNavBar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
-  const [openChangePasswordDialog, setOpenChangePasswordDialog] = useState(false);
-  const isLargeScreen = useMediaQuery('(min-width:900px)');
+  const [openChangePasswordDialog, setOpenChangePasswordDialog] =
+    useState(false);
+  const isLargeScreen = useMediaQuery("(min-width:900px)");
   const location = useLocation();
   const navigation = useNavigate();
 
   const [passwordData, setPasswordData] = useState({
-    oldPassword: '',
-    newPassword: '',
-    confirmPassword: ''
+    oldPassword: "",
+    newPassword: "",
+    confirmPassword: "",
   });
 
   const registerNo = TokenService.getRegistrationNo();
@@ -132,17 +136,17 @@ const UserNavBar = () => {
   const handleCloseChangePassword = () => {
     setOpenChangePasswordDialog(false);
     setPasswordData({
-      oldPassword: '',
-      newPassword: '',
-      confirmPassword: ''
+      oldPassword: "",
+      newPassword: "",
+      confirmPassword: "",
     });
   };
 
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
-    setPasswordData(prev => ({
+    setPasswordData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -169,7 +173,9 @@ const UserNavBar = () => {
           handleCloseChangePassword();
         },
         onError: (error) => {
-          toast.error(error?.response?.data?.message || "Failed to change password");
+          toast.error(
+            error?.response?.data?.message || "Failed to change password"
+          );
         },
       }
     );
@@ -203,9 +209,9 @@ const UserNavBar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  useEffect(()=>{
-    setIsSidebarOpen(isLargeScreen)
-  },[isLargeScreen])
+  useEffect(() => {
+    setIsSidebarOpen(isLargeScreen);
+  }, [isLargeScreen]);
 
   // On first render, ensure we're on the dashboard if no specific route is set
   useEffect(() => {
@@ -235,16 +241,22 @@ const UserNavBar = () => {
             height: "60px",
           }}
         >
-          <Toolbar sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <Toolbar
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
             {!isLargeScreen && (
               <IconButton edge="start" color="inherit" onClick={toggleSidebar}>
-                <FaBars />
+                <FaBars style={{ fontSize: "20px" }} />
               </IconButton>
             )}
 
             <Box sx={{ textAlign: "left", width: "100%" }}>
               <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-                <Typography variant="h5" noWrap component="div">
+                <Typography variant="h6" noWrap component="div">
                   Girija❤️Kalyana
                 </Typography>
               </Link>
@@ -285,7 +297,9 @@ const UserNavBar = () => {
                 horizontal: "right",
               }}
             >
-              <MenuItem onClick={() => handleMenuItemClick(handleProfileClick)}>My Profile</MenuItem>
+              <MenuItem onClick={() => handleMenuItemClick(handleProfileClick)}>
+                My Profile
+              </MenuItem>
               <MenuItem onClick={handleOpenChangePassword}>
                 <Box display="flex" alignItems="center">
                   Change Password
@@ -315,7 +329,9 @@ const UserNavBar = () => {
           <Toolbar />
           <SidebarMenu
             selectedItem={selectedItem}
-            handleDashboardClick={() => handleMenuItemClick(handleDashboardClick)}
+            handleDashboardClick={() =>
+              handleMenuItemClick(handleDashboardClick)
+            }
             handleProfileClick={() => handleMenuItemClick(handleProfileClick)}
             handleMatchesClick={() => handleMenuItemClick(handleMatchesClick)}
             handleInterestClick={() => handleMenuItemClick(handleInterestClick)}
@@ -345,21 +361,41 @@ const UserNavBar = () => {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle sx={{fontWeight:'500px'}} id="alert-dialog-title">{"Confirm Logout"}</DialogTitle>
+          <DialogTitle sx={{ fontWeight: "500px" }} id="alert-dialog-title">
+            {"Confirm Logout"}
+          </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               Are you sure you want to logout from your account?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseLogoutDialog} 
-            sx={{textTransform:'capitalize',fontSize:'18px',
-            fontWeight:'500px',"&:hover": {
-        backgroundColor: "transparent"}}}>Cancel</Button>
-            <Button onClick={handleConfirmLogout} 
-            sx={{textTransform:'capitalize',fontSize:'18px',
-            fontWeight:'500px',"&:hover": {
-        backgroundColor: "transparent"}}} autoFocus color="error">
+            <Button
+              onClick={handleCloseLogoutDialog}
+              sx={{
+                textTransform: "capitalize",
+                fontSize: "18px",
+                fontWeight: "500px",
+                "&:hover": {
+                  backgroundColor: "transparent",
+                },
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleConfirmLogout}
+              sx={{
+                textTransform: "capitalize",
+                fontSize: "18px",
+                fontWeight: "500px",
+                "&:hover": {
+                  backgroundColor: "transparent",
+                },
+              }}
+              autoFocus
+              color="error"
+            >
               Logout
             </Button>
           </DialogActions>
@@ -370,9 +406,16 @@ const UserNavBar = () => {
           onClose={handleCloseChangePassword}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle sx={{fontWeight:'bold'}} id="form-dialog-title">Change Password</DialogTitle>
+          <DialogTitle sx={{ fontWeight: "bold" }} id="form-dialog-title">
+            Change Password
+          </DialogTitle>
           <DialogContent>
-            <DialogContentText>
+            <DialogContentText
+              sx={{
+                fontSize: { xs: "0.875rem", sm: "1rem" },
+                lineHeight: { xs: 1.3, sm: 1.5 },
+              }}
+            >
               Please enter your current password and new password.
             </DialogContentText>
             <TextField
@@ -405,17 +448,33 @@ const UserNavBar = () => {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseChangePassword} 
-            sx={{textTransform:'capitalize',fontSize:'18px',
-            fontWeight:'bold',
-            "&:hover": {
-        backgroundColor:  "transparent" }}} color="primary">
+            <Button
+              onClick={handleCloseChangePassword}
+              sx={{
+                textTransform: "capitalize",
+                fontSize: "18px",
+                fontWeight: 400,
+                "&:hover": {
+                  backgroundColor: "transparent",
+                },
+              }}
+              color="primary"
+            >
               Cancel
             </Button>
-           <Button onClick={handleSubmitPasswordChange}  
-           sx={{textTransform:'capitalize',fontSize:'18px',
-           color:'green',fontWeight:'bold',"&:hover": {
-        backgroundColor: "transparent"}}}  disabled={isPending}>
+            <Button
+              onClick={handleSubmitPasswordChange}
+              sx={{
+                textTransform: "capitalize",
+                fontSize: "18px",
+                color: "green",
+                fontWeight:400,
+                "&:hover": {
+                  backgroundColor: "transparent",
+                },
+              }}
+              disabled={isPending}
+            >
               {isPending ? "Changing..." : "Submit"}
             </Button>
           </DialogActions>

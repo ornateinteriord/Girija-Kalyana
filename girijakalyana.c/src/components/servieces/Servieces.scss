@@ -129,4 +129,9 @@
       grid-template-columns: repeat(2, 1fr);
     }
   }
+  @media (min-width:360px){
+    h2{
+      font-size: 1.4rem;
+    }
+  }
 }

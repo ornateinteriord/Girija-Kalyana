@@ -315,9 +315,8 @@
 
     .contact-content-wrapper {
       .contact-main-content {
-        .contact-card, .contact-form-container {
-          padding: 1rem;
-
+        .contact-card  {
+          padding: 1rem !important;
         }
       }
    
@@ -332,6 +331,11 @@
        .button-group{
        
           flex-direction: row;
+
+          .subbtn{
+            font-size:0.8rem !important;
+            // padding: 0.5rem !important ;
+          }
       }
 
   }

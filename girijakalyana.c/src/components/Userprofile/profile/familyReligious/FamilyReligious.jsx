@@ -78,24 +78,20 @@ const FamilyReligious = () => {
   return (
     <Box
       sx={{
-        bgcolor: '#fff',
-        p: { xs: 1, sm: 3, md: 2 },
+        p: { xs: 0, sm: 3, md: 2 },
         borderRadius: 2,
-        boxShadow: 1,
-        maxWidth: 1200,
+        maxWidth: "100%",
         mx: 'auto'
       }}
     >
-      {/* Header */}
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h5" sx={{ fontSize: { xs: '21px', sm: '25px' }, color: '#34495e' }} fontWeight="500px">
+
+        <Typography variant="h5" sx={{ fontSize: { xs: '21px', sm: '25px' }, color: '#34495e',
+      mt:{xs:1},mb:{xs:1,md:2} }} fontWeight="500px">
           Family & Religious Information
         </Typography>
-      </Box>
 
-      {/* Sections */}
       <Stack spacing={4}>
-        {/* Religious Section */}
+
         <Box>
           <Typography variant="h6" fontWeight={500} gutterBottom>
             Religious Details

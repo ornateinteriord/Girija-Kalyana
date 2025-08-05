@@ -27,7 +27,7 @@ const UserCard = ({
   return (
     <Card
       sx={{
-        width: { xs: 300, sm: 280, md: 260, lg: 280 },
+        width: { xs: 280, sm: 280, md: 260, lg: 280 },
         borderRadius: 4,
         boxShadow: 3,
         overflow: "hidden",

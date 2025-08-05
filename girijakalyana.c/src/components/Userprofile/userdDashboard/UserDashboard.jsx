@@ -78,12 +78,11 @@ useEffect(() => {
       sx={{
         minHeight: "100vh",
         padding: {
-          xs: "10px 12px",
+          xs: "10px 9px",
           sm: "10px 16px",
           md: "10px ",
         },
         mt: "0",
-        backgroundColor: "#f5f5f5",
       }}
     >
       <Box sx={{ textAlign: "center", mb: 1 }}>
@@ -117,24 +116,21 @@ useEffect(() => {
 
         <Box>
           <Box 
-            display="flex" 
-            justifyContent="space-between" 
-            alignItems="center"
-            flexDirection={isSmallScreen ? "column" : "row"}
             gap={isSmallScreen ? 1 : 0}
-            mb={2}
+           mb={2}
           >
-            <PageTitle title="Interested Profiles" />
-           {!isLoadingConnections && (
-  <Typography variant="body2" color="#616161">
-    Showing {connectionsData?.connections?.length || 0} of {connectionsData?.totalRecords || 0} connections
+ <Typography  
+ variant="h5"
+    sx={{fontSize:{ xs: "22px" },color:'#000',textAlign:{xs:'center',md:'left'} }} 
+  >
+    Interested Profiles
   </Typography>
-)}
-
           </Box>
 <Box
   sx={{
     display: "grid",
+    justifySelf: "center",
+    alignSelf: "center",
     gridTemplateColumns: {
       xs: "1fr",
       sm: "repeat(2, 1fr)",

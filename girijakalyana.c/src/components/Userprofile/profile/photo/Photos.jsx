@@ -128,26 +128,24 @@ const Photos = () => {
   return (
     <Box
       sx={{
-        padding: "24px",
-        backgroundColor: "#f9f9f9",
+        padding: {xs:'0px',md:'24px'},
         borderRadius: "12px",
-        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-        fontFamily: "Roboto, sans-serif",
         maxWidth: "600px",
         margin: "auto",
         display: "flex",
+         mt:{xs:1},
       }}
     >
       <Card
         sx={{
-          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+          // boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
           borderRadius: "12px",
-          padding: "16px",
+          padding:{xs:"10px",md:"16px"},
           width: "100%",
         }}
       >
         <Box>
-          <Box>
+          <Box sx={{p:{xs:0,md:2}}}>
             <Box
               sx={{
                 display: "flex",
@@ -193,13 +191,14 @@ const Photos = () => {
             <Typography
               variant="body2"
               color="text.primary"
-              sx={{ marginBottom: "16px", textAlign: "center" }}
+              sx={{ marginBottom:{xs:'7px',md:'16px'}, textAlign: "center" }}
             >
               * Please upload high-resolution images only (Max size: 10 MB)
             </Typography>
           </Box>
-          <Box sx={{ mb: 2 }}>
-            <Typography sx={{ fontWeight: "500px", color: "#000" }}>
+          <Box sx={{ mb: 2 ,}}>
+            <Typography sx={{ fontWeight: "400px", color: "#000",textAlign: {xs:'center',md:'center'},
+          fontSize: { xs: '15px', sm: '18px' } }}>
               Image Verification Status:{" "}
               <Box
                 component="span"
@@ -218,82 +217,87 @@ const Photos = () => {
             </Typography>
           </Box>
           <Box
-            display="flex"
-            gap={1}
-            flexWrap="wrap"
-            alignItems="center"
-            sx={{
-              "@media (max-width: 600px)": {
-                width: "100%",
-                flexDirection: "column",
-                alignItems: "stretch",
-                "& > button": {
-                  width: "100%",
-                  margin: "4px 0 !important",
-                },
-              },
-            }}
-          >
-            <Button
-              variant="outlined"
-              component="label"
-              startIcon={<FaUpload />}
-              sx={{
-                width: "100%",
-                color: "#1976d2",
-                borderColor: "#1976d2",
-                "&:hover": {
-                  backgroundColor: "#f0f7ff",
-                },
-              }}
-            >
-              Choose File
-              <input
-                type="file"
-                name="image"
-                accept="image/*"
-                hidden
-                onChange={handleFileChange}
-                onClick={(e) => (e.target.value = null)}
-              />
-            </Button>
+  display="flex"
+  flexDirection="column"
+  gap={1}
+  sx={{
+    width: "100%",
+  }}
+>
+  {/* File Upload Button - Full Width */}
+  <Button
+    variant="outlined"
+    component="label"
+    startIcon={<FaUpload />}
+    sx={{
+      width: "100%",
+      maxWidth: "100%",
+      color: "#1976d2",
+      borderColor: "#1976d2",
+      "&:hover": {
+        backgroundColor: "#f0f7ff",
+      },
+    }}
+  >
+    Choose File
+    <input
+      type="file"
+      name="image"
+      accept="image/*"
+      hidden
+      onChange={handleFileChange}
+      onClick={(e) => (e.target.value = null)}
+    />
+  </Button>
 
-            <Button
-              variant="contained"
-              size="small"
-              onClick={handleSave}
-              disabled={isUpdating || !formData.image || cloudinary.isPending}
-              sx={{
-                height: "35px",
-                backgroundColor: "#34495e",
-                "&:hover": {
-                  backgroundColor: "#1976d2",
-                },
-                opacity: isUpdating ? 0.7 : 1,
-                cursor: isUpdating ? "not-allowed" : "pointer",
-              }}
-            >
-              {isUpdating ? "Saving..." : "Save"}
-            </Button>
-            {(userProfile?.image) && (
-              <Button
-                variant="contained"
-                color="error"
-                size="small"
-                startIcon={<FaTrash />}
-                onClick={handleDeleteClick}
-                disabled={isUpdating}
-                sx={{
-                  height: "35px",
-                  "&:hover": {
-                    backgroundColor: "#d32f2f",
-                  },
-                }}
-              >
-                Delete
-              </Button>
-            )}
-          </Box>
+  {/* Save and Delete Buttons - Side by Side */}
+  <Box
+    display="flex"
+    gap={1}
+    sx={{
+      width:{xs:"100%",md:'50%'},
+    }}
+  >
+    <Button
+      variant="contained"
+      size="small"
+      onClick={handleSave}
+      disabled={isUpdating || !formData.image || cloudinary.isPending}
+      sx={{
+        flex: 1, 
+        height: "35px",
+        backgroundColor: "#34495e",
+        "&:hover": {
+          backgroundColor: "#1976d2",
+        },
+        opacity: isUpdating ? 0.7 : 1,
+        cursor: isUpdating ? "not-allowed" : "pointer",
+      }}
+    >
+      {isUpdating ? "Saving..." : "Save"}
+    </Button>
+    
+    {userProfile?.image && (
+      <Button
+        variant="contained"
+        color="error"
+        size="small"
+        startIcon={<FaTrash />}
+        onClick={handleDeleteClick}
+        disabled={isUpdating}
+        sx={{
+          flex: 1, // Take equal space
+          height: "35px",
+          "&:hover": {
+            backgroundColor: "#d32f2f",
+          },
+        }}
+      >
+        Delete
+      </Button>
+    )}
+  </Box>
+</Box>
         </Box>
       </Card>
 
@@ -315,14 +319,34 @@ const Photos = () => {
             cannot be undone.
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDeleteCancel} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleDeleteConfirm} color="error" autoFocus disabled={DeleteImage.isPending}>
-            {DeleteImage.isPending?'Deleting...':'Delete'}
-          </Button>
-        </DialogActions>
+      <DialogActions>
+  <Button
+    onClick={handleDeleteCancel}
+    color="primary"
+    sx={{
+      '&:hover': {
+        backgroundColor: 'rgba(0, 0, 255, 0.04)',
+      },
+    }}
+  >
+    Cancel
+  </Button>
+
+  <Button
+    onClick={handleDeleteConfirm}
+    color="error"
+    autoFocus
+    disabled={DeleteImage.isPending}
+    sx={{
+      '&:hover': {
+        backgroundColor: 'rgba(255, 0, 0, 0.08)', 
+      },
+    }}
+  >
+    {DeleteImage.isPending ? 'Deleting...' : 'Delete'}
+  </Button>
+</DialogActions>
+
       </Dialog>
     </Box>
   );

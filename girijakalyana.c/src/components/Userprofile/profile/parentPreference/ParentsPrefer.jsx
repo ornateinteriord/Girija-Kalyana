@@ -132,10 +132,7 @@ const ParentsPrefer = () => {
   return (
     <Box
       sx={{
-        padding: isMobile ? 1 : 3,
-        borderRadius: "12px",
-        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-        fontFamily: "Roboto, sans-serif",
+        padding: isMobile ? 0 : 3,
         width: { xs: "100%", md: "100%" },
         maxWidth: "100%"
       }}
@@ -144,10 +141,11 @@ const ParentsPrefer = () => {
         variant="h6"
         sx={{
           textAlign: "start",
-          fontWeight: 500,
+          fontWeight: 400,
           fontSize: { xs: "23px", sm: "22px" },
           color: "#34495e",
           marginBottom: { xs: "16px", sm: "24px" },
+           mt:{xs: 1,},
         }}
       >
         Partner Preference
