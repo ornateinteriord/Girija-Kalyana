@@ -486,7 +486,7 @@ const Navbar = () => {
             <Typography
               variant="body2"
               sx={{
-                color: theme.palette.primary.main,
+                color: '#1A4F72',
                 cursor: "pointer",
                 textAlign: "center",
                 "&:hover": {
@@ -516,6 +516,7 @@ const Navbar = () => {
               height: "44px",
               borderRadius: "8px",
               fontWeight: "bold",
+              backgroundColor : '#1A4F72',
               textTransform: "capitalize",
               fontSize: "1rem",
             }}
@@ -536,7 +537,7 @@ const Navbar = () => {
             Don't have an account?{" "}
             <span
               style={{
-                color: theme.palette.primary.main,
+                color: '#1A4F72',
                 cursor: "pointer",
                 fontWeight: "bold",
               }}

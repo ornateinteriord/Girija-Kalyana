@@ -113,7 +113,7 @@ const ContactUs = () => {
                   <button 
                     type="reset" 
                     className="clear-btn"
-                    style={{backgroundColor : 'transparent', color :'#fff'}}
+                    style={{backgroundColor : 'transparent', color :'#fff', border:'1px solid #1A4F72'}}
                   >
                     Clear Form
                   </button>
