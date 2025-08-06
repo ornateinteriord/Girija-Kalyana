@@ -230,7 +230,7 @@ const Navbar = () => {
               left: "8px",
               right: "8px",
               height: "2px",
-              backgroundColor: "aqua",  
+              backgroundColor: "#fff",  
               transform: "scaleX(1)",  
               transition: "transform 0.3s ease"
             }
@@ -242,7 +242,7 @@ const Navbar = () => {
             left: "8px",
             right: "8px",
             height: "2px",
-            backgroundColor: "aqua",
+            backgroundColor: "#fff",
             transform: isActive ? "scaleX(1)" : "scaleX(0)",  
             transition: "transform 0.3s ease"
           }
