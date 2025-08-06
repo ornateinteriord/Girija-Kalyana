@@ -56,20 +56,40 @@ const MyInterest = () => {
         minHeight: "100vh",
       }}
     >
-       <Typography variant="h5" sx={{ fontSize: { xs: '21px', sm: '25px' }, color: '#34495e',
-           mt:{xs:1},mb:{xs:1,md:2} }} fontWeight="500px">
-                Interested Profiles
-             </Typography>
- 
+      <Typography
+        variant="h5"
+        sx={{
+          fontSize: { xs: "21px", sm: "25px" },
+          color: "#34495e",
+          mt: { xs: 1 },
+          mb: { xs: 1, md: 2 },
+        }}
+        fontWeight="500px"
+      >
+        Interested Profiles
+      </Typography>
+
       <Tabs
         value={tabValue}
         onChange={handleTabChange}
         variant="scrollable"
         scrollButtons="auto"
         sx={{
-          mb: {xs: 1, sm: 2},
-          "& .MuiTab-root:hover": {
-            backgroundColor: "rgba(0, 0, 0, 0.04)",
+          mb: { xs: 1, sm: 2 },
+          "& .MuiTab-root": {
+            textTransform: "capitalize",
+            fontWeight: 600,
+            color: "#444",
+            "&:hover": {
+              backgroundColor: "rgba(26, 79, 114, 0.1)",
+              color: "#1a4f72",
+            },
+          },
+          "& .Mui-selected": {
+            color: "#1a4f72 !important",
+          },
+          "& .MuiTabs-indicator": {
+            backgroundColor: "#1a4f72",
           },
         }}
       >

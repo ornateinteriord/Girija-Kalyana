@@ -280,14 +280,13 @@ const ProfileDialog = ({
                         : selectedUser?.type_of_user === "FreeUser"
                         ? "#87CEEB"
                         : "gray",
-                    color: "#fff",
+                    color: "#000",
                     fontWeight: "500px",
                   }}
                 />
               </Box>
             </Box>
 
-            {/* Right side - Tabbed content */}
             <Box
               sx={{
                 flex: 2,
@@ -302,12 +301,24 @@ const ProfileDialog = ({
                 scrollButtons="auto"
                 sx={{
                   mb: 2,
+                  "& .MuiTabs-indicator": {
+                    backgroundColor: "#1a4f72", 
+                    height: 3,
+                  },
                   "& .MuiTab-root": {
                     fontSize: { xs: "0.7rem", sm: "0.8rem" },
                     minWidth: "unset",
-                    padding: { xs: "6px 8px", sm: "12px 16px" },
+                    padding: { xs: "6px 12px", sm: "12px 16px" },
+                    textTransform: "none",
+                    fontWeight: 500,
+                    color: "text.secondary",
+                    "&.Mui-selected": {
+                      color: "#1a4f72",
+                      fontWeight: 600,
+                    },
                     "&:hover": {
-                      backgroundColor: "transparent",
+                      backgroundColor: "rgba(26, 79, 114, 0.08)",
+                      color: "#1a4f72",
                     },
                   },
                 }}
