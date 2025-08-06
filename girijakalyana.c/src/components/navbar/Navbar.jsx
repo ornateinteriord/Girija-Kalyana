@@ -381,7 +381,7 @@ const Navbar = () => {
                 sx={{
                   backgroundColor: "#fff",
                   color: "#000",
-                  fontWeight: 700,
+                  fontWeight: 600,
                   height: "42px",
                   textTransform: "capitalize",
                   "&:hover": {
@@ -403,7 +403,7 @@ const Navbar = () => {
                   sx={{
                     backgroundColor: "#fff",
                     color: "#000",
-                    fontWeight: 700,
+                    fontWeight: 600,
                     height: "42px",
                     textTransform: "capitalize",
                     "&:hover": {
@@ -438,6 +438,7 @@ const Navbar = () => {
             fontWeight: 500,
             fontSize: "1.5rem",
             paddingBottom: "10px",
+         
           }}
         >
           Login
@@ -486,9 +487,9 @@ const Navbar = () => {
             <Typography
               variant="body2"
               sx={{
-                color: theme.palette.primary.main,
                 cursor: "pointer",
                 textAlign: "center",
+                color:'#1a4f72',
                 "&:hover": {
                   textDecoration: "underline",
                 },
@@ -515,9 +516,14 @@ const Navbar = () => {
             sx={{
               height: "44px",
               borderRadius: "8px",
-              fontWeight: "bold",
+              fontWeight: 500,
               textTransform: "capitalize",
               fontSize: "1rem",
+             backgroundColor:'#1a4f72',
+             "&:hover":{
+               backgroundColor:'#1a4f72',
+             }
+             
             }}
           >
             {isLoginPending ? (
@@ -536,9 +542,9 @@ const Navbar = () => {
             Don't have an account?{" "}
             <span
               style={{
-                color: theme.palette.primary.main,
+                color:' #1a4f72',
                 cursor: "pointer",
-                fontWeight: "bold",
+                fontWeight: 500,
               }}
               onClick={() => {
                 handleClose();
@@ -567,7 +573,7 @@ const Navbar = () => {
         <DialogTitle
           sx={{
             textAlign: "center",
-            fontWeight: "bold",
+            fontWeight: 500,
             fontSize: "1.5rem",
             paddingBottom: "8px",
           }}
@@ -697,9 +703,13 @@ const Navbar = () => {
             sx={{
               height: "44px",
               borderRadius: "8px",
-              fontWeight: "bold",
+              fontWeight: 500,
               textTransform: "capitalize",
               fontSize: "1rem",
+              backgroundColor:'#1a4f72',
+                "&:hover":{
+                background:'#1a4f72'
+              }
             }}
           >
             {isResettingPassword ? (
@@ -717,9 +727,12 @@ const Navbar = () => {
             sx={{
               height: "44px",
               borderRadius: "8px",
-              fontWeight: "bold",
+              fontWeight: 500,
               textTransform: "capitalize",
               fontSize: "1rem",
+              "&:hover":{
+                background:'transparent'
+              }
             }}
           >
             Cancel

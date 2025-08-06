@@ -100,7 +100,7 @@ const SidebarMenu = ({
             onClick={item.onClick}
             sx={{
               backgroundColor:
-                selectedItem === item.text ? "#1976d2" : "transparent",
+                selectedItem === item.text ? "#4a8fb2" : "transparent",
               "&:hover": {
                 backgroundColor: "rgba(255, 255, 255, 0.1)",
               },
