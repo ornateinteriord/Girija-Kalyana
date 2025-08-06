@@ -255,17 +255,19 @@ const Photos = () => {
     display="flex"
     gap={1}
     sx={{
-      width:{xs:"100%",md:'50%'},
+      width:{xs:"100%",md:`${userProfile?.image ? "50%" : "100%"}`},
     }}
   >
     <Button
       variant="contained"
       size="small"
+
       onClick={handleSave}
       disabled={isUpdating || !formData.image || cloudinary.isPending}
       sx={{
         flex: 1, 
-        height: "35px",
+        height: "40px",
+        margin: `${userProfile?.image ? undefined : 'auto'}`,
         backgroundColor: "#34495e",
         "&:hover": {
           backgroundColor: "#1976d2",
@@ -287,7 +289,7 @@ const Photos = () => {
         disabled={isUpdating}
         sx={{
           flex: 1, // Take equal space
-          height: "35px",
+          height: "40px",
           "&:hover": {
             backgroundColor: "#d32f2f",
           },

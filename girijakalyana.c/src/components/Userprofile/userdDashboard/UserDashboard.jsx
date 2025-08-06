@@ -121,7 +121,7 @@ useEffect(() => {
           >
  <Typography  
  variant="h5"
-    sx={{fontSize:{ xs: "22px" },color:'#000',textAlign:{xs:'center',md:'left'} }} 
+    sx={{fontSize:{ xs: "22px" },color:'#000',textAlign:{xs:'left',md:'left'} }} 
   >
     Interested Profiles
   </Typography>
@@ -131,6 +131,7 @@ useEffect(() => {
     display: "grid",
     justifySelf: "center",
     alignSelf: "center",
+    mr: 2,
     gridTemplateColumns: {
       xs: "1fr",
       sm: "repeat(2, 1fr)",

@@ -76,13 +76,9 @@ const About = () => {
         maxWidth: '100%',
         mx: 'auto',
         width: '100%',
+        mt:2
       }}
     >
-
-     <Typography variant="h5" sx={{ fontSize: { xs: '21px', sm: '25px' }, color: '#34495e',
-           mt:{xs:1},mb:{xs:1,md:2} }} fontWeight="500px">
-            Profile Information
-             </Typography>
 
       {/* Form Sections */}
       <Box display="flex" flexDirection="column" gap={4}>

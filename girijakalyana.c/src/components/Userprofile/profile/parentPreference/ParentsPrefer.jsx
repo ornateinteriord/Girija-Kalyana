@@ -137,19 +137,6 @@ const ParentsPrefer = () => {
         maxWidth: "100%"
       }}
     >
-      <Typography
-        variant="h6"
-        sx={{
-          textAlign: "start",
-          fontWeight: 400,
-          fontSize: { xs: "23px", sm: "22px" },
-          color: "#34495e",
-          marginBottom: { xs: "16px", sm: "24px" },
-           mt:{xs: 1,},
-        }}
-      >
-        Partner Preference
-      </Typography>
 
       <Box
         sx={{
@@ -159,7 +146,8 @@ const ParentsPrefer = () => {
             md: 'repeat(2, 1fr)',
             lg: 'repeat(2, 1fr)'
           },
-          gap: 3.5
+          gap: 3.5,
+          mt:2
         }}
       >
         {formFields.map((field, index) => (

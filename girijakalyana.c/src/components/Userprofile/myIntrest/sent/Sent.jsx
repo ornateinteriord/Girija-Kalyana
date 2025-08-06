@@ -93,6 +93,8 @@ const Sent = ({refetchCounts}) => {
               display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
               gap: 3,
+              placeItems: { xs: "center", sm: "flex-start" },
+              mr: 2,
             }}
           >
             {sentInterests?.content?.map((interest) => (

@@ -88,13 +88,11 @@ const Education = () => {
         width: { xs: "100%", sm: "90%", md: "85%", lg: "100%" },
         p: { xs: 0, sm: 3, md: 2 },
         boxSizing: 'border-box',
-         mt:{xs:1},
+         mt:{xs:2},
+    
       }}
     >
-      <Stack spacing={3}>
-        <Typography variant="h5" gutterBottom sx={{ color: "#34495e", fontWeight: '500px' }}>
-          Education & Occupation
-        </Typography>
+      <Stack spacing={3} mt={1}>
         <form>
           <Stack spacing={3}>
             <Stack

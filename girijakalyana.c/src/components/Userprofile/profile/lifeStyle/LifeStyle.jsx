@@ -82,19 +82,7 @@ const LifeStyle = () => {
       maxWidth: "100%",
       margin: "0 auto"
     }}>
-      <Box mb={3}>
-        <Typography 
-          variant="h5" 
-          sx={{
-            fontSize: isMobile ? "1.4rem" : "1.7rem",
-            color: "#34495e", 
-            fontWeight: 400,
-            mt:{xs: 1,},
-          }}
-        >
-          Life Style & Appearance
-        </Typography>
-      </Box>
+
 
       <Box sx={{
         display: 'grid',
@@ -102,7 +90,8 @@ const LifeStyle = () => {
           xs: '1fr',
           sm: 'repeat(2, 1fr)'
         },
-        gap: isMobile ? 3 : 4
+        gap: isMobile ? 3 : 4,
+        mt:2
       }}>
         {/* Drink */}
         <TextField
