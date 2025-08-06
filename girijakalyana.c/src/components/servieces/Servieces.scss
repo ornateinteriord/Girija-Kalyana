@@ -6,14 +6,14 @@
   margin-left: auto;
   margin-right: auto;
 
-  h2 {
-    font-size: clamp(1.5rem, 4vw, 2rem);
-    margin-bottom: 1.5rem;
-    margin-top: 1.0rem;
-    color: #2c3e50 !important;
-    font-family: "Outfit sans-serif";
-    padding: 0 1rem;
-  }
+h2 {
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  margin-bottom: 1.5rem;
+  margin-top: 1rem;
+  color: #2c3e50;
+  font-family: "Outfit", sans-serif;
+  padding: 0 1rem;
+}
 
   .service-grid {
     display: grid;
@@ -129,9 +129,10 @@
       grid-template-columns: repeat(2, 1fr);
     }
   }
-  @media (min-width:360px){
-    h2{
-      font-size: 1.4rem;
-    }
+
+@media (max-width: 480px) {
+  h2 {
+    font-size: 1.3rem;
   }
+}
 }
