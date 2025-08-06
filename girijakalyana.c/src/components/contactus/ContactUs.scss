@@ -176,24 +176,24 @@
               padding: 1rem;
               border: none;
               border-radius: 8px;
-             text-transform: capitalize;
+              text-transform: capitalize;
               font-size: 1rem;
               font-weight: 500;
               cursor: pointer;
               transition: all 0.3s ease;
-              background:#27ae60;
+              background:#1A4F72;
                &:hover {
-             background-color: #1e8449;
+                background-color: #1A4F72;
               }
               color: white;
               letter-spacing: 0.5px;
             }
 
             .clear-btn {
-              background:#1a4f72;
               text-transform: capitalize;
               &:hover {
-             background-color: #245a7e;
+                background-color: #1A4F72;
+                color: '#fff'
               }
               width: 100%; // Full width clear button
             }
