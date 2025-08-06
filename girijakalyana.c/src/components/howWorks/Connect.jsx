@@ -160,7 +160,7 @@ const stats = [
                     right: 10,
                     backgroundColor: '#fff',
                     color: '#000',
-                    border: '2px solid #00bcd4',
+                    border: '2px solid #1A4F72',
                   },
                 }}
               >
@@ -182,7 +182,7 @@ const stats = [
                 </Paper>
               </Badge>
               <Box sx={{ marginTop: 2 }}>
-                <Typography variant="h6" sx={{ color: '#00bcd4', fontFamily: "Outfit sans-serif" }}>
+                <Typography variant="h6" sx={{ color: '#1A4F72', fontFamily: "Outfit sans-serif" }}>
                   {feature.title}
                 </Typography>
                 <Typography variant="body2" sx={{ color: '#777', fontFamily: "Outfit sans-serif" }}>
