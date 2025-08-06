@@ -183,6 +183,9 @@ const UserCard = ({
                 variant="outlined"
                 sx={{
                   background: "#fff",
+                  ":hover":{
+                    background: "transparent"
+                  },
                   color: "red",
                   fontWeight: 500,
                   borderColor: "red",

@@ -42,19 +42,11 @@ const MyMatches = () => {
 
   return (
     <Box sx={{ p: { xs: 1, sm: 2 }, backgroundColor: "#f9f9f9" }}>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexDirection: { xs: "column", sm: "row" }, // Stack on mobile, row on desktop
-          gap: 2,
-          mb: 3,
-        }}
-      >
-        {/* Left-aligned heading */}
-        <PageTitle title="My Matches" />
-      </Box>
+    
+           <Typography variant="h5" sx={{ fontSize: { xs: '21px', sm: '25px' }, color: '#34495e',
+           mt:{xs:1},mb:{xs:2,md:2},textAlign:'left' }} fontWeight="500px">
+               My Matches
+             </Typography>
 
       {isUsersLoading ? (
         <LoadingTextSpinner />
@@ -71,6 +63,7 @@ const MyMatches = () => {
             },
             flexDirection: "column",
             alignItems: "center",
+            mr: 2,
             gridTemplateColumns: {
               sm: "repeat(2, 1fr)",
               md: "repeat(3, 1fr)",

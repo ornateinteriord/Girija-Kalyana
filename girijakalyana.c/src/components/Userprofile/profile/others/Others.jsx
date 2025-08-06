@@ -74,25 +74,12 @@ const Others = () => {
       width: "100%",
       maxWidth: {xs:'100%',md:'50%'},
       margin: "0 auto",
-      backgroundColor: "#f5f5f5",
        borderRadius: 2,
        mb: 3,
     }}>
-      <Box mb={3}>
-        <Typography 
-          variant="h5" 
-          sx={{
-            fontSize: isMobile ? "1.4rem" : "1.7rem",
-            color: "#34495e", 
-            fontWeight: 400,
-            mt:{xs:1}
-          }}
-        >
-          Other Information
-        </Typography>
-      </Box>
 
-      <Box sx={{ mb: 3 }}>
+
+      <Box sx={{ mb: 3,mt:2 }}>
         <TextField
           multiline
           minRows={5}

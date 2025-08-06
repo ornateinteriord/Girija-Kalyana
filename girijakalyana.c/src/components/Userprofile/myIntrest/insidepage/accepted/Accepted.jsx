@@ -51,7 +51,7 @@ const Accepted = () => {
         </Typography>
       ) : (
         <>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} sx={{justifyContent: {xs:"center",sm:'flex-start'},mr: 2}}>
             {interests.map((item, index) => {
               const profile = item.sender || {};
               return (

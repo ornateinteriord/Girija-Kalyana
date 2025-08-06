@@ -65,7 +65,8 @@ const Requests = ({refetchCounts}) => {
           display: "flex",
           flexWrap: "wrap",
           gap: 3,
-          justifyContent: interests.length > 0 ? "flex-start" : "center",
+          justifyContent: {xs: "center", sm: "flex-start"},
+          mr:2,
           marginTop: 1,
         }}
       >

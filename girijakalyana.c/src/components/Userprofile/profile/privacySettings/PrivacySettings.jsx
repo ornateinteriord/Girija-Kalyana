@@ -82,29 +82,16 @@ const PrivacySettings = () => {
     <Box
       sx={{
         padding:isMobile ? "0px" : "24px",
-        backgroundColor: "#f9f9f9",
         maxWidth: "100%",
         margin: "auto",
         fontFamily: "Roboto, sans-serif",
         width: "100%",
-       
+       mt:2
       }}
     >
-      <Typography
-        variant="h5"
-        sx={{
-          textAlign: "start",
-          marginBottom: isMobile ? "10px" : "24px",
-          fontWeight: "400px",
-          color: "#34495e",
-          fontSize: "1.75rem",
-          mt:{xs: 1},
-        }}
-      >
-        Privacy Settings
-      </Typography>
+   
 
-      <Typography variant="body1" sx={{ mb: 3 }}>
+      <Typography variant="body1" sx={{ mb: 3, }}>
         {userProfile?.image_verification === "active" ? (
           <Box component="span" sx={{ color: "green",fontSize:isMobile ? "1rem" : "1.2rem" }}>
             Your photo is verified. Choose who can see it:

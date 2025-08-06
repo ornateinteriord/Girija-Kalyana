@@ -85,15 +85,10 @@ const FamilyReligious = () => {
       }}
     >
 
-        <Typography variant="h5" sx={{ fontSize: { xs: '21px', sm: '25px' }, color: '#34495e',
-      mt:{xs:1},mb:{xs:1,md:2} }} fontWeight="500px">
-          Family & Religious Information
-        </Typography>
-
       <Stack spacing={4}>
 
         <Box>
-          <Typography variant="h6" fontWeight={500} gutterBottom>
+          <Typography variant="h6" fontWeight={500} gutterBottom mt={1}>
             Religious Details
           </Typography>
 

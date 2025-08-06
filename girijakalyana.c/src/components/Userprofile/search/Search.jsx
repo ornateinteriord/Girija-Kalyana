@@ -17,7 +17,6 @@ import LifeStylePop from "../viewAll/popupContent/lifeStylePop/LifeStylePop";
 import PreferencePop from "../viewAll/popupContent/preferencePop/PreferencePop";
 import { LoadingTextSpinner } from "../../../utils/common";
 import OthersPop from "../viewAll/popupContent/others/OthersPop";
-import PageTitle from "../../UI/PageTitle";
 import UserCard from "../../common/UserCard";
 
 const itemsPerPage = 8;
@@ -29,7 +28,7 @@ const Search = () => {
   const [currentTab, setCurrentTab] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const { data = [], isFetching,refetch,isError, } = useGetSearchProfiles(searchTerm);
+  const { data = [], isFetching,refetch,isFetched } = useGetSearchProfiles(searchTerm);
 
   const handleSearch = () => {
    refetch()
@@ -119,6 +118,8 @@ const Search = () => {
           <Box
             sx={{
               display: "grid",
+              placeItems: "center",
+              mr:2,
               gridTemplateColumns: {
                 xs: "1fr",
                 sm: "repeat(2, 1fr)",
@@ -128,7 +129,7 @@ const Search = () => {
               gap: { xs: 2, sm: 3 },
             }}
           >
-            {paginatedUsers.map((user)=>{
+            {paginatedUsers?.length > 0 && paginatedUsers.map((user)=>{
               return (
                 <UserCard
                   key={user._id}
@@ -158,7 +159,7 @@ const Search = () => {
                 count={Math.ceil(data.length / itemsPerPage)}
                 page={currentPage}
                 shape="rounded"
-                onChange={(e, page) => setCurrentPage(page)}
+                onChange={(_e, page) => setCurrentPage(page)}
                 color="primary"
                   size={window.innerWidth < 600 ? "small" : "medium"}
               />
@@ -166,7 +167,7 @@ const Search = () => {
           )}
 
           {/* Show message if no results found */}
-          {isError && data.length === 0 && (
+          {isFetched && paginatedUsers?.length === 0 && (
             <Box mt={4} textAlign="center">
               <Typography color="red">No users found matching the input</Typography>
             </Box>

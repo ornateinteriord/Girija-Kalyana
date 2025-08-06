@@ -66,15 +66,15 @@ const ViewAll = () => {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          justifyContent: {xs:"flex-start", sm: "space-between"},
+          alignItems: {xs: "flex-start", sm: "center"},
           flexDirection: { xs: "column", sm: "row" },
           gap: 2,
           mb: 3,
         }}
       >
         <Typography variant="h5" sx={{ fontSize: { xs: '21px', sm: '25px' }, color: '#34495e',
-                   mt:{xs:0},mb:{xs:1,md:2} }} fontWeight="500px">
+                   mt:{xs:0},mb:{xs:1,md:2},textAlign:'left' }} fontWeight="500px">
                        Profiles
                      </Typography>
 
@@ -91,6 +91,8 @@ const ViewAll = () => {
       <Box
         sx={{
           display: "grid",
+          placeItems: "center",
+          mr:2,
           gridTemplateColumns: {
             xs: "1fr",
             sm: "repeat(2, 1fr)",
