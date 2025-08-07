@@ -19,14 +19,14 @@ const PaymentComponent = () => {
     return;
   }
 
-  const amount = 500; // Example: ₹500
+  const amount = 390029; // Example: ₹500
 
      // 1. Create Razorpay Order via backend
     // Step 1: Create order on backend
   const order = await fetch("http://localhost:5000/api/payment/create-order", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ amount: 500 }), // amount in rupees
+    body: JSON.stringify({ amount: 999 }), // amount in rupees
   }).then((res) => res.json());
 
   const options = {
@@ -59,7 +59,7 @@ const PaymentComponent = () => {
       contact: "9999999999",
     },
     theme: {
-      color: "#F37254",
+      color: "#1a4257",
     },
   };
 
