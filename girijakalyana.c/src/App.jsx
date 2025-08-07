@@ -22,6 +22,7 @@ import Expired from './components/PromotersDash/myReferals/Expired';
 import InActive from './components/PromotersDash/myReferals/InActive';
 import TeamUsers from './components/PromotersDash/myReferals/TeamUsers';
 import ActivationPending from './components/activationPending/activationPending';
+import PaymentComponent from './components/Payment/PaymentComponent';
 
 
 
@@ -116,6 +117,7 @@ const App = () => {
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<><HeroSlider /><Connect /><Members /></>} />
+            <Route path="/payment" element={<PaymentComponent />} />
             <Route path="/service" element={<Servieces />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/privacy-policy" element={<Privacy />} />
