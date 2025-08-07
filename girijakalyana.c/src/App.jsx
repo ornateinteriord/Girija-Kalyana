@@ -23,6 +23,7 @@ import InActive from './components/PromotersDash/myReferals/InActive';
 import TeamUsers from './components/PromotersDash/myReferals/TeamUsers';
 import ActivationPending from './components/activationPending/activationPending';
 import ScrollToTop from './components/common/scrollToTop';
+import NotFoundPage from './components/notFound/NotFoundPage';
 
 
 
@@ -180,7 +181,7 @@ const App = () => {
             
             {/* 404 Route */}
             <Route path="activation-pending" element={<ActivationPending />} />
-            <Route path="*" element={<div>404 Not Found</div>} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Router>
       

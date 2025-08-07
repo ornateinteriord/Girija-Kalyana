@@ -17,10 +17,10 @@ const ContactUs = () => {
         {/* Header Section */}
         <div className="contact-header">
           <h2>Get In Touch</h2>
-          {/* <p>
+          <p>
             We're here to assist you! Feel free to reach out to us with any
             questions, concerns, or feedback.
-          </p> */}
+          </p>
         </div>
 
         <div className="contact-content-wrapper">
