@@ -22,6 +22,7 @@ import Expired from './components/PromotersDash/myReferals/Expired';
 import InActive from './components/PromotersDash/myReferals/InActive';
 import TeamUsers from './components/PromotersDash/myReferals/TeamUsers';
 import ActivationPending from './components/activationPending/activationPending';
+import ScrollToTop from './components/common/scrollToTop';
 
 
 
@@ -113,6 +114,7 @@ const App = () => {
   
       }>
         <Router>
+            <ScrollToTop />
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<><HeroSlider /><Connect /><Members /></>} />
