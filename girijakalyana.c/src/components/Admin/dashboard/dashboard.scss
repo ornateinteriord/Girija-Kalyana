@@ -8,6 +8,13 @@
   @media (min-width: 768px) {
     padding: 40px;
   }
+  .dashboard-loading-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh; 
+    width: 100%;
+  }
 }
 
 .card-div {

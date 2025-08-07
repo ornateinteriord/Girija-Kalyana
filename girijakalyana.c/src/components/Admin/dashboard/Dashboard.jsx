@@ -25,46 +25,50 @@ const DashboardCard = ({ count, label, icon, link, style }) => {
   );
 };
 
-const Dashboard=() =>{
-const { data: usersObj = {}, isFetching:isLoading, isError, error } = getAllUserCounts();
+const Dashboard = () => {
+  const { data: usersObj = {}, isFetching: isLoading, isError, error } = getAllUserCounts();
 
 
-   useEffect(() => {
-       if (isError) {
-         toast.error(error.message);
-       }
-     }, [isError, error]);
+  useEffect(() => {
+    if (isError) {
+      toast.error(error.message);
+    }
+  }, [isError, error]);
 
   const iconStyle = { fontSize: "50px", color: "#92d0f3" };
 
   const stats = [
-    { count: usersObj?.freeUser, label: "Free Users", icon: <FaUsers style={iconStyle} />,link: "/admin/user-table"  },
-    { count: usersObj?.silverUser, label: "Silver Users", icon: <FaUsers style={iconStyle} /> ,link: "/admin/user-table" },
-    { count: usersObj?.premiumUser, label: "Premium Users", icon: <FaUsers style={iconStyle} />,link: "/admin/user-table"  },
+    { count: usersObj?.freeUser, label: "Free Users", icon: <FaUsers style={iconStyle} />, link: "/admin/user-table" },
+    { count: usersObj?.silverUser, label: "Silver Users", icon: <FaUsers style={iconStyle} />, link: "/admin/user-table" },
+    { count: usersObj?.premiumUser, label: "Premium Users", icon: <FaUsers style={iconStyle} />, link: "/admin/user-table" },
     { count: usersObj?.totalPaidUsers, label: "Total Paid Users", icon: <FaUsers style={iconStyle} />, link: "/admin/onlinetransaction" },
     { count: usersObj?.assistancePending, label: "Assistance Pending", icon: <FaUsers style={iconStyle} />, link: "/admin/assistencepending" },
     { count: usersObj?.assistanceSuccess, label: "Assistance Success", icon: <FaUsers style={iconStyle} />, link: "/admin/assistencesuccess" },
     { count: 11332.86, label: "Paid User Receipts", icon: <MdCurrencyRupee style={iconStyle} />, link: "/admin/onlinetransaction" },
     { count: 10873.88, label: "Assistance Receipts", icon: <MdCurrencyRupee style={iconStyle} />, link: "/admin/assistanceonlinetransaction" },
-    { count: 6646.0, label: "Renewal Receipts", icon: <MdCurrencyRupee style={iconStyle} />,link: "/admin/renewalreports"  },
-    { count: 12951.8, label: "Total Online Receipts", icon: <MdCurrencyRupee style={iconStyle} />,link: "/admin/receiptsvocher"  },
+    { count: 6646.0, label: "Renewal Receipts", icon: <MdCurrencyRupee style={iconStyle} />, link: "/admin/renewalreports" },
+    { count: 12951.8, label: "Total Online Receipts", icon: <MdCurrencyRupee style={iconStyle} />, link: "/admin/receiptsvocher" },
   ];
 
   return (
     <div className="dashboard-content-main">
       {/* Cards Section */}
-      {isLoading ? <LoadingTextSpinner/> : (
-         <div className="card-div">
-        {stats.map((stat, index) => (
-          <DashboardCard
-            key={index}
-            count={stat.count}
-            label={stat.label}
-            icon={stat.icon}
-            link={stat.link}
-          />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="dashboard-loading-wrapper">
+          <LoadingTextSpinner />
+        </div>
+      ) : (
+        <div className="card-div">
+          {stats.map((stat, index) => (
+            <DashboardCard
+              key={index}
+              count={stat.count}
+              label={stat.label}
+              icon={stat.icon}
+              link={stat.link}
+            />
+          ))}
+        </div>
       )}
     </div>
   );
