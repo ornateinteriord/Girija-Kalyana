@@ -26,6 +26,7 @@ import EducationPop from "../viewAll/popupContent/educationPop/EducationPop";
 import LifeStylePop from "../viewAll/popupContent/lifeStylePop/LifeStylePop";
 import PreferencePop from "../viewAll/popupContent/preferencePop/PreferencePop";
 import OthersPop from "../viewAll/popupContent/others/OthersPop";
+import { useNavigate } from 'react-router-dom';
 
 const ProfileDialog = ({
   openDialog,
@@ -49,6 +50,7 @@ const ProfileDialog = ({
   const [selectedPlan, setSelectedPlan] = useState(null);
   const loggedInUserRole = TokenService.getRole();
   const loggedInUserId = TokenService.getRegistrationNo();
+  const navigate = useNavigate();
 
   const renderDialogContent = () => {
     if (!selectedUser) return null;
@@ -195,6 +197,10 @@ const ProfileDialog = ({
   const handleConfirmPayment = () => {
     setMembershipDialogOpen(false);
   };
+
+  const handleOpenMessage = () => {
+   navigate(`/user/chat/${selectedUser.registration_no}`);
+  }
 
   return (
     <>
@@ -387,6 +393,18 @@ const ProfileDialog = ({
                 },
               }}
             >
+              {localInterestStatus === 'accepted' && (<Button
+                variant="outlined"
+                onClick={handleOpenMessage}
+                fullWidth={window.innerWidth < 600}
+                sx={{
+                  "&:hover": {
+                    backgroundColor: "transparent",
+                  },
+                }}
+              >
+                Message
+              </Button>)}
               {loggedInUserId !== selectedUser?.registration_no && (
                 <Button
                   variant="contained"
