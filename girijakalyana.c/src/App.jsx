@@ -24,6 +24,7 @@ import TeamUsers from './components/PromotersDash/myReferals/TeamUsers';
 import ActivationPending from './components/activationPending/activationPending';
 import ScrollToTop from './components/common/scrollToTop';
 import NotFoundPage from './components/notFound/NotFoundPage';
+import ChatBox from './components/ChatBox';
 
 
 
@@ -176,6 +177,8 @@ const App = () => {
               <Route path="myintrest" element={<MyInterest />} />
               <Route path="viewAll" element={<ViewAll />} />
               <Route path="search" element={<Search />} />
+              <Route path="chat/:userId" element={<ChatBox />} />
+
             </Route>
             </Route>
             
