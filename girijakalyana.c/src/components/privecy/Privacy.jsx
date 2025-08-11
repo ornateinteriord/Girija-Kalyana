@@ -71,7 +71,7 @@ const Privacy = () => {
               <li><strong>Company:</strong> Ornate Pvt. Ltd</li>
               <li><strong>Address:</strong> #148/E, 2nd Floor, 17th Main Vijaynagar, Bangalore-560040</li>
               <li><strong>Phone:</strong> 080 - 23409697</li>
-              <li><strong>Email:</strong> ornateinteriod@example.com</li>
+              <li><strong>Email:</strong> ornateinteriod@gmail.com</li>
             </ul>
           </div>
         </section>

@@ -135,25 +135,51 @@ const Sent = ({refetchCounts}) => {
         />
       )}
 
-      <Dialog open={cancelConfirmOpen} onClose={handleCancelDialogClose}>
-        <DialogTitle>Cancel Request</DialogTitle>
-        <DialogContent>
-          <Typography>
-            Are you sure you want to cancel this interest request?
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancelDialogClose}>No</Button>
-          <Button
-            onClick={handleConfirmCancel}
-            color="error"
-            variant="contained"
-            disabled={isCancelling}
-          >
-            {isCancelling ? "Cancelling..." : "Yes, Cancel"}
-          </Button>
-        </DialogActions>
-      </Dialog>
+    <Dialog open={cancelConfirmOpen} onClose={handleCancelDialogClose}>
+  <DialogTitle sx={{ fontWeight: 600, color: "black" }}>
+    Cancel Request
+  </DialogTitle>
+
+  <DialogContent>
+    <Typography sx={{ color: "black" }}>
+      Are you sure you want to cancel this interest request?
+    </Typography>
+  </DialogContent>
+
+  <DialogActions>
+    <Button
+      onClick={handleCancelDialogClose}
+      variant="outlined"
+      sx={{
+        textTransform: "capitalize",
+        color: "black",
+        borderColor: "black",
+        "&:hover": {
+          backgroundColor: "#f0f0f0",
+          borderColor: "black",
+        },
+      }}
+    >
+      No
+    </Button>
+
+    <Button
+      onClick={handleConfirmCancel}
+      color="error"
+      variant="contained"
+      disabled={isCancelling}
+      sx={{
+        textTransform: "capitalize",
+        "&:hover": {
+          backgroundColor: "#d32f2f",
+        },
+      }}
+    >
+      {isCancelling ? "Cancelling..." : "Cancel"}
+    </Button>
+  </DialogActions>
+</Dialog>
+
 
       {isLoading && (
         <LoadingTextSpinner />
