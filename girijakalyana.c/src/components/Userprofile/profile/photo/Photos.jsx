@@ -14,9 +14,9 @@ import {
 import { FaTrash, FaUpload } from "react-icons/fa";
 import toast from "react-hot-toast";
 import {
-  getCloudinaryUrl,
   useDeleteImage,
   useGetMemberDetails,
+  useImageKitUpload,
   useUpdateProfile,
 } from "../../../api/User/useGetProfileDetails";
 import TokenService from "../../../token/tokenService";
@@ -28,7 +28,7 @@ const Photos = () => {
   const registerNo = TokenService.getRegistrationNo();
   const { data: userProfile, refetch : getMember } = useGetMemberDetails(registerNo);
   const { mutate: updateProfile, isPending: isUpdating } = useUpdateProfile();
-  const cloudinary = getCloudinaryUrl();
+  const imagekit = useImageKitUpload(userProfile?.registration_no)
 
   const handleFileChange = async (event) => {
     const input = event.target;
@@ -49,16 +49,16 @@ const Photos = () => {
       };
       reader.readAsDataURL(file);
 
-      cloudinary.mutate(file, {
+      imagekit.mutate(file, {
         onSuccess: (data) => {
-          if (data.secure_url) {
+          if (data.url) {
             setFormData((prev) => ({
               ...prev,
-              image: data.secure_url,
-              previewImage: data.secure_url,
+              image: data.url,
+              previewImage: data.url,
               image_verification: "pending",
             }));
-            toast.success("Image uploaded to Cloudinary");
+            toast.success("Image uploaded to Successfully");
           } else {
             toast.error("Failed to get image URL");
           }
@@ -87,6 +87,7 @@ const Photos = () => {
       {
         onSuccess: () => {
           toast.success("Profile image updated successfully");
+          getMember()
         },
         onError: (error) => {
           toast.error(
@@ -263,7 +264,7 @@ const Photos = () => {
       size="small"
 
       onClick={handleSave}
-      disabled={isUpdating || !formData.image || cloudinary.isPending}
+      disabled={isUpdating || !formData.image || imagekit.isPending}
       sx={{
         flex: 1, 
         height: "40px",
@@ -303,7 +304,7 @@ const Photos = () => {
         </Box>
       </Card>
 
-      {cloudinary.isPending && <LoadingComponent />}
+      {imagekit.isPending && <LoadingComponent />}
 
       {/* Delete Confirmation Dialog */}
       <Dialog
