@@ -8,6 +8,7 @@ import {
   Box,
   Container,
   useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import MembershipDialog from "../Userprofile/MembershipDailog/MembershipDailog";
 
@@ -15,7 +16,8 @@ const HomeUserTable = () => {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [open, setOpen] = useState(false);
   const [currentMembership, ] = useState(null);
-  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleUpgrade = () => {
     const dummyPlan = {

@@ -4,14 +4,9 @@ import {
   Divider,
   Stack,
   Typography,
-  CircularProgress,
   Pagination,
   useMediaQuery,
-  Card,
-  CardContent,
-  Button,
-  Chip,
-  Avatar,
+  useTheme,
 } from "@mui/material";
 import { toast } from "react-toastify";
 import TokenService from "../../token/tokenService";
@@ -19,10 +14,8 @@ import HomeUserTable from "../../userupgrade/HomeUserTable";
 import { useGetConnections, useGetMemberDetails } from "../../api/User/useGetProfileDetails";
 import { LoadingComponent, } from "../../../App";
 import { isSilverOrPremiumUser, LoadingTextSpinner } from "../../../utils/common";
-import { FaBriefcase, FaMapMarkerAlt } from "react-icons/fa";
 import ProfileDialog from "../ProfileDialog/ProfileDialog";
-import PageTitle from "../../UI/PageTitle";
-import UserCard, { ProfileInfo } from "../../common/UserCard";
+import UserCard from "../../common/UserCard";
 
 const UserDashboard = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,7 +23,8 @@ const UserDashboard = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [currentTab, setCurrentTab] = useState(0);
   const itemsPerPage = 8; 
-  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+ const theme = useTheme();
+const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const registerNo = TokenService.getRegistrationNo();
   
   const {

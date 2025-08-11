@@ -18,7 +18,7 @@ const Members = () => {
   const isLargeScreen = useMediaQuery("(min-width:1200px)");
   const isMediumScreen = useMediaQuery("(min-width:900px)");
   const isSmallScreen = useMediaQuery("(min-width:600px)");
-  const { data: recentregisters } = useGetRecentRegisters();
+  const { data: recentregisters = [] } = useGetRecentRegisters();
 
   const getSlidesPerView = () => {
     if (isLargeScreen) return 3;
