@@ -527,7 +527,7 @@ const Navbar = () => {
             }}
           >
             {isLoginPending ? (
-             <CircularProgress size={24} color="inherit" /> 
+             <CircularProgress size={24} color="info" /> 
             ) : (
               "Login"
             )}
@@ -566,7 +566,7 @@ const Navbar = () => {
         PaperProps={{
           sx: {
             borderRadius: "12px",
-            padding: "20px",
+            padding: "0px",
           }
         }}
       >
@@ -690,7 +690,8 @@ const Navbar = () => {
         </DialogContent>
         <DialogActions
           sx={{
-            padding: "16px 24px",
+            padding: "16px 14px",
+            display: "flex",
             flexDirection: "column",
             gap: "12px",
           }}
@@ -726,6 +727,7 @@ const Navbar = () => {
             onClick={handleCloseForgotPassword}
             sx={{
               height: "44px",
+              mb:2.5,
               borderRadius: "8px",
               fontWeight: 500,
               textTransform: "capitalize",

@@ -355,51 +355,63 @@ const UserNavBar = () => {
           <Outlet />
         </Box>
 
-        <Dialog
-          open={openLogoutDialog}
-          onClose={handleCloseLogoutDialog}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle sx={{ fontWeight: "500px" }} id="alert-dialog-title">
-            {"Confirm Logout"}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Are you sure you want to logout from your account?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={handleCloseLogoutDialog}
-              sx={{
-                textTransform: "capitalize",
-                fontSize: "18px",
-                fontWeight: "500px",
-                "&:hover": {
-                  backgroundColor: "transparent",
-                },
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleConfirmLogout}
-              sx={{
-                textTransform: "capitalize",
-                fontSize: "18px",
-                fontWeight: "500px",
-                "&:hover": {
-                  backgroundColor: "transparent",
-                },
-              }}
-              autoFocus
-              color="error"
-            >
-              Logout
-            </Button>
-          </DialogActions>
-        </Dialog>
+       <Dialog
+  open={openLogoutDialog}
+  onClose={handleCloseLogoutDialog}
+  aria-labelledby="alert-dialog-title"
+  aria-describedby="alert-dialog-description"
+>
+  <DialogTitle sx={{ fontWeight: 600, color: "black" }} id="alert-dialog-title">
+    Confirm Logout
+  </DialogTitle>
+
+  <DialogContent>
+    <DialogContentText
+      id="alert-dialog-description"
+      sx={{ color: "black" }}
+    >
+      Are you sure you want to logout from your account?
+    </DialogContentText>
+  </DialogContent>
+
+  <DialogActions>
+    <Button
+      onClick={handleCloseLogoutDialog}
+      variant="outlined"
+      sx={{
+        textTransform: "capitalize",
+        fontSize: "18px",
+        fontWeight: 500,
+        color: "black",
+        borderColor: "black",
+        "&:hover": {
+          backgroundColor: "#f0f0f0",
+          borderColor: "black",
+        },
+      }}
+    >
+      Cancel
+    </Button>
+
+    <Button
+      onClick={handleConfirmLogout}
+      color="error"
+      variant="contained"
+      autoFocus
+      sx={{
+        textTransform: "capitalize",
+        fontSize: "18px",
+        fontWeight: 500,
+        "&:hover": {
+          backgroundColor: "#d32f2f", 
+        },
+      }}
+    >
+      Logout
+    </Button>
+  </DialogActions>
+</Dialog>
+
 
         <Dialog
           open={openChangePasswordDialog}
