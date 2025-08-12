@@ -13,7 +13,7 @@ const ActivationPending = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  consoel.log(selectedPlan,'selectedPlan')
+  console.log(selectedPlan,'selectedPlan')
 
   useEffect(() => {
   const handleBackNavigation = () => {
