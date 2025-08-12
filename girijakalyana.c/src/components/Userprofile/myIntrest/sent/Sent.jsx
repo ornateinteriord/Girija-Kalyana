@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 import TokenService from "../../../token/tokenService";
-import { useCancelSentInterest, useGetSentInterests } from "../../../api/User/useGetProfileDetails";
+import { useCancelSentInterest, useGetSentInterests } from "../../../api/User";
 import ProfileDialog from "../../ProfileDialog/ProfileDialog";
 import { isSilverOrPremiumUser, LoadingTextSpinner } from "../../../../utils/common";
 import UserCard from "../../../common/UserCard";

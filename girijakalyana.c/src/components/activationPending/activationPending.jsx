@@ -13,6 +13,8 @@ const ActivationPending = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  consoel.log(selectedPlan,'selectedPlan')
+
   useEffect(() => {
   const handleBackNavigation = () => {
     TokenService.removeToken();           
@@ -241,7 +243,7 @@ const ActivationPending = () => {
       <MembershipDialog
         open={open}
         onClose={handleClose}
-        selectedPlan={selectedPlan}
+        onSelectPlan={setSelectedPlan}
       />
     </Box>
   );

@@ -6,7 +6,7 @@ import {
   Pagination,
 } from "@mui/material";
 import TokenService from "../../../../token/tokenService";
-import { useGetAcceptedInterests } from "../../../../api/User/useGetProfileDetails";
+import { useGetAcceptedInterests } from "../../../../api/User";
 import ProfileDialog from "../../../ProfileDialog/ProfileDialog";
 import { LoadingTextSpinner } from "../../../../../utils/common";
 import UserCard from "../../../../common/UserCard";

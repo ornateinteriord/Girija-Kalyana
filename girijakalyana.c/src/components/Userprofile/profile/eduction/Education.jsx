@@ -11,7 +11,7 @@ import {
 import {
   useGetMemberDetails,
   useUpdateProfile
-} from "../../../api/User/useGetProfileDetails";
+} from "../../../api/User";
 import TokenService from "../../../token/tokenService";
 import toast from "react-hot-toast";
 import rawJsonData from "../eduction/jsondata/data.json";

@@ -10,8 +10,6 @@ import {
   DialogContent,
   IconButton,
   CircularProgress,
-  ImageList,
-  ImageListItem,
   Button,
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";

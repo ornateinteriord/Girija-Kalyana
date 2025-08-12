@@ -10,7 +10,7 @@ import {
 import toast from "react-hot-toast";
 
 import TokenService from "../../../token/tokenService";
-import { useGetMemberDetails, useUpdateProfile } from "../../../api/User/useGetProfileDetails";
+import { useGetMemberDetails, useUpdateProfile } from "../../../api/User";
 import { LoadingComponent } from "../../../../App";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";

@@ -6,7 +6,7 @@ import {
   Button,
 } from "@mui/material";
 import TokenService from "../../token/tokenService";
-import { useGetMyMatches } from "../../api/User/useGetProfileDetails";
+import { useGetMyMatches } from "../../api/User";
 import ProfileDialog from "../ProfileDialog/ProfileDialog";
 import {
   LoadingTextSpinner,

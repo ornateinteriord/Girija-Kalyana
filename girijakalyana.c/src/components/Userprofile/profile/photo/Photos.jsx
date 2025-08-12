@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Button,
@@ -18,7 +18,7 @@ import {
   useGetMemberDetails,
   useImageKitUpload,
   useUpdateProfile,
-} from "../../../api/User/useGetProfileDetails";
+} from "../../../api/User";
 import TokenService from "../../../token/tokenService";
 import { LoadingComponent } from "../../../../App";
 

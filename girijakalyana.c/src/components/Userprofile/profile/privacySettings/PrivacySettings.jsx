@@ -11,7 +11,7 @@ import { FaRegImage } from "react-icons/fa";
 import {
   useGetMemberDetails,
   useUpdateProfile,
-} from "../../../api/User/useGetProfileDetails";
+} from "../../../api/User";
 import TokenService from "../../../token/tokenService";
 
 const privacyOptions = [

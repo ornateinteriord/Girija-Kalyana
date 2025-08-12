@@ -22,13 +22,11 @@ import {
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
-import convertFromBase64 from "../profile/photo/Photos";
-import useStore from "../../../store";
 import TokenService from "../../token/tokenService";
 import {
   useChangePassword,
   useGetMemberDetails,
-} from "../../api/User/useGetProfileDetails";
+} from "../../api/User";
 import { toast } from "react-toastify";
 import { LoadingComponent } from "../../../App";
 import SidebarMenu from "../../sidebar/SidebarMenu";
@@ -42,7 +40,6 @@ const theme = createTheme({
 });
 
 const UserNavBar = () => {
-  const { setFirstName, setProfileImage } = useStore();
   const [anchorEl, setAnchorEl] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
@@ -93,16 +90,6 @@ const UserNavBar = () => {
       toast.error(error.message);
     }
   }, [isError, error]);
-
-  useEffect(() => {
-    if (userProfile) {
-      setFirstName(userProfile.firstName || "");
-      if (userProfile.profileImage) {
-        const url = convertFromBase64(userProfile.profileImage);
-        setProfileImage(url);
-      }
-    }
-  }, [userProfile, setFirstName, setProfileImage]);
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
