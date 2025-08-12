@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { FaHeart } from "react-icons/fa";
-import { useExpressInterest } from "../../api/User/useGetProfileDetails";
+import { useExpressInterest } from "../../api/User";
 import { get } from "../../api/authHooks";
 import TokenService from "../../token/tokenService";
 import MembershipDialog from "../MembershipDailog/MembershipDailog";

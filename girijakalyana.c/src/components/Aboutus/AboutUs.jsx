@@ -1,4 +1,3 @@
-import React from "react";
 import card4 from '../../assets/card4.jpg';
 import './Aboutus.scss';
 import Navbar from "../navbar/Navbar";

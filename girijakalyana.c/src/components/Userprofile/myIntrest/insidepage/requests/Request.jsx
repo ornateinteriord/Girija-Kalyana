@@ -12,7 +12,7 @@ import {
 import {
   useGetReceivedInterests,
   useUpdateInterestStatus,
-} from "../../../../api/User/useGetProfileDetails";
+} from "../../../../api/User";
 import TokenService from "../../../../token/tokenService";
 import toast from "react-hot-toast";
 import { LoadingTextSpinner } from "../../../../../utils/common";

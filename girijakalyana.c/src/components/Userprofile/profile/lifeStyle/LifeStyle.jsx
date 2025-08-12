@@ -9,7 +9,7 @@ import {
   useMediaQuery,
   useTheme
 } from "@mui/material";
-import { useGetMemberDetails, useUpdateProfile } from "../../../api/User/useGetProfileDetails";
+import { useGetMemberDetails, useUpdateProfile } from "../../../api/User";
 import TokenService from "../../../token/tokenService";
 import { LoadingComponent } from "../../../../App";
 import { toast } from "react-toastify";

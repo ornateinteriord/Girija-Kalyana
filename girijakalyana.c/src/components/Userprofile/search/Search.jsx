@@ -7,7 +7,7 @@ import {
   TextField,
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
-import { useGetSearchProfiles } from "../../api/User/useGetProfileDetails";
+import { useGetSearchProfiles } from "../../api/User";
 import TokenService from "../../token/tokenService";
 import ProfileDialog from "../ProfileDialog/ProfileDialog";
 import AboutPop from "../viewAll/popupContent/abouPop/AboutPop";

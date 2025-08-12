@@ -10,7 +10,7 @@ import {
   Pagination,
 } from "@mui/material";
 
-import { useGetAllUsersProfiles } from "../../api/User/useGetProfileDetails";
+import { useGetAllUsersProfiles } from "../../api/User";
 import TokenService from "../../token/tokenService";
 import ProfileDialog from "../ProfileDialog/ProfileDialog";
 import GenderFilter from "../../../utils/Filters/GenderFilter";

@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import rawJsonData from "../eduction/jsondata/data.json";
 import toast from "react-hot-toast";
-import { useGetMemberDetails, useUpdateProfile } from "../../../api/User/useGetProfileDetails";
+import { useGetMemberDetails, useUpdateProfile } from "../../../api/User";
 import TokenService from "../../../token/tokenService";
 import { LoadingComponent } from "../../../../App";
 import CustomAutocomplete from "../../../Autocomplete/CustomAutocomplete";

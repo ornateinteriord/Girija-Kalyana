@@ -9,7 +9,7 @@ import {
   Divider,
 } from "@mui/material";
 import toast from "react-hot-toast";
-import { useGetMemberDetails, useUpdateProfile } from "../../../api/User/useGetProfileDetails";
+import { useGetMemberDetails, useUpdateProfile } from "../../../api/User";
 import TokenService from "../../../token/tokenService";
 import { LoadingComponent } from "../../../../App";
 

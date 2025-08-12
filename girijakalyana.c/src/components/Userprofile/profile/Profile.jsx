@@ -80,7 +80,7 @@ const Profile = () => {
       }
     }}>
       <Typography sx={{fontSize:{xs:"20px",md:"25px",
-        color:'#000',textAlign:'left'
+        color:'#34495E',textAlign:'left'
       }}}>My Profile</Typography>
       
       <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
