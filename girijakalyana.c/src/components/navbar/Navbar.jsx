@@ -428,7 +428,7 @@ const Navbar = () => {
         PaperProps={{
           sx: {
             borderRadius: "10px",
-            padding: "0px",
+             padding: {xs: "0px", sm: "10px"},
           }
         }}
       >
@@ -502,7 +502,7 @@ const Navbar = () => {
         </DialogContent>
         <DialogActions
           sx={{
-            padding: "16px 24px",
+            padding: "6px 24px",
             flexDirection: "column",
             gap: "12px",
           }}
@@ -566,7 +566,7 @@ const Navbar = () => {
         PaperProps={{
           sx: {
             borderRadius: "12px",
-            padding: "0px",
+           padding: {xs: "0px", sm: "10px"},
           }
         }}
       >
@@ -690,7 +690,7 @@ const Navbar = () => {
         </DialogContent>
         <DialogActions
           sx={{
-            padding: "16px 14px",
+            padding: "6px 14px",
             display: "flex",
             flexDirection: "column",
             gap: "12px",
@@ -727,6 +727,7 @@ const Navbar = () => {
             onClick={handleCloseForgotPassword}
             sx={{
               height: "44px",
+              mr:1,
               mb:2.5,
               borderRadius: "8px",
               fontWeight: 500,
