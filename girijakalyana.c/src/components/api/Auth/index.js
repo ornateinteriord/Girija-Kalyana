@@ -83,19 +83,20 @@ export const useLoginMutation = () => {
 export const useResetpassword = () => {
   return useMutation({
     mutationFn: async (data) => {
-      return await post("/api/auth/reset-password", data);
-      
+      const response = await post("/api/auth/reset-password", data);
+      if (!response.success) {
+        throw new Error(response.message);
+      }
+      return response;
     },
     onSuccess: (response) => {
-      if (response.success) {
-        toast.success(response.message);
-      } else {
-        console.error(response.message);
-      }
+      toast.success(response.message);
     },
-    onError: (error) => {
-      toast.error(error.response.data.message);
-    }
+   onError: (error) => {
+  const errorMessage =
+    error?.response?.data?.message || "Something went wrong";
+  toast.error(errorMessage);
+}
   });
 };
 
