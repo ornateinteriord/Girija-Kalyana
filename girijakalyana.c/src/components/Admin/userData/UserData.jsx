@@ -24,9 +24,9 @@ const UserData = () => {
   const [search, setSearch] = useState("");
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 50 });
   
-  // API calls
+  // API calls with default empty array fallbacks
   const { 
-    data, 
+    data = { content: [], totalRecords: 0 }, 
     isPending: isFetching, 
     isError, 
     error, 
@@ -39,31 +39,37 @@ const UserData = () => {
     refetch: searchUser 
   } = useGetSearchProfiles(search, true);
 
-  // Data handling
-  const users = useMemo(() => data?.content || [], [data?.content]);
+  // Data handling with proper null checks
+  const users = useMemo(() => Array.isArray(data?.content) ? data.content : [], [data?.content]);
   const [localUsers, setLocalUsers] = useState(users);
   const isMobile = useMediaQuery('(max-width:600px)');
 
-  // Memoized upgrade function
+  // Memoized upgrade function with stable reference
   const upgradeUserMutation = useMemo(() => UpgradeUserStatus(), []);
 
-  // Debounced search with cleanup
+  // Debounced search with proper cleanup
   const debouncedSearch = useCallback(
     debounce((searchValue) => {
       if (searchValue?.trim()) {
-        searchUser();
+        searchUser().catch(err => {
+          toast.error(err?.message || "Search failed");
+        });
       }
     }, 500),
     [searchUser]
   );
 
-  // Effects
+  // Effects with proper dependencies
   useEffect(() => {
-    setLocalUsers(users);
+    if (Array.isArray(users)) {
+      setLocalUsers(users);
+    }
   }, [users]);
 
   useEffect(() => {
-    return () => debouncedSearch.cancel();
+    return () => {
+      debouncedSearch.cancel();
+    };
   }, [debouncedSearch]);
 
   useEffect(() => {
@@ -71,6 +77,8 @@ const UserData = () => {
       fetchUsers({ 
         page: paginationModel.page, 
         pageSize: paginationModel.pageSize 
+      }).catch(err => {
+        toast.error(err?.message || "Failed to fetch users");
       });
     }
   }, [paginationModel.page, paginationModel.pageSize, fetchUsers, search]);
@@ -81,7 +89,7 @@ const UserData = () => {
     }
   }, [isError, error]);
 
-  // Handlers
+  // Stable handler with proper error handling
   const handleUpgrade = useCallback(async (regno, currentStatus) => {
     try {
       const newStatus = currentStatus === "active" ? "inactive" : "active";
@@ -93,11 +101,15 @@ const UserData = () => {
         },
         {
           onSuccess: () => {
-            setLocalUsers(prev => prev.map(user => 
-              user?.registration_no === regno 
-                ? { ...user, status: newStatus } 
-                : user
-            ));
+            setLocalUsers(prev => 
+              Array.isArray(prev) 
+                ? prev.map(user => 
+                    user?.registration_no === regno 
+                      ? { ...user, status: newStatus } 
+                      : user
+                  )
+                : []
+            );
           },
           onError: (err) => {
             toast.error(err?.message || "Failed to update user status");
@@ -110,20 +122,22 @@ const UserData = () => {
   }, [upgradeUserMutation]);
 
   const handleSearchChange = (e) => {
-    const value = e.target.value;
+    const value = e.target.value || "";
     setSearch(value);
-    if (!value?.trim()) {
+    if (!value.trim()) {
       setPaginationModel(prev => ({ ...prev, page: 0 }));
     } else {
       debouncedSearch(value);
     }
   };
 
-  // Data processing
-  const displayData = useMemo(() => 
-    search?.trim() ? (searchedResult || []) : localUsers,
-    [search, searchedResult, localUsers]
-  );
+  // Safe data processing with null checks
+  const displayData = useMemo(() => {
+    const searchActive = search?.trim();
+    return searchActive 
+      ? (Array.isArray(searchedResult) ? searchedResult : [])
+      : (Array.isArray(localUsers) ? localUsers : []);
+  }, [search, searchedResult, localUsers]);
 
   const filteredRows = useMemo(() => {
     if (!Array.isArray(displayData)) return [];
@@ -132,24 +146,27 @@ const UserData = () => {
       if (!data || data?.user_role?.toLowerCase() === "admin") return false;
       
       const statusCheck = () => {
-        switch(selectedStatus?.toLowerCase()) {
-          case "active": return data?.status === "active";
-          case "inactive": return data?.status === "inactive";
-          case "pending": return data?.status === "pending";
-          case "expires": return data?.status === "expires";
-          default: return true;
-        }
+        const status = selectedStatus?.toLowerCase();
+        if (!status || status === "status") return true;
+        return data?.status?.toLowerCase() === status;
       };
       
       return statusCheck();
     });
   }, [displayData, selectedStatus]);
 
-  // Memoized columns
+  // Stable columns reference
   const columns = useMemo(
     () => getUserDataColumns(upgradeUserMutation, handleUpgrade),
     [upgradeUserMutation, handleUpgrade]
   );
+
+  // Calculate total rows safely
+  const totalRows = useMemo(() => {
+    return search?.trim() 
+      ? (Array.isArray(searchedResult) ? searchedResult.length : 0)
+      : (data?.totalRecords || 0);
+  }, [search, searchedResult, data?.totalRecords]);
 
   return (
     <Box className="upgrade-user" sx={{ p: 3 }}>
@@ -188,7 +205,7 @@ const UserData = () => {
         <FormControl sx={{ width: isMobile ? '100%' : 200 }}>
           <Select
             value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value)}
+            onChange={(e) => setSelectedStatus(e.target.value || "status")}
             sx={{ height: "50px" }}
           >
             <MenuItem value="status">Status</MenuItem>
@@ -205,7 +222,7 @@ const UserData = () => {
         data={filteredRows}
         customStyles={customStyles}
         isLoading={isFetching || isSearchLoading}
-        totalRows={search?.trim() ? (searchedResult?.length || 0) : (data?.totalRecords || 0)}
+        totalRows={totalRows}
         paginationModel={paginationModel}
         setPaginationModel={setPaginationModel}
         noDataComponent={<Typography padding={3}>No data available</Typography>}
