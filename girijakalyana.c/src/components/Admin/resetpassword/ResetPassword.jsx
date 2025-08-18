@@ -77,24 +77,6 @@ const ResetPassword = () => {
     if (isError) toast.error(error.message);
   }, [isError, error]);
 
-  // Memoized filtered rows
-  const filteredRows = useMemo(() => 
-    displayData.filter(record => {
-      const isAdmin = record?.user_role?.toLowerCase() === "admin";
-      if (isAdmin) return false;
-      
-      if (!search) return true;
-      
-      return [
-        record?.first_name,
-        record?.last_name,
-        record?.username,
-        record?.registration_no,
-      ].some(field => field?.toString().toLowerCase().includes(search.toLowerCase()));
-    }),
-    [displayData, search]
-  );
-
   // Handlers
   const handleSearch = (e) => {
     const value = e.target.value;
@@ -193,7 +175,7 @@ const ResetPassword = () => {
 
       <PaginationDataTable
         columns={columns}
-        data={filteredRows}
+        data={displayData}
         customStyles={customStyles}
         isLoading={isLoading || isSearchLoading}
         totalRows={search ? searchedResult.length : data?.totalRecords || 0}

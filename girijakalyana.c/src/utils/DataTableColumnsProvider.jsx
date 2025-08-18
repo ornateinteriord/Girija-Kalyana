@@ -211,7 +211,7 @@ export const getResetPasswordColumns = (handleOpenDialog) =>  [
     },
     {
       name: "Username",
-      selector: (row) => row.username,
+      selector: row => row?.username || row?.email_id,
       sortable: true,
     },
     {
@@ -348,7 +348,7 @@ export const getUserTableColumns = (formatUserRole) =>  [
     },
     {
       name: "Username",
-      selector: row => row.username,
+      selector: row => row?.username || row?.email_id,
       sortable: true,
     },
     {
@@ -672,7 +672,7 @@ export const getOnlineTransactionColumns = (showActive) => [
     },
     {
       name: "UserName",
-      selector: (row) => row.username,
+      selector: row => row?.username || row?.email_id,
       sortable: true,
     },
     {
@@ -720,7 +720,7 @@ export const getOnlineTransactionColumns = (showActive) => [
     },
     {
       name: "Username",
-      selector: (row) => row.username,
+      selector: row => row?.username || row?.email_id,
       sortable: true,
     },
     {
@@ -821,7 +821,7 @@ export const getOnlineTransactionColumns = (showActive) => [
     },
     {
       name: "UserName",
-      selector: (row) => row.username,
+      selector: row => row?.username || row?.email_id,
       sortable: true,
     },
     {
