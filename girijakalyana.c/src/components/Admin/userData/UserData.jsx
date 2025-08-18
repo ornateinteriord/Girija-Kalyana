@@ -24,7 +24,7 @@ const UserData = () => {
   const [search, setSearch] = useState("");
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 50 });
   
-  // API calls with default empty array fallbacks
+  // API calls with proper error handling
   const { 
     data = { content: [], totalRecords: 0 }, 
     isPending: isFetching, 
@@ -47,13 +47,15 @@ const UserData = () => {
   // Memoized upgrade function with stable reference
   const upgradeUserMutation = useMemo(() => UpgradeUserStatus(), []);
 
-  // Debounced search with proper cleanup
+  // Fixed debounced search with proper Promise handling
   const debouncedSearch = useCallback(
-    debounce((searchValue) => {
-      if (searchValue?.trim()) {
-        searchUser()?.catch(err => {
-          toast.error(err?.message || "Search failed");
-        });
+    debounce(async (searchValue) => {
+      try {
+        if (searchValue?.trim()) {
+          await searchUser();
+        }
+      } catch (err) {
+        toast.error(err?.message || "Search failed");
       }
     }, 500),
     [searchUser]
@@ -67,19 +69,25 @@ const UserData = () => {
   }, [users]);
 
   useEffect(() => {
+    const debounceInstance = debouncedSearch;
     return () => {
-      debouncedSearch?.cancel();
+      debounceInstance.cancel();
     };
   }, [debouncedSearch]);
 
   useEffect(() => {
     if (!search?.trim()) {
-      fetchUsers({ 
-        page: paginationModel.page, 
-        pageSize: paginationModel.pageSize 
-      }).catch(err => {
-        toast.error(err?.message || "Failed to fetch users");
-      });
+      const fetchData = async () => {
+        try {
+          fetchUsers({ 
+            page: paginationModel.page, 
+            pageSize: paginationModel.pageSize 
+          });
+        } catch (err) {
+          toast.error(err?.message || "Failed to fetch users");
+        }
+      };
+      fetchData();
     }
   }, [paginationModel.page, paginationModel.pageSize, fetchUsers, search]);
 
@@ -103,7 +111,7 @@ const UserData = () => {
           onSuccess: () => {
             setLocalUsers(prev => 
               Array.isArray(prev) 
-                ? prev?.map(user => 
+                ? prev.map(user => 
                     user?.registration_no === regno 
                       ? { ...user, status: newStatus } 
                       : user
@@ -142,7 +150,7 @@ const UserData = () => {
   const filteredRows = useMemo(() => {
     if (!Array.isArray(displayData)) return [];
     
-    return displayData?.filter(data => {
+    return displayData.filter(data => {
       if (!data || data?.user_role?.toLowerCase() === "admin") return false;
       
       const statusCheck = () => {
@@ -164,7 +172,7 @@ const UserData = () => {
   // Calculate total rows safely
   const totalRows = useMemo(() => {
     return search?.trim() 
-      ? (Array.isArray(searchedResult) ? searchedResult?.length : 0)
+      ? (Array.isArray(searchedResult) ? searchedResult.length : 0)
       : (data?.totalRecords || 0);
   }, [search, searchedResult, data?.totalRecords]);
 
