@@ -50,11 +50,11 @@ export const useGetMyMatches = () => {
     },
   });
 };
-export const useGetSearchProfiles = (input) => {
+export const useGetSearchProfiles = (input, isAdmin = false) => {
   return useQuery({
     queryKey: ["searchProfiles",input],
     queryFn: async () => {
-      const response = await get(`/api/user/search?input=${input}`);
+      const response = await get(isAdmin ? `/api/admin/search?input=${input}` : `/api/user/search?input=${input}`);
       if (response?.success) {
         return response.users || [];
       } else {
