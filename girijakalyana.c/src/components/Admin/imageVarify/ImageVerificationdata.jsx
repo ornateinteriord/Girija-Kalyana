@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
+import { debounce } from "lodash";
 import PaginationDataTable from "../../common/PaginationDataTable";
 import {
   Box,
@@ -11,104 +12,145 @@ import {
   IconButton,
   CircularProgress,
   Button,
+  useMediaQuery,
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
+import { Close } from "@mui/icons-material";
 import {
   customStyles,
   getImageVerificationColumns,
 } from "../../../utils/DataTableColumnsProvider";
 import { getAllUserProfiles, UpgradeUserStatus } from "../../api/Admin";
-import { Close } from "@mui/icons-material";
+import { useGetSearchProfiles } from "../../api/User";
 import { LoadingTextSpinner } from "../../../utils/common";
 import { toast } from "react-toastify";
 
-
 const ImageVerificationData = () => {
+  // State management
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 50 });
-  const { data, isPending: isLoading, isError, error, mutate: fetchUsers } = getAllUserProfiles();
-  const users = data?.content || [];
-  const [localUsers, setLocalUsers] = useState(users);
   const [search, setSearch] = useState("");
+  const isMobile = useMediaQuery('(max-width:600px)');
+
+  // API calls
+  const { 
+    data, 
+    isPending: isLoading, 
+    isError, 
+    error, 
+    mutate: fetchUsers 
+  } = getAllUserProfiles();
+  
+  const { 
+    data: searchedResult = [], 
+    isFetching: isSearchLoading, 
+    refetch: searchUser 
+  } = useGetSearchProfiles(search, true);
+
   const upgradeUserMutation = UpgradeUserStatus();
 
+  // Data handling
+  const users = data?.content || [];
+  const [localUsers, setLocalUsers] = useState(users);
+  const displayData = search ? searchedResult : localUsers;
+
+  // Debounced search
+  const debouncedSearch = useCallback(
+    debounce((searchValue) => {
+      if (searchValue) searchUser();
+    }, 500),
+    [searchUser]
+  );
+
+  // Effects
   useEffect(() => {
-    fetchUsers({ page: paginationModel.page, pageSize:paginationModel.pageSize});
-  }, [paginationModel.page, paginationModel.pageSize,]);
+    if (!search) {
+      fetchUsers({ page: paginationModel.page, pageSize: paginationModel.pageSize });
+    }
+  }, [paginationModel.page, paginationModel.pageSize, fetchUsers, search]);
 
   useEffect(() => {
-    if (users.length > 0) {
-      setLocalUsers(users);
-    }
+    if (users.length) setLocalUsers(users);
   }, [users]);
 
   useEffect(() => {
-    if (isError) {
-      toast.error(error.message);
-    }
+    if (isError) toast.error(error.message);
   }, [isError, error]);
 
+  useEffect(() => {
+    return () => debouncedSearch.cancel();
+  }, [debouncedSearch]);
+
+  // Handlers
   const handleStatusUpdate = async (regno, currentStatus) => {
     try {
       const newStatus = currentStatus === "active" ? "pending" : "active";
       await upgradeUserMutation.mutateAsync(
-        {
-          regno,
-          image_verification: newStatus,
-      
-        },
+        { regno, image_verification: newStatus },
         {
           onSuccess: () => {
-            setLocalUsers((prevUsers) =>
-              prevUsers.map((user) =>
-                user.registration_no === regno
-                  ? { ...user, image_verification: newStatus }
-                  : user
-              )
-            );
+            setLocalUsers(prev => prev.map(user => 
+              user.registration_no === regno 
+                ? { ...user, image_verification: newStatus } 
+                : user
+            ));
           },
-          onError: (error) => {
-            console.error(error.message);
-          },
+          onError: (error) => toast.error(error.message),
         }
       );
     } catch (err) {
-      console.error(err.message);
+      toast.error(err.message);
     }
   };
-  // Handle Search
-  const filteredRows = localUsers.filter((data) => {
-    const isAdmin = data?.user_role?.toLowerCase() === "admin";
-    const matchesSearch =
-      search === "" ||
-      data.registration_no?.toString().includes(search.toString()) ||
-      data.first_name?.toLowerCase().includes(search.toLowerCase()) ||
-      data.username?.toLowerCase().includes(search.toLowerCase()) ||
-      data.gender?.toLowerCase().includes(search.toLowerCase()) ||
-      data.user_role?.toLowerCase().includes(search.toLowerCase()) ||
-      data.image_verification?.toLowerCase().includes(search.toLowerCase());
-    return matchesSearch && !isAdmin;
-  });
+
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearch(value);
+    debouncedSearch(value);
+  };
+
+  // Memoized filtered rows
+  const filteredRows = useMemo(() => 
+    displayData.filter(data => {
+      const isAdmin = data?.user_role?.toLowerCase() === "admin";
+      if (isAdmin) return false;
+      
+      if (!search) return true;
+      
+      return [
+        data.registration_no,
+        data.first_name,
+        data.username,
+        data.gender,
+        data.user_role,
+        data.image_verification,
+      ].some(field => field?.toString().toLowerCase().includes(search.toLowerCase()));
+    }),
+    [displayData, search]
+  );
+
+  // Memoized columns
+  const columns = useMemo(
+    () => getImageVerificationColumns(upgradeUserMutation, handleStatusUpdate),
+    [upgradeUserMutation, handleStatusUpdate]
+  );
 
   return (
-    <Box p={6} mt={6}>
-      {/* Header & Controls */}
-
+    <Box sx={{ p: { xs: 2, md: 6 }, mt: 6 }}>
       <Typography
         variant="h4"
         fontWeight={600}
         color="#34495e"
-        fontFamily={"Outfit sans-serif"}
-        sx={{ textAlign: { xs: "center", sm: "left" }, mb: "10px" }}
+        fontFamily="Outfit"
+        sx={{ textAlign: { xs: "center", sm: "left" }, mb: 2 }}
       >
         Image Verification
       </Typography>
 
-      <Box display="flex" alignItems="center" gap={2}>
-        {/* Search Field */}
+      <Box display="flex" alignItems="center" gap={2} mb={3}>
         <TextField
           placeholder="Search record"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={handleSearch}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -116,23 +158,27 @@ const ImageVerificationData = () => {
               </InputAdornment>
             ),
           }}
-          sx={{ width: { xs: "100%", sm: "auto", md: "auto" } }}
+          sx={{ width: isMobile ? '100%' : 300 }}
           variant="outlined"
         />
       </Box>
 
-      {/* Data Table */}
       <PaginationDataTable
-        columns={getImageVerificationColumns(upgradeUserMutation, handleStatusUpdate)}
+        columns={columns}
         data={filteredRows}
         customStyles={customStyles}
-        isLoading={isLoading}
-        totalRows={data?.totalRecords || 0}
+        isLoading={isLoading || isSearchLoading}
+        totalRows={search ? searchedResult.length : data?.totalRecords || 0}
         paginationModel={paginationModel}
         setPaginationModel={setPaginationModel}
         rowsPerPageOptions={[6, 10, 15, 20, 50]}
-        noDataComponent={<Typography padding={3} textAlign="center">No records found</Typography>}
+        noDataComponent={
+          <Typography padding={3} textAlign="center">
+            No records found
+          </Typography>
+        }
         progressComponent={<LoadingTextSpinner />}
+        disablePagination={!!search}
       />
     </Box>
   );
@@ -143,6 +189,7 @@ export const ViewImagesComponent = ({ image, id, loading }) => {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   return (
     <>
       <Button
@@ -152,9 +199,7 @@ export const ViewImagesComponent = ({ image, id, loading }) => {
         onClick={handleOpen}
         sx={{
           textTransform: "none",
-          "&:hover": {
-            backgroundColor: "#2e7d32",
-          },
+          "&:hover": { backgroundColor: "#2e7d32" },
         }}
       >
         View
@@ -182,13 +227,18 @@ export const ViewImagesComponent = ({ image, id, loading }) => {
               <CircularProgress />
             </Box>
           ) : (
-           <img
-                    src={image}
-                    alt={`Usr img`}
-                    loading="lazy"
-                    style={{ width: "100%",height: "500px", 
-    objectFit: "contain",  borderRadius: 4 }}
-                  />
+            <Box
+              component="img"
+              src={image}
+              alt={`User ${id} image`}
+              loading="lazy"
+              sx={{
+                width: "100%",
+                height: 500,
+                objectFit: "contain",
+                borderRadius: 1,
+              }}
+            />
           )}
         </DialogContent>
       </Dialog>

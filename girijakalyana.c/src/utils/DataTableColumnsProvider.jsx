@@ -103,7 +103,7 @@ export const getImageVerificationColumns = (upgradeUserMutation,handleStatusUpda
     },
     {
       name: "Email ID",
-      selector: (row) => row.username,
+      selector: row => row?.username || row?.email_id,
       sortable: true,
     },
     {
@@ -173,7 +173,7 @@ export const getRenewalsColumns = () => [
     },
     {
       name: "Email Id",
-      selector: (row) => row.username,
+      selector: row => row?.username || row?.email_id,
       sortable: true,
     },
     {
@@ -507,7 +507,7 @@ export const getUserDataColumns = (upgradeUserMutation, handleUpgrade) => [
     },
     {
       name: "Email Id",
-      selector: row => row.username,
+      selector: row => row?.username || row?.email_id,
       sortable: true,
     },
     {
@@ -565,7 +565,7 @@ export const getUserDataColumns = (upgradeUserMutation, handleUpgrade) => [
     },
     {
       name: "Email",
-      selector: row => row.username,
+      selector: row => row?.username || row?.email_id,
       sortable: true,
     },
     {
@@ -599,7 +599,7 @@ export const getUserDataColumns = (upgradeUserMutation, handleUpgrade) => [
     },
     {
       name: "Email",
-      selector: row => row.username,
+      selector: row => row?.username || row?.email_id,
       sortable: true,
     },
     {
@@ -725,7 +725,7 @@ export const getOnlineTransactionColumns = (showActive) => [
     },
     {
       name: "Email",
-      selector: (row) => row.email,
+      selector: row => row?.username || row?.email_id,
       sortable: true,
     },
     {

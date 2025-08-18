@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { debounce } from "lodash";
 import PaginationDataTable from "../../common/PaginationDataTable";
 import {
   TextField,
@@ -9,42 +10,83 @@ import {
   Box,
   Stack,
   InputAdornment,
-  Paper,
   useTheme,
   useMediaQuery,
-  CircularProgress
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 import { getAllUserProfiles } from "../../api/Admin";
 import toast from "react-hot-toast";
 import { customStyles, getUserTableColumns } from "../../../utils/DataTableColumnsProvider";
 import { LoadingTextSpinner } from "../../../utils/common";
+import { useGetSearchProfiles } from "../../api/User";
 
 const UserTable = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   
+  // State management
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 50 });
-  const { data,   isPending:isLoading, isError, error, mutate: fetchUsers } = getAllUserProfiles();
-  const users = data?.content || [];
-  const [filteredUsers, setFilteredUsers] = useState(users);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUserType, setSelectedUserType] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("status");
 
-  useEffect(() => {
-    fetchUsers({ page: paginationModel.page, pageSize: paginationModel.pageSize });
-  }, [paginationModel.page, paginationModel.pageSize, fetchUsers]);
+  // API calls
+  const { 
+    data, 
+    isPending: isLoading, 
+    isError, 
+    error, 
+    mutate: fetchUsers 
+  } = getAllUserProfiles();
+  
+  const { 
+    data: searchedResult = [], 
+    isFetching: isSearchLoading, 
+    refetch: searchUser 
+  } = useGetSearchProfiles(searchTerm, true);
 
+  const users = data?.content || [];
+  const [filteredUsers, setFilteredUsers] = useState(users);
+
+  // Debounced search function
+  const debouncedSearch = useCallback(
+    debounce((searchValue) => {
+      if (searchValue) {
+        searchUser();
+      } else {
+        fetchUsers({ page: paginationModel.page, pageSize: paginationModel.pageSize });
+      }
+    }, 500),
+    [searchUser, fetchUsers, paginationModel]
+  );
+
+  // Cleanup debounce on unmount
+  useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
+
+  // Fetch users when pagination changes
+  useEffect(() => {
+    if (!searchTerm) {
+      fetchUsers({ page: paginationModel.page, pageSize: paginationModel.pageSize });
+    }
+  }, [paginationModel.page, paginationModel.pageSize, fetchUsers, searchTerm]);
+
+  // Handle API errors
   useEffect(() => {
     if (isError) {
       toast.error(error.message);
     }
   }, [isError, error]);
 
+  // Filter users based on search and filters
   useEffect(() => {
     if (users && users.length > 0) {
-      filterUsers(searchTerm, selectedUserType, selectedStatus);
+      if (!searchTerm) {
+        filterUsers(searchTerm, selectedUserType, selectedStatus);
+      }
     } else {
       setFilteredUsers([]);
     }
@@ -52,6 +94,7 @@ const UserTable = () => {
 
   const handleSearch = (value) => {
     setSearchTerm(value);
+    debouncedSearch(value);
   };
 
   const handleUserTypeChange = (event) => {
@@ -64,37 +107,42 @@ const UserTable = () => {
     return role.replace('User', '').replace(/^\w/, c => c.toUpperCase());
   };
 
-  const filterUsers = (search, userType, Status) => {
+  const filterUsers = (search, userType, status) => {
     let filtered = users.filter(user => {
       const isAdmin = user?.user_role?.toLowerCase() === "admin";
       return !isAdmin;
     });
 
-    filtered = filtered.filter(user => {
-      const username = user?.username?.toLowerCase() || '';
-      const registration_no = user?.registration_no?.toLowerCase() || '';
-      const searchLower = search.toLowerCase();
-      return username.includes(searchLower) || registration_no.includes(searchLower);
-    });
-
-    if (Status !== "status") {
+    // Apply search filter if not using API search
+    if (!searchTerm && search) {
       filtered = filtered.filter(user => {
-        const UserStatus = user?.status?.toLowerCase();
-        switch (Status.toLowerCase()) {
+        const username = user?.username?.toLowerCase() || '';
+        const registration_no = user?.registration_no?.toLowerCase() || '';
+        const searchLower = search.toLowerCase();
+        return username.includes(searchLower) || registration_no.includes(searchLower);
+      });
+    }
+
+    // Apply status filter
+    if (status !== "status") {
+      filtered = filtered.filter(user => {
+        const userStatus = user?.status?.toLowerCase();
+        switch (status.toLowerCase()) {
           case "active":
-            return UserStatus === "active";
+            return userStatus === "active";
           case "inactive":
-            return UserStatus === "inactive";
+            return userStatus === "inactive";
           case "pending":
-            return UserStatus === "pending";
+            return userStatus === "pending";
           case "expires":
-            return UserStatus === "expires";
+            return userStatus === "expires";
           default:
             return true;
         }
       });
     }
 
+    // Apply user type filter
     if (userType !== "all") {
       filtered = filtered.filter(user => {
         const userRole = user?.user_role?.toLowerCase();
@@ -116,9 +164,9 @@ const UserTable = () => {
     setFilteredUsers(filtered);
   };
 
-
-
-
+  // Determine which data to display
+  const displayData = searchTerm ? searchedResult : filteredUsers;
+  const isLoadingData = isLoading || isSearchLoading;
 
   return (
     <Box sx={{ 
@@ -167,7 +215,6 @@ const UserTable = () => {
               width: { xs: '100%', sm: '300px' },
               marginBottom: { xs: 0, md: 0 }
             }}
-            fontFamily={"Outfit sans-serif"}
           />
         </Box>
         
@@ -177,10 +224,7 @@ const UserTable = () => {
           gap: 2,
           width: { xs: '100%', md: 'auto' }
         }}>
-          <FormControl sx={{ 
-            minWidth: { xs: '100%', sm: 200 },
-            fontFamily: "Outfit sans-serif"
-          }}>
+          <FormControl sx={{ minWidth: { xs: '100%', sm: 200 } }}>
             <Select 
               value={selectedStatus} 
               onChange={(e) => setSelectedStatus(e.target.value)}
@@ -194,10 +238,7 @@ const UserTable = () => {
               <MenuItem value="expires">Expires</MenuItem>
             </Select>
           </FormControl>
-          <FormControl sx={{ 
-            minWidth: { xs: '100%', sm: 200 },
-            fontFamily: "Outfit sans-serif"
-          }}>
+          <FormControl sx={{ minWidth: { xs: '100%', sm: 200 } }}>
             <Select 
               value={selectedUserType} 
               onChange={handleUserTypeChange}
@@ -217,19 +258,20 @@ const UserTable = () => {
       {/* DataTable */}
       <PaginationDataTable
         columns={getUserTableColumns(formatUserRole)}
-        data={filteredUsers}
+        data={displayData}
         customStyles={customStyles}
-        isLoading={isLoading}
-        totalRows={data?.totalRecords || 0}
+        isLoading={isLoadingData}
+        totalRows={searchTerm ? searchedResult.length : data?.totalRecords || 0}
         paginationModel={paginationModel}
         setPaginationModel={setPaginationModel}
-        rowsPerPageOptions={[6, 10, 15, 20, 50,1000]}
+        rowsPerPageOptions={[6, 10, 15, 20, 50, 1000]}
         noDataComponent={
           <Typography padding={3} textAlign="center" fontFamily="Outfit">
             No users found matching your criteria.
           </Typography>
         }
         progressComponent={<LoadingTextSpinner />}
+        disablePagination={!!searchTerm} // Disable pagination when searching
       />
     </Box>
   );

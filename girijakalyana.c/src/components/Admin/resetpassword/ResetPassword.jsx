@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { debounce } from "lodash";
 import PaginationDataTable from "../../common/PaginationDataTable";
 import {
   TextField,
@@ -9,63 +10,98 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Paper,
-  
+  Box,
+  useMediaQuery
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 import { getAllUserProfiles, UserResetPassword } from "../../api/Admin";
-import { LoadingComponent, } from "../../../App";
 import { toast } from "react-toastify";
 import {
   customStyles,
   getResetPasswordColumns,
 } from "../../../utils/DataTableColumnsProvider";
-import "./Resetpassword.scss";
 import { LoadingTextSpinner } from "../../../utils/common";
+import { useGetSearchProfiles } from "../../api/User";
 
 const ResetPassword = () => {
+  // State management
   const [search, setSearch] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const { data, isPending: isLoading, isError, error, mutate: fetchUsers } = getAllUserProfiles();
-  const users = data?.content || [];
-  const { mutateAsync: resetPassword, isPending } = UserResetPassword();
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 50 });
+  
+  // API calls
+  const { 
+    data, 
+    isPending: isLoading, 
+    isError, 
+    error, 
+    mutate: fetchUsers 
+  } = getAllUserProfiles();
+  
+  const { 
+    data: searchedResult = [], 
+    isFetching: isSearchLoading, 
+    refetch: searchUser 
+  } = useGetSearchProfiles(search, true);
+  
+  const { mutateAsync: resetPassword, isPending: isResetting } = UserResetPassword();
+  const isMobile = useMediaQuery('(max-width:600px)');
+
+  // Data handling
+  const users = data?.content || [];
+  const displayData = search ? searchedResult : users;
+
+  // Debounced search
+  const debouncedSearch = useCallback(
+    debounce((searchValue) => {
+      if (searchValue) searchUser();
+    }, 500),
+    [searchUser]
+  );
+
+  // Effects
   useEffect(() => {
-    if (isError) {
-      toast.error(error.message);
+    return () => debouncedSearch.cancel();
+  }, [debouncedSearch]);
+
+  useEffect(() => {
+    if (!search) {
+      fetchUsers({ page: paginationModel.page, pageSize: paginationModel.pageSize });
     }
+  }, [paginationModel.page, paginationModel.pageSize, fetchUsers, search]);
+
+  useEffect(() => {
+    if (isError) toast.error(error.message);
   }, [isError, error]);
 
-  // Fetch users whenever page or pageSize changes
-  useEffect(() => {
-    fetchUsers({ page: paginationModel.page, pageSize: paginationModel.pageSize });
-  }, [paginationModel.page, paginationModel.pageSize, fetchUsers]);
-
-  if (isError) {
-    toast.error(error.message);
-  }
-
-  const filteredRows = users.filter((record) => {
-    const isAdmin = record?.user_role?.toLowerCase() === "admin";
-    return (
-      !isAdmin &&
-      [
+  // Memoized filtered rows
+  const filteredRows = useMemo(() => 
+    displayData.filter(record => {
+      const isAdmin = record?.user_role?.toLowerCase() === "admin";
+      if (isAdmin) return false;
+      
+      if (!search) return true;
+      
+      return [
         record?.first_name,
         record?.last_name,
         record?.username,
         record?.registration_no,
-        record?.password,
-      ].some(
-        (field) =>
-          field && field.toString().toLowerCase().includes(search.toLowerCase())
-      )
-    );
-  });
+      ].some(field => field?.toString().toLowerCase().includes(search.toLowerCase()));
+    }),
+    [displayData, search]
+  );
 
-  const handleSearch = (e) => setSearch(e.target.value);
+  // Handlers
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearch(value);
+    debouncedSearch(value);
+  };
+
   const handleOpenDialog = (user) => {
     setSelectedUser(user);
     setOpenDialog(true);
@@ -80,128 +116,146 @@ const ResetPassword = () => {
 
   const handlePasswordReset = async () => {
     if (!selectedUser) return;
+    
     if (!newPassword || !confirmPassword) {
       toast.error("Please fill in both password fields");
       return;
     }
+    
     if (newPassword !== confirmPassword) {
       toast.error("Passwords don't match");
       return;
     }
+
     try {
       await resetPassword({
         regno: selectedUser.registration_no,
         password: newPassword,
-      },{
-        onSuccess:()=>{
-              fetchUsers({ page: paginationModel.page, pageSize: paginationModel.pageSize });
-        },onError:(error) => {
+      }, {
+        onSuccess: () => {
+          toast.success("Password reset successfully");
+          fetchUsers({ page: paginationModel.page, pageSize: paginationModel.pageSize });
+          handleCloseDialog();
+        },
+        onError: (error) => {
           toast.error(error.message);
         }
       });
-      handleCloseDialog();
     } catch (error) {
       console.error(error);
     }
   };
 
-  return (
-    <div className="reset-password-user" style={{ padding: "20px" }}>
-      
-        <Typography
-          variant="h4"
-          fontWeight={500}
-          color="#34495e"
-          fontFamily={"Outfit sans-serif"}
-          sx={{textAlign:{xs:"center",sm:"left"},mb:"10px"}}
-        >
-          Reset Password
-        </Typography>
+  // Memoized columns
+  const columns = useMemo(
+    () => getResetPasswordColumns(handleOpenDialog),
+    [handleOpenDialog]
+  );
 
-        <div className="search-div">
-          <TextField
-            id="search"
-            label="Search"
-            variant="outlined"
-            onChange={handleSearch}
-            placeholder="Search records"
-            autoComplete="off"
-            sx={{ width: { xs: '100%',sm:"auto", md: 'auto' } }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start" style={{ marginRight: "8px" }}>
-                  <FaSearch />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </div>
-     
+  return (
+    <Box sx={{ p: 3 }}>
+      <Typography
+        variant="h4"
+        fontWeight={500}
+        color="#34495e"
+        fontFamily="Outfit"
+        sx={{ textAlign: { xs: "center", sm: "left" }, mb: 2 }}
+      >
+        Reset Password
+      </Typography>
+
+      <Box 
+        sx={{ 
+          mb: 3,
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },
+          gap: 2
+        }}
+      >
+        <TextField
+          label="Search"
+          variant="outlined"
+          onChange={handleSearch}
+          value={search}
+          placeholder="Search records"
+          autoComplete="off"
+          fullWidth={isMobile}
+          sx={{ width: { xs: '100%', sm: 300 } }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <FaSearch />
+              </InputAdornment>
+            ),
+          }}
+        />
+      </Box>
 
       <PaginationDataTable
-        columns={getResetPasswordColumns(handleOpenDialog)}
+        columns={columns}
         data={filteredRows}
         customStyles={customStyles}
-        isLoading={isLoading}
-        totalRows={data?.totalRecords || 0}
+        isLoading={isLoading || isSearchLoading}
+        totalRows={search ? searchedResult.length : data?.totalRecords || 0}
         paginationModel={paginationModel}
         setPaginationModel={setPaginationModel}
         noDataComponent={<Typography padding={3}>No records found</Typography>}
         progressComponent={<LoadingTextSpinner />}
+        disablePagination={!!search}
       />
 
       <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle
-          sx={{
-            color: "#34495e",
-            textTransform: "capitalize",
-            fontWeight: 400,
-          }}
-        >
-          Change Password
+        <DialogTitle sx={{ color: "#34495e", fontWeight: 400 }}>
+          Change Password for {selectedUser?.username}
         </DialogTitle>
         <DialogContent>
-
-            <>
-              <TextField
-                label="New Password"
-                type="password"
-                fullWidth
-                margin="normal"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                disabled={isPending}
-              />
-              <TextField
-                label="Confirm Password"
-                type="password"
-                fullWidth
-                margin="normal"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                disabled={isPending}
-              />
-            </>
+          <TextField
+            label="New Password"
+            type="password"
+            fullWidth
+            margin="normal"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            disabled={isResetting}
+          />
+          <TextField
+            label="Confirm Password"
+            type="password"
+            fullWidth
+            margin="normal"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            disabled={isResetting}
+          />
         </DialogContent>
         <DialogActions>
           <Button
             onClick={handleCloseDialog}
-            disabled={isPending}
-             sx={{ color: "#fff",backgroundColor:"#f44336","&:hover": {backgroundColor:"#d32f2f"},fontWeight: 400, }}
+            disabled={isResetting}
+            sx={{ 
+              color: "#fff",
+              backgroundColor: "#f44336",
+              "&:hover": { backgroundColor: "#d32f2f" },
+              fontWeight: 400,
+            }}
           >
             Cancel
           </Button>
           <Button
-           color="white"
             onClick={handlePasswordReset}
-            sx={{ color: "#fff",backgroundColor:"#4caf50","&:hover": {backgroundColor:"#388e3c",},fontWeight: 400, }}
-            disabled={isPending || !newPassword || !confirmPassword || newPassword !== confirmPassword}
+            sx={{ 
+              color: "#fff",
+              backgroundColor: "#4caf50",
+              "&:hover": { backgroundColor: "#388e3c" },
+              fontWeight: 400,
+            }}
+            disabled={isResetting || !newPassword || !confirmPassword || newPassword !== confirmPassword}
           >
-            {isPending ? "Submitting..." : "Submit"}
+            {isResetting ? "Submitting..." : "Submit"}
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </Box>
   );
 };
 
