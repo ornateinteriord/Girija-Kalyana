@@ -44,12 +44,6 @@ const UserData = () => {
   const [localUsers, setLocalUsers] = useState(users);
   const isMobile = useMediaQuery('(max-width:600px)');
 
-  // Memoized values
-  const columns = useMemo(
-    () => getUserDataColumns(UpgradeUserStatus(), handleUpgrade),
-    []
-  );
-
   // Debounced search
   const debouncedSearch = useCallback(
     debounce((searchValue) => {
@@ -78,28 +72,33 @@ const UserData = () => {
   }, [isError, error]);
 
   // Handlers
-  const handleUpgrade = async (regno, currentStatus) => {
-    try {
-      const newStatus = currentStatus === "active" ? "inactive" : "active";
-      await UpgradeUserStatus().mutateAsync(
-        { 
-          regno, 
-          status: newStatus, 
-          isProfileUpdate: newStatus === "active" 
+  const handleUpgrade = useCallback(async (regno, currentStatus) => {
+  try {
+    const newStatus = currentStatus === "active" ? "inactive" : "active";
+    await UpgradeUserStatus().mutateAsync(
+      { 
+        regno, 
+        status: newStatus, 
+        isProfileUpdate: newStatus === "active" 
+      },
+      {
+        onSuccess: () => {
+          setLocalUsers(prev => prev.map(user => 
+            user.registration_no === regno ? { ...user, status: newStatus } : user
+          ));
         },
-        {
-          onSuccess: () => {
-            setLocalUsers(prev => prev.map(user => 
-              user.registration_no === regno ? { ...user, status: newStatus } : user
-            ));
-          },
-          onError: (err) => console.error(err.message),
-        }
-      );
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
+        onError: (err) => console.error(err.message),
+      }
+    );
+  } catch (err) {
+    console.error(err.message);
+  }
+}, []);
+
+const columns = useMemo(
+  () => getUserDataColumns(UpgradeUserStatus(), handleUpgrade),
+  [handleUpgrade]
+);
 
   const handleSearchChange = (e) => {
     const value = e.target.value;

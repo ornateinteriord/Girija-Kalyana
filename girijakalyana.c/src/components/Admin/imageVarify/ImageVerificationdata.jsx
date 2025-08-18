@@ -108,26 +108,6 @@ const ImageVerificationData = () => {
     debouncedSearch(value);
   };
 
-  // Memoized filtered rows
-  const filteredRows = useMemo(() => 
-    displayData.filter(data => {
-      const isAdmin = data?.user_role?.toLowerCase() === "admin";
-      if (isAdmin) return false;
-      
-      if (!search) return true;
-      
-      return [
-        data.registration_no,
-        data.first_name,
-        data.username,
-        data.gender,
-        data.user_role,
-        data.image_verification,
-      ].some(field => field?.toString().toLowerCase().includes(search.toLowerCase()));
-    }),
-    [displayData, search]
-  );
-
   // Memoized columns
   const columns = useMemo(
     () => getImageVerificationColumns(upgradeUserMutation, handleStatusUpdate),
@@ -165,7 +145,7 @@ const ImageVerificationData = () => {
 
       <PaginationDataTable
         columns={columns}
-        data={filteredRows}
+        data={displayData}
         customStyles={customStyles}
         isLoading={isLoading || isSearchLoading}
         totalRows={search ? searchedResult.length : data?.totalRecords || 0}
