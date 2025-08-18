@@ -54,7 +54,7 @@ const UserData = () => {
 
   // Effects
   useEffect(() => {
-    if (users.length) setLocalUsers(users);
+    if (users?.length) setLocalUsers(users);
   }, [users]);
 
   useEffect(() => {
@@ -179,7 +179,7 @@ const columns = useMemo(
         data={filteredRows}
         customStyles={customStyles}
         isLoading={isFetching || isSearchLoading}
-        totalRows={search ? searchedResult.length : data?.totalRecords || 0}
+        totalRows={search ? searchedResult?.length : data?.totalRecords || 0}
         paginationModel={paginationModel}
         setPaginationModel={setPaginationModel}
         noDataComponent={<Typography padding={3}>No data available</Typography>}
