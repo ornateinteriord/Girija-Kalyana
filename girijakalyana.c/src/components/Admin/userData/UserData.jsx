@@ -51,7 +51,7 @@ const UserData = () => {
   const debouncedSearch = useCallback(
     debounce((searchValue) => {
       if (searchValue?.trim()) {
-        searchUser().catch(err => {
+        searchUser()?.catch(err => {
           toast.error(err?.message || "Search failed");
         });
       }
@@ -68,7 +68,7 @@ const UserData = () => {
 
   useEffect(() => {
     return () => {
-      debouncedSearch.cancel();
+      debouncedSearch?.cancel();
     };
   }, [debouncedSearch]);
 
@@ -103,7 +103,7 @@ const UserData = () => {
           onSuccess: () => {
             setLocalUsers(prev => 
               Array.isArray(prev) 
-                ? prev.map(user => 
+                ? prev?.map(user => 
                     user?.registration_no === regno 
                       ? { ...user, status: newStatus } 
                       : user
@@ -124,7 +124,7 @@ const UserData = () => {
   const handleSearchChange = (e) => {
     const value = e.target.value || "";
     setSearch(value);
-    if (!value.trim()) {
+    if (!value?.trim()) {
       setPaginationModel(prev => ({ ...prev, page: 0 }));
     } else {
       debouncedSearch(value);
@@ -142,7 +142,7 @@ const UserData = () => {
   const filteredRows = useMemo(() => {
     if (!Array.isArray(displayData)) return [];
     
-    return displayData.filter(data => {
+    return displayData?.filter(data => {
       if (!data || data?.user_role?.toLowerCase() === "admin") return false;
       
       const statusCheck = () => {
@@ -164,7 +164,7 @@ const UserData = () => {
   // Calculate total rows safely
   const totalRows = useMemo(() => {
     return search?.trim() 
-      ? (Array.isArray(searchedResult) ? searchedResult.length : 0)
+      ? (Array.isArray(searchedResult) ? searchedResult?.length : 0)
       : (data?.totalRecords || 0);
   }, [search, searchedResult, data?.totalRecords]);
 
