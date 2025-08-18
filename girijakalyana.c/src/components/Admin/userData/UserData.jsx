@@ -77,12 +77,16 @@ const UserData = () => {
 
   // Fetch paginated users when no search
   useEffect(() => {
+    try{
     if (!search.trim()) {
       fetchUsers({
         page: paginationModel.page,
         pageSize: paginationModel.pageSize,
-      }).catch((err) => toast.error(err?.message || "Failed to fetch users"));
+      })
     }
+  } catch (err) {
+    toast.error(err?.message || "Failed to fetch users");
+  }
   }, [paginationModel, fetchUsers, search]);
 
   // API errors
