@@ -40,21 +40,26 @@ const UserData = () => {
   } = useGetSearchProfiles(search, true);
 
   // Data handling
-  const users = data?.content || [];
+  const users = useMemo(() => data?.content || [], [data?.content]);
   const [localUsers, setLocalUsers] = useState(users);
   const isMobile = useMediaQuery('(max-width:600px)');
 
-  // Debounced search
+  // Memoized upgrade function
+  const upgradeUserMutation = useMemo(() => UpgradeUserStatus(), []);
+
+  // Debounced search with cleanup
   const debouncedSearch = useCallback(
     debounce((searchValue) => {
-      if (searchValue) searchUser();
+      if (searchValue?.trim()) {
+        searchUser();
+      }
     }, 500),
     [searchUser]
   );
 
   // Effects
   useEffect(() => {
-    if (users?.length) setLocalUsers(users);
+    setLocalUsers(users);
   }, [users]);
 
   useEffect(() => {
@@ -62,67 +67,88 @@ const UserData = () => {
   }, [debouncedSearch]);
 
   useEffect(() => {
-    if (!search) {
-      fetchUsers({ page: paginationModel.page, pageSize: paginationModel.pageSize });
+    if (!search?.trim()) {
+      fetchUsers({ 
+        page: paginationModel.page, 
+        pageSize: paginationModel.pageSize 
+      });
     }
   }, [paginationModel.page, paginationModel.pageSize, fetchUsers, search]);
 
   useEffect(() => {
-    if (isError) toast.error(error.message);
+    if (isError && error?.message) {
+      toast.error(error.message);
+    }
   }, [isError, error]);
 
   // Handlers
   const handleUpgrade = useCallback(async (regno, currentStatus) => {
-  try {
-    const newStatus = currentStatus === "active" ? "inactive" : "active";
-    await UpgradeUserStatus().mutateAsync(
-      { 
-        regno, 
-        status: newStatus, 
-        isProfileUpdate: newStatus === "active" 
-      },
-      {
-        onSuccess: () => {
-          setLocalUsers(prev => prev.map(user => 
-            user.registration_no === regno ? { ...user, status: newStatus } : user
-          ));
+    try {
+      const newStatus = currentStatus === "active" ? "inactive" : "active";
+      await upgradeUserMutation.mutateAsync(
+        { 
+          regno, 
+          status: newStatus, 
+          isProfileUpdate: newStatus === "active" 
         },
-        onError: (err) => console.error(err.message),
-      }
-    );
-  } catch (err) {
-    console.error(err.message);
-  }
-}, []);
-
-const columns = useMemo(
-  () => getUserDataColumns(UpgradeUserStatus(), handleUpgrade),
-  [handleUpgrade]
-);
+        {
+          onSuccess: () => {
+            setLocalUsers(prev => prev.map(user => 
+              user?.registration_no === regno 
+                ? { ...user, status: newStatus } 
+                : user
+            ));
+          },
+          onError: (err) => {
+            toast.error(err?.message || "Failed to update user status");
+          },
+        }
+      );
+    } catch (err) {
+      toast.error(err?.message || "An error occurred");
+    }
+  }, [upgradeUserMutation]);
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearch(value);
-    if (!value) setPaginationModel(prev => ({ ...prev, page: 0 }));
-    else debouncedSearch(value);
+    if (!value?.trim()) {
+      setPaginationModel(prev => ({ ...prev, page: 0 }));
+    } else {
+      debouncedSearch(value);
+    }
   };
 
   // Data processing
-  const displayData = search ? searchedResult : localUsers;
+  const displayData = useMemo(() => 
+    search?.trim() ? (searchedResult || []) : localUsers,
+    [search, searchedResult, localUsers]
+  );
 
-  const filteredRows = useMemo(() => 
-    displayData.filter(data => {
-      if (data?.user_role?.toLowerCase() === "admin") return false;
+  const filteredRows = useMemo(() => {
+    if (!Array.isArray(displayData)) return [];
+    
+    return displayData.filter(data => {
+      if (!data || data?.user_role?.toLowerCase() === "admin") return false;
       
-      switch(selectedStatus.toLowerCase()) {
-        case "active": return data.status === "active";
-        case "inactive": return data.status === "inactive";
-        case "pending": return data.status === "pending";
-        case "expires": return data.status === "expires";
-        default: return true;
-      }
-    }),
-    [displayData, selectedStatus]
+      const statusCheck = () => {
+        switch(selectedStatus?.toLowerCase()) {
+          case "active": return data?.status === "active";
+          case "inactive": return data?.status === "inactive";
+          case "pending": return data?.status === "pending";
+          case "expires": return data?.status === "expires";
+          default: return true;
+        }
+      };
+      
+      return statusCheck();
+    });
+  }, [displayData, selectedStatus]);
+
+  // Memoized columns
+  const columns = useMemo(
+    () => getUserDataColumns(upgradeUserMutation, handleUpgrade),
+    [upgradeUserMutation, handleUpgrade]
   );
 
   return (
@@ -179,12 +205,12 @@ const columns = useMemo(
         data={filteredRows}
         customStyles={customStyles}
         isLoading={isFetching || isSearchLoading}
-        totalRows={search ? searchedResult?.length : data?.totalRecords || 0}
+        totalRows={search?.trim() ? (searchedResult?.length || 0) : (data?.totalRecords || 0)}
         paginationModel={paginationModel}
         setPaginationModel={setPaginationModel}
         noDataComponent={<Typography padding={3}>No data available</Typography>}
         progressComponent={<LoadingTextSpinner />}
-        disablePagination={!!search}
+        disablePagination={!!search?.trim()}
       />
     </Box>
   );

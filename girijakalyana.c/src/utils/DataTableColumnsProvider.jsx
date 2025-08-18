@@ -358,18 +358,21 @@ export const getUserTableColumns = (formatUserRole) =>  [
     },
     {
       name: "Membership",
-      cell: row => (
+      cell: row => {
+        const role = row?.user_role || row?.type_of_user;
+        return (
         <Typography
           sx={{
-            color: row.user_role === 'PremiumUser' ? '#FFD700' : 
-                  row.user_role === 'SilverUser' ? '#C0C0C0' : 
-                  row.user_role === 'FreeUser' ? '#4CAF50' :
-                  row.user_role === 'Assistance' ? '#3498db' : '#333',
+            color: role === 'PremiumUser' ? '#FFD700' : 
+                  role === 'SilverUser' ? '#C0C0C0' : 
+                  role === 'FreeUser' ? '#4CAF50' :
+                  role === 'Assistance' ? '#3498db' : '#333',
           }}
         >
-          {formatUserRole(row.user_role)}
+          {formatUserRole(role)}
         </Typography>
-      ),
+      )
+      },
       sortable: true,
     },
     {
