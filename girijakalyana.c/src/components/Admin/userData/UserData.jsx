@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { debounce } from "lodash";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PaginationDataTable from "../../common/PaginationDataTable";
 import {
   TextField,
@@ -14,15 +13,22 @@ import {
 import { FaSearch } from "react-icons/fa";
 import { getAllUserProfiles, UpgradeUserStatus } from "../../api/Admin";
 import toast from "react-hot-toast";
-import { customStyles, getUserDataColumns } from "../../../utils/DataTableColumnsProvider";
+import {
+  customStyles,
+  getUserDataColumns,
+} from "../../../utils/DataTableColumnsProvider";
 import { LoadingTextSpinner } from "../../../utils/common";
 import { useGetSearchProfiles } from "../../api/User";
+import { debounce } from "./../../../utils/common/debounce";
 
 const UserData = () => {
   // State
   const [selectedStatus, setSelectedStatus] = useState("status");
   const [search, setSearch] = useState("");
-  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 50 });
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 50,
+  });
   const isMobile = useMediaQuery("(max-width:600px)");
 
   // Get users (paginated)
@@ -36,23 +42,29 @@ const UserData = () => {
 
   // Get searched users
   const {
-    data: searchedData,
+    data: searchedData = [],
     isFetching: isSearchLoading,
     refetch: searchUser,
   } = useGetSearchProfiles(search, true);
 
-  // Always safe arrays
-  const users = Array.isArray(allUsersData?.content) ? allUsersData.content : [];
-  const searchedResult = Array.isArray(searchedData) ? searchedData : [];
+  // ✅ Normalize API data
+  const users = Array.isArray(allUsersData?.content)
+    ? allUsersData.content
+    : [];
+  const totalRecords = allUsersData?.totalRecords ?? 0;
 
-  // Local cache for users
+  const searchedResult = Array.isArray(searchedData)
+    ? searchedData
+    : [];
+
+  // Local cache
   const [localUsers, setLocalUsers] = useState(users);
 
   // Upgrade mutation
-  const upgradeUserMutation = useMemo(() => UpgradeUserStatus(), []);
+  const upgradeUserMutation = UpgradeUserStatus()
 
   // Debounced search
-  const debouncedSearch = useCallback(
+ const debouncedSearchRef = useRef(
     debounce(async (searchValue) => {
       if (searchValue.trim()) {
         try {
@@ -61,8 +73,7 @@ const UserData = () => {
           toast.error(err?.message || "Search failed");
         }
       }
-    }, 500),
-    [searchUser]
+    }, 500)
   );
 
   // Update local users whenever API data changes
@@ -71,25 +82,27 @@ const UserData = () => {
   }, [users]);
 
   // Cancel debounce on unmount
-  useEffect(() => {
-    return () => debouncedSearch.cancel();
-  }, [debouncedSearch]);
+   useEffect(() => {
+    return () => {
+      debouncedSearchRef.current.cancel();
+    };
+  }, []);
 
-  // Fetch paginated users when no search
+  // Fetch users when no search
   useEffect(() => {
-    try{
     if (!search.trim()) {
-      fetchUsers({
-        page: paginationModel.page,
-        pageSize: paginationModel.pageSize,
-      })
+      try {
+        fetchUsers({
+          page: paginationModel.page,
+          pageSize: paginationModel.pageSize,
+        });
+      } catch (err) {
+        toast.error(err?.message || "Failed to fetch users");
+      }
     }
-  } catch (err) {
-    toast.error(err?.message || "Failed to fetch users");
-  }
   }, [paginationModel, fetchUsers, search]);
 
-  // API errors
+  // Handle API errors
   useEffect(() => {
     if (isError && error?.message) {
       toast.error(error.message);
@@ -112,7 +125,9 @@ const UserData = () => {
               setLocalUsers((prev) =>
                 Array.isArray(prev)
                   ? prev.map((user) =>
-                      user?.registration_no === regno ? { ...user, status: newStatus } : user
+                      user?.registration_no === regno
+                        ? { ...user, status: newStatus }
+                        : user
                     )
                   : []
               );
@@ -137,19 +152,18 @@ const UserData = () => {
     if (!value.trim()) {
       setPaginationModel((prev) => ({ ...prev, page: 0 }));
     } else {
-      debouncedSearch(value);
+      debouncedSearchRef.current?.(value);
     }
   };
 
   // Decide which data to show
   const displayData = search.trim() ? searchedResult : localUsers;
 
-  // Filter rows by status (excluding admins)
+  // Filter rows (no admins + status filter)
   const filteredRows = useMemo(() => {
     return Array.isArray(displayData)
       ? displayData.filter((data) => {
           if (!data || data?.user_role?.toLowerCase() === "admin") return false;
-
           if (selectedStatus === "status") return true;
           return data?.status?.toLowerCase() === selectedStatus.toLowerCase();
         })
@@ -162,10 +176,8 @@ const UserData = () => {
     [upgradeUserMutation, handleUpgrade]
   );
 
-  // Total rows for pagination
-  const totalRows = search.trim()
-    ? searchedResult.length
-    : allUsersData?.totalRecords || 0;
+  // Total rows
+  const totalRows = search.trim() ? searchedResult.length : totalRecords;
 
   return (
     <Box className="upgrade-user" sx={{ p: 3 }}>
@@ -181,7 +193,12 @@ const UserData = () => {
       </Typography>
 
       {/* Filters */}
-      <Box display="flex" flexDirection={{ xs: "column", sm: "row" }} gap={2} mb={3}>
+      <Box
+        display="flex"
+        flexDirection={{ xs: "column", sm: "row" }}
+        gap={2}
+        mb={3}
+      >
         <TextField
           label="Search"
           fullWidth={isMobile}
