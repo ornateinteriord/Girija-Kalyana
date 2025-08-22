@@ -277,7 +277,7 @@ const Register = () => {
                 PERSONAL DETAILS
               </Typography>
 
-              <FormControl fullWidth sx={{ mb: 3 }}>
+              <FormControl fullWidth sx={{ mb: 3 }} required>
                 <InputLabel>Marital Status</InputLabel>
                 <Select
                   label="Marital Status"
@@ -293,7 +293,7 @@ const Register = () => {
                 </Select>
               </FormControl>
 
-              <FormControl fullWidth sx={{ mb: 3 }}>
+              <FormControl fullWidth sx={{ mb: 3 }} required>
                 <InputLabel>Create Profile For</InputLabel>
                 <Select
                   label="Create Profile For"
@@ -309,7 +309,7 @@ const Register = () => {
                 </Select>
               </FormControl>
 
-              <FormControl fullWidth sx={{ mb: 3 }}>
+              <FormControl  fullWidth sx={{ mb: 3 }} required>
                 <InputLabel>Gender</InputLabel>
                 <Select
                   label="Gender"
