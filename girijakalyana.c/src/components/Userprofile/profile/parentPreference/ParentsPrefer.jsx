@@ -34,14 +34,6 @@ const ParentsPrefer = () => {
     education_preference: ""
   });
 
-  // Initialize suggestions state
-  const [casteSuggestions, setCasteSuggestions] = useState(datas?.casteValues || []);
-  const [countrySuggestions, setCountrySuggestions] = useState(["India", "USA", "China"]);
-  const [ageSuggestions, setAgeSuggestions] = useState(datas?.minAge || []);
-  const [heightSuggestions, setHeightSuggestions] = useState(datas?.heightValues || []);
-  const [maritalStatusSuggestions, setMaritalStatusSuggestions] = useState(datas?.marritalStatus || []);
-  const [educationSuggestions, setEducationSuggestions] = useState(datas?.qualificationValues || []);
-
   const { data: userProfile, isLoading, isError, error } = useGetMemberDetails(registerNo);
   const { mutate: updateProfile, isPending: isUpdating } = useUpdateProfile();
 
@@ -82,49 +74,49 @@ const ParentsPrefer = () => {
     {
       name: "caste_preference",
       label: "Caste Preference",
-      options: casteSuggestions,
+      options: [...datas?.casteValues, 'Any Brahmin'],
       currentValue: formData.caste_preference
     },
     {
       name: "occupation_country_preference",
       label: "Occupation Country",
-      options: countrySuggestions,
+      options: ["India", "USA", "China"],
       currentValue: formData.occupation_country_preference
     },
     {
       name: "from_age_preference",
       label: "Age Preference (From)",
-      options: ageSuggestions,
+      options: datas?.minAge,
       currentValue: formData.from_age_preference
     },
     {
       name: "to_age_preference",
       label: "Age Preference (To)",
-      options: ageSuggestions,
+      options: datas?.minAge,
       currentValue: formData.to_age_preference
     },
     {
       name: "from_height_preference",
       label: "Height Preference (From)",
-      options: heightSuggestions,
+      options: [...datas?.heightValues,'Any Height'],
       currentValue: formData.from_height_preference
     },
     {
       name: "to_height_preference",
       label: "Height Preference (To)",
-      options: heightSuggestions,
+      options: [...datas?.heightValues,'Any Height'],
       currentValue: formData.to_height_preference
     },
     {
       name: "maritalstatus_preference",
       label: "Marital Status",
-      options: maritalStatusSuggestions,
+      options: datas?.marritalStatus,
       currentValue: formData.maritalstatus_preference
     },
     {
       name: "education_preference",
       label: "Education Preference",
-      options: educationSuggestions,
+      options: [...datas?.qualificationValues, 'Any Education'],
       currentValue: formData.education_preference
     }
   ];
@@ -153,7 +145,7 @@ const ParentsPrefer = () => {
         {formFields.map((field, index) => (
           <CustomAutocomplete
             key={index}
-            options={field.options}
+            options={field.options || []}
             label={field.label}
             name={field.name}
             value={field.currentValue}
