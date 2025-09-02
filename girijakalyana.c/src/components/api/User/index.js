@@ -226,6 +226,26 @@ export const useGetAcceptedInterests = (recipient) => {
   });
 };
 
+export const useRemoveAcceptedConnection = () => {
+  return useMutation({
+    mutationFn: ({ sender, recipient }) => {
+      return del("/api/user/remove-connection", {
+        data: {
+          sender,
+          recipient,
+          isConnectionRemove: true
+        },
+      });
+    },
+    onSuccess: (data) => {
+      toast.success(data.message)
+    },
+    onError: (_error) => {
+      toast.error("Failed to Remove Connection");
+    },
+  });
+};
+
 export const useCancelSentInterest = () => {
   return useMutation({
     mutationFn: ({ sender, recipient }) => {
