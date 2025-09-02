@@ -178,8 +178,8 @@ const UserCard = ({
           mt="auto"
           flexWrap="wrap"
         >
-          {showResponseButtons ? (
-            <>
+          {showResponseButtons && (
+            <Box sx={{ display: 'flex', gap: 1, width: '100%', mb: 1 }}>
               <Button
                 fullWidth
                 variant="outlined"
@@ -192,6 +192,7 @@ const UserCard = ({
                   fontWeight: 500,
                   borderColor: "red",
                   textTransform: "capitalize",
+                  flex: 1
                 }}
                 onClick={() => onResponse(profile?.registration_no, false)}
               >
@@ -200,79 +201,83 @@ const UserCard = ({
               <Button
                 fullWidth
                 variant="contained"
-                color="primary"
                 sx={{
+                  backgroundColor: "#4caf50",
                   color: "#fff",
                   textTransform: "capitalize",
+                  flex: 1,
+                  "&:hover": {
+                    backgroundColor: "#45a049"
+                  }
                 }}
                 onClick={() => onResponse(profile?.registration_no, true)}
               >
                 Accept
               </Button>
-            </>
-          ) : (
-            <>
-              <Button
-                fullWidth
-                variant="contained"
-                color="primary"
-                onClick={() => onViewMore(profile)}
-                sx={{
-                  minWidth: "120px",
-                  borderRadius: 2,
-                  py: 1,
-                  textTransform: "none",
-                  fontWeight: 500,
-                  fontSize: { xs: "0.8rem", sm: "0.9rem" },
-                }}
-              >
-                View More
-              </Button>
-              {showRemoveButton && (
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  color="primary"
-                  onClick={() => onRemoveConnection(interestId)}
-                  sx={{
-                    flex: 1,
-                    borderRadius: 2,
-                    py: 1,
-                    textTransform: "none",
-                    fontWeight: 500,
-                    fontSize: { xs: "0.8rem", sm: "0.7rem" },
-                    backgroundColor: "#d32f2f",
-                    color : '#fff',
-                    "&:hover": {
-                      backgroundColor: "#d32f2f",
-                      color : '#fff',
-                      borderColor : '#fff'
-                    },
-                  }}
-                >
-                  Remove Connection
-                </Button>
-              )}
-              {showCancelButton && (
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  color="primary"
-                  onClick={() => onCancelRequest(interestId)}
-                  sx={{
-                    flex: 1,
-                    borderRadius: 2,
-                    py: 1,
-                    textTransform: "none",
-                    fontWeight: 500,
-                    fontSize: { xs: "0.8rem", sm: "0.7rem" },
-                    "&:hover": { backgroundColor: "transparent" },
-                  }}
-                >
-                  Cancel Request
-                </Button>
-              )}
-            </>
+            </Box>
+          )}
+
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            onClick={() => onViewMore(profile)}
+            sx={{
+              minWidth: "120px",
+              borderRadius: 2,
+              py: 1,
+              textTransform: "none",
+              fontWeight: 500,
+              fontSize: { xs: "0.8rem", sm: "0.9rem" },
+            }}
+          >
+            View More
+          </Button>
+
+          {showRemoveButton && (
+            <Button
+              fullWidth
+              variant="outlined"
+              color="primary"
+              onClick={() => onRemoveConnection(interestId)}
+              sx={{
+                flex: 1,
+                borderRadius: 2,
+                py: 1,
+                textTransform: "none",
+                fontWeight: 500,
+                fontSize: { xs: "0.8rem", sm: "0.9rem" },
+                backgroundColor: "#d32f2f",
+                color : '#fff',
+                "&:hover": {
+                  backgroundColor: "#d32f2f",
+                  color : '#fff',
+                  borderColor : '#fff'
+                },
+              }}
+            >
+              Remove Connection
+            </Button>
+          )}
+
+          {showCancelButton && (
+            <Button
+              fullWidth
+              variant="outlined"
+              color="primary"
+              onClick={() => onCancelRequest(interestId)}
+              sx={{
+                flex: 1,
+                borderRadius: 2,
+                py: 1,
+                textTransform: "none",
+                fontWeight: 500,
+                fontSize: { xs: "0.8rem", sm: "0.7rem" },
+                "&:hover": { backgroundColor: "transparent" },
+              }}
+            >
+              Cancel Request
+            </Button>
           )}
         </Box>
       </CardContent>
