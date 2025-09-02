@@ -30,8 +30,7 @@ function Footer() {
 
           <div className="footer-section">
             <h3 className="footer-heading">Contact Us</h3>
-            <p className="footer-text">Email: contactusgirijakalyana@gmail.com</p>
-            <p className="footer-text">Email: enquirygirijakalyana@gmail.com</p>
+            <p className="footer-text">Email: ornateinteriord@gmail.com</p>
             <p className="footer-text">Call Us: 9148824442</p>
           </div>
 
