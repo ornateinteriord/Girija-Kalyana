@@ -27,7 +27,7 @@ const Sent = ({refetchCounts}) => {
   const itemsPerPage = 4;
   const currentUserRegistrationNo = TokenService.getRegistrationNo();
 
-  const { mutate: cancelInterest, isFetching: isCancelling } = useCancelSentInterest();
+  const { mutate: cancelInterest, isPending: isCancelling } = useCancelSentInterest();
   const {
     data: sentInterests,
     isPending: isLoading,

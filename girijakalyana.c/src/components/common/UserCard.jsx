@@ -17,10 +17,12 @@ const UserCard = ({
   connection = null,
   onViewMore = () => {},
   onCancelRequest = () => {},
+  onRemoveConnection = () => {},
   interestId = null,
   showCancelButton = false,
   onResponse = () => {},
   showResponseButtons = false,
+  showRemoveButton = false,
 }) => {
   const age = profile?.age || calculateAge(profile?.date_of_birth);
 
@@ -226,6 +228,31 @@ const UserCard = ({
               >
                 View More
               </Button>
+              {showRemoveButton && (
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => onRemoveConnection(interestId)}
+                  sx={{
+                    flex: 1,
+                    borderRadius: 2,
+                    py: 1,
+                    textTransform: "none",
+                    fontWeight: 500,
+                    fontSize: { xs: "0.8rem", sm: "0.7rem" },
+                    backgroundColor: "#d32f2f",
+                    color : '#fff',
+                    "&:hover": {
+                      backgroundColor: "#d32f2f",
+                      color : '#fff',
+                      borderColor : '#fff'
+                    },
+                  }}
+                >
+                  Remove Connection
+                </Button>
+              )}
               {showCancelButton && (
                 <Button
                   fullWidth

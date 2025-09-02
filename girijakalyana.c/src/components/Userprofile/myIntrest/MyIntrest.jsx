@@ -39,7 +39,7 @@ const MyInterest = () => {
   const renderContents = () => {
     switch (tabValue) {
       case 0:
-        return <Accepted />;
+        return <Accepted refetchCounts={refetchCounts} />;
       case 1:
         return <Requests refetchCounts={refetchCounts} />;
       case 2:
