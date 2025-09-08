@@ -20,7 +20,7 @@ import {
   customStyles,
   getImageVerificationColumns,
 } from "../../../utils/DataTableColumnsProvider";
-import { getAllUserProfiles, UpgradeUserStatus } from "../../api/Admin";
+import { getAllUserImageVerification, UpgradeUserStatus } from "../../api/Admin";
 import { useGetSearchProfiles } from "../../api/User";
 import { LoadingTextSpinner } from "../../../utils/common";
 import { toast } from "react-toastify";
@@ -38,7 +38,7 @@ const ImageVerificationData = () => {
     isError, 
     error, 
     mutate: fetchUsers 
-  } = getAllUserProfiles();
+  } = getAllUserImageVerification();
   
   const { 
     data: searchedResult = [], 
@@ -93,6 +93,7 @@ const ImageVerificationData = () => {
                 ? { ...user, image_verification: newStatus } 
                 : user
             ));
+            fetchUsers({ page: paginationModel.page, pageSize: paginationModel.pageSize });
           },
           onError: (error) => toast.error(error.message),
         }

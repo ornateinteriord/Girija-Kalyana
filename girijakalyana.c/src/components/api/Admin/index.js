@@ -4,6 +4,22 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { get, post, put } from "../authHooks";
 import { toast } from "react-toastify";
 
+export const getAllUserImageVerification = () => {
+   return useMutation({
+    mutationFn: async ({ page, pageSize }) => {
+      const response = await post("/api/admin/image-verification", {
+        page,
+        pageSize,
+      });
+      if (response?.success) {
+        return response;
+      
+      } else {
+        throw new Error(response?.message || "Failed to fetch users");
+      }
+    },
+  });
+};
 export const getAllUserProfiles = () => {
    return useMutation({
     mutationFn: async ({ page, pageSize }) => {
