@@ -4,6 +4,20 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { get, post, put } from "../authHooks";
 import { toast } from "react-toastify";
 
+export const useUpgradeUserType = () => {
+   return useMutation({
+    mutationFn: async ({ userType, amountPaid, paidType, referenceNumber, registration_no }) => {
+      const response = await post(`/api/admin/upgrade-user-type/${registration_no}`, {
+        userType, amountPaid, paidType, referenceNumber
+      });
+      if (response?.success) {
+        return response;
+      } else {
+        throw new Error(response?.message || "Failed to fetch users");
+      }
+    },
+  });
+};
 export const getAllUserImageVerification = () => {
    return useMutation({
     mutationFn: async ({ page, pageSize }) => {
