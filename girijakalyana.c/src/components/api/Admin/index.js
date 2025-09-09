@@ -167,11 +167,14 @@ export const usePromotersEarnings = () => {
   return useQuery({
     queryKey: ['promoters-earnings'],
     queryFn: async () => {
-      const response = await get('/api/admin/all-promoters-earnings'); // <-- Match your backend route
+      const response = await get('/api/admin/all-promoters-earnings');
       if (!response.success) {
         throw new Error(response.message || 'Failed to fetch promoter earnings');
       }
-      return response.Earnings;
+      return {
+        aggregatedEarnings: response.Earnings || [],
+        allRecords: response.allRecords || []
+      };
     },
   });
 };

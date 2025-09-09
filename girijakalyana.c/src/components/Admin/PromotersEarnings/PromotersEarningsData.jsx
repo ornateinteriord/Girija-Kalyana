@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Box,
   Typography,
   TextField,
   InputAdornment,
+  Button,
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 import DataTable from "react-data-table-component";
@@ -14,28 +15,44 @@ import {
 } from "../../../utils/DataTableColumnsProvider";
 import { usePromotersEarnings } from "../../api/Admin";
 import { LoadingTextSpinner } from "../../../utils/common";
+import TransactionDetailsDialog from "./TransactionDetailsDialog";
 
 const PromotersEarningsData = () => {
   const [search, setSearch] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedPromoter, setSelectedPromoter] = useState(null);
 
-  // ✅ Use the custom hook
   const {
-    data: records = [],
+    data: { aggregatedEarnings = [], allRecords = [] } = {},
     isLoading,
     isError,
     error,
   } = usePromotersEarnings();
 
-  // 🔍 Filter records based on search input
-  const filteredRows = records.filter((data) => {
+  const filteredTransactions = useMemo(() => {
+    if (!selectedPromoter || !allRecords.length) return [];
+    return allRecords.filter(record => 
+      record.referal_by === selectedPromoter.referal_by
+    );
+  }, [selectedPromoter, allRecords]);
+
+  const handleDetailsClick = (row) => {
+    setSelectedPromoter(row);
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+    setSelectedPromoter(null);
+  };
+
+  const filteredRows = aggregatedEarnings.filter((data) => {
     const searchTerm = search.toLowerCase();
     return (
       search === "" ||
       data?.referal_by?.toLowerCase().includes(searchTerm) ||
-      data?.emailid?.toLowerCase().includes(searchTerm) ||
-      data?.mobile?.toLowerCase().includes(searchTerm) ||
-      data?.transaction_no?.toLowerCase().includes(searchTerm) ||
-      data?.ref_no?.toLowerCase().includes(searchTerm)
+      data?.emails?.some(email => email?.toLowerCase().includes(searchTerm)) ||
+      data?.mobiles?.some(mobile => mobile?.toLowerCase().includes(searchTerm))
     );
   });
 
@@ -58,7 +75,7 @@ const PromotersEarningsData = () => {
       <TextField
         label="Search"
         variant="outlined"
-        placeholder="Search by email, mobile, referral ID"
+        placeholder="Search by promoter code, email, mobile"
         value={search}
         onChange={handleSearchChange}
         sx={{ width: { xs: "100%", sm: "auto", md: "auto" }, mb: "20px" }}
@@ -72,7 +89,7 @@ const PromotersEarningsData = () => {
       />
 
       <DataTable
-        columns={getPromotersEarningsColumns()}
+        columns={getPromotersEarningsColumns(handleDetailsClick)}
         data={filteredRows}
         pagination
         paginationPerPage={6}
@@ -90,7 +107,14 @@ const PromotersEarningsData = () => {
         progressPending={isLoading}
         progressComponent={<LoadingTextSpinner />}
         persistTableHead
-          highlightOnHover
+        highlightOnHover
+      />
+
+      <TransactionDetailsDialog
+        open={dialogOpen}
+        onClose={handleCloseDialog}
+        transactions={filteredTransactions}
+        promoterCode={selectedPromoter?.referal_by}
       />
     </Box>
   );
