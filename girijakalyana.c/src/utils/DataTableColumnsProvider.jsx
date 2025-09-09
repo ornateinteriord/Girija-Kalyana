@@ -497,6 +497,49 @@ export const getPromotersEarningsColumns = (handlePayNow) => [
   },
 ];
 
+export const getUserUpgradeColumns = (handleUpgrade) => [
+    {
+      name: "Registration No",
+      selector: row => row.registration_no,
+      sortable: true,
+    },
+    {
+      name: "Name",
+      selector: row => `${row.first_name} ${row.last_name}`,
+      sortable: true,
+    },
+    {
+      name: "Email Id",
+      selector: row => row?.username || row?.email_id,
+      sortable: true,
+    },
+    {
+      name: "User Type",
+      selector: row => row.type_of_user,
+      sortable: true,
+    },
+    {
+      name: "Status",
+      cell: row => (
+        <Typography color={row.status === "active" ? "green" : "red"}>
+          {row.status}
+        </Typography>
+      ),
+      sortable: true,
+    },
+    {
+      name: "Upgrade",
+      cell: row => (
+        <Button
+          variant="contained"
+          size="small"
+          onClick={() => handleUpgrade(row)}
+        >
+          Upgrade
+        </Button>
+      ),
+    },
+  ];
 export const getUserDataColumns = (upgradeUserMutation, handleUpgrade) => [
     {
       name: "Registration No",

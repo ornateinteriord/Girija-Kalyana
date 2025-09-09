@@ -2,28 +2,25 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PaginationDataTable from "../../common/PaginationDataTable";
 import {
   TextField,
-  Select,
-  MenuItem,
-  FormControl,
   Typography,
   InputAdornment,
   Box,
   useMediaQuery,
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
-import { getAllUserProfiles, UpgradeUserStatus } from "../../api/Admin";
+import { getAllUserProfiles } from "../../api/Admin";
 import toast from "react-hot-toast";
 import {
   customStyles,
-  getUserDataColumns,
+  getUserUpgradeColumns,
 } from "../../../utils/DataTableColumnsProvider";
 import { LoadingTextSpinner } from "../../../utils/common";
 import { useGetSearchProfiles } from "../../api/User";
 import { debounce } from "./../../../utils/common/debounce";
+import UserUpgradeDialog from "./UserUpgradeDialog";
 
 const UserData = () => {
   // State
-  const [selectedStatus, setSelectedStatus] = useState("status");
   const [search, setSearch] = useState("");
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
@@ -59,9 +56,8 @@ const UserData = () => {
 
   // Local cache
   const [localUsers, setLocalUsers] = useState(users);
-
-  // Upgrade mutation
-  const upgradeUserMutation = UpgradeUserStatus()
+  const [upgradeDialogOpen, setUpgradeDialogOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   // Debounced search
  const debouncedSearchRef = useRef(
@@ -111,37 +107,11 @@ const UserData = () => {
 
   // Upgrade handler
   const handleUpgrade = useCallback(
-    async (regno, currentStatus) => {
-      try {
-        const newStatus = currentStatus === "active" ? "inactive" : "active";
-        await upgradeUserMutation.mutateAsync(
-          {
-            regno,
-            status: newStatus,
-            isProfileUpdate: newStatus === "active",
-          },
-          {
-            onSuccess: () => {
-              setLocalUsers((prev) =>
-                Array.isArray(prev)
-                  ? prev.map((user) =>
-                      user?.registration_no === regno
-                        ? { ...user, status: newStatus }
-                        : user
-                    )
-                  : []
-              );
-            },
-            onError: (err) => {
-              toast.error(err?.message || "Failed to update user status");
-            },
-          }
-        );
-      } catch (err) {
-        toast.error(err?.message || "An error occurred");
-      }
+    async (row) => {
+      setSelectedUser(row);
+      setUpgradeDialogOpen(true);
     },
-    [upgradeUserMutation]
+    []
   );
 
   // Handle search input
@@ -159,21 +129,10 @@ const UserData = () => {
   // Decide which data to show
   const displayData = search.trim() ? searchedResult : localUsers;
 
-  // Filter rows (no admins + status filter)
-  const filteredRows = useMemo(() => {
-    return Array.isArray(displayData)
-      ? displayData.filter((data) => {
-          if (!data || data?.user_role?.toLowerCase() === "admin") return false;
-          if (selectedStatus === "status") return true;
-          return data?.status?.toLowerCase() === selectedStatus.toLowerCase();
-        })
-      : [];
-  }, [displayData, selectedStatus]);
-
   // Columns
   const columns = useMemo(
-    () => getUserDataColumns(upgradeUserMutation, handleUpgrade),
-    [upgradeUserMutation, handleUpgrade]
+    () => getUserUpgradeColumns(handleUpgrade, setUpgradeDialogOpen),
+    [handleUpgrade, setUpgradeDialogOpen]
   );
 
   // Total rows
@@ -213,26 +172,12 @@ const UserData = () => {
           value={search}
           placeholder="Search user"
         />
-
-        <FormControl sx={{ width: isMobile ? "100%" : 200 }}>
-          <Select
-            value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value || "status")}
-            sx={{ height: "50px" }}
-          >
-            <MenuItem value="status">Status</MenuItem>
-            <MenuItem value="active">Active</MenuItem>
-            <MenuItem value="inactive">Inactive</MenuItem>
-            <MenuItem value="pending">Pending</MenuItem>
-            <MenuItem value="expires">Expires</MenuItem>
-          </Select>
-        </FormControl>
       </Box>
 
       {/* DataTable */}
       <PaginationDataTable
         columns={columns}
-        data={filteredRows}
+        data={displayData}
         customStyles={customStyles}
         isLoading={isFetching || isSearchLoading}
         totalRows={totalRows}
@@ -241,6 +186,14 @@ const UserData = () => {
         noDataComponent={<Typography padding={3}>No data available</Typography>}
         progressComponent={<LoadingTextSpinner />}
         disablePagination={!!search.trim()}
+      />
+
+      <UserUpgradeDialog
+        open={upgradeDialogOpen}
+        handleClose={() => setUpgradeDialogOpen(false)}
+        defaultUserType={selectedUser?.type_of_user}
+        userId={selectedUser?.registration_no}
+        key={`upgrade-dialog-${selectedUser?.registration_no}`}
       />
     </Box>
   );

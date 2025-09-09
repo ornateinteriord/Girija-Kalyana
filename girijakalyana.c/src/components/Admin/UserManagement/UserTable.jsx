@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { debounce } from "lodash";
 import PaginationDataTable from "../../common/PaginationDataTable";
 import {
@@ -14,9 +14,9 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
-import { getAllUserProfiles } from "../../api/Admin";
+import { getAllUserProfiles, UpgradeUserStatus } from "../../api/Admin";
 import toast from "react-hot-toast";
-import { customStyles, getUserTableColumns } from "../../../utils/DataTableColumnsProvider";
+import { customStyles, getUserDataColumns, getUserTableColumns } from "../../../utils/DataTableColumnsProvider";
 import { LoadingTextSpinner } from "../../../utils/common";
 import { useGetSearchProfiles } from "../../api/User";
 
@@ -45,6 +45,8 @@ const UserTable = () => {
     refetch: searchUser 
   } = useGetSearchProfiles(searchTerm, true);
 
+  const upgradeUserMutation = UpgradeUserStatus()
+
   const users = data?.content || [];
   const [filteredUsers, setFilteredUsers] = useState(users);
 
@@ -72,7 +74,7 @@ const UserTable = () => {
     if (!searchTerm) {
       fetchUsers({ page: paginationModel.page, pageSize: paginationModel.pageSize });
     }
-  }, [paginationModel.page, paginationModel.pageSize, fetchUsers, searchTerm]);
+  }, [paginationModel.page, paginationModel.pageSize, fetchUsers, searchTerm, upgradeUserMutation.isSuccess , upgradeUserMutation.isError]);
 
   // Handle API errors
   useEffect(() => {
@@ -164,9 +166,48 @@ const UserTable = () => {
     setFilteredUsers(filtered);
   };
 
+  const handleUpgrade = useCallback(
+      async (regno, currentStatus) => {
+        try {
+          const newStatus = currentStatus === "active" ? "inactive" : "active";
+          await upgradeUserMutation.mutateAsync(
+            {
+              regno,
+              status: newStatus,
+              isProfileUpdate: newStatus === "active",
+            },
+            {
+              onSuccess: () => {
+                setLocalUsers((prev) =>
+                  Array.isArray(prev)
+                    ? prev.map((user) =>
+                        user?.registration_no === regno
+                          ? { ...user, status: newStatus }
+                          : user
+                      )
+                    : []
+                );
+              },
+              onError: (err) => {
+                toast.error(err?.message || "Failed to update user status");
+              },
+            }
+          );
+        } catch (err) {
+          toast.error(err?.message || "An error occurred");
+        }
+      },
+      [upgradeUserMutation]
+    );
+
   // Determine which data to display
   const displayData = searchTerm ? searchedResult : filteredUsers;
   const isLoadingData = isLoading || isSearchLoading;
+
+   const columns = useMemo(
+      () => getUserDataColumns(upgradeUserMutation, handleUpgrade),
+      [upgradeUserMutation, handleUpgrade]
+    );
 
   return (
     <Box sx={{ 
@@ -257,7 +298,7 @@ const UserTable = () => {
       
       {/* DataTable */}
       <PaginationDataTable
-        columns={getUserTableColumns(formatUserRole)}
+        columns={columns}
         data={displayData}
         customStyles={customStyles}
         isLoading={isLoadingData}
