@@ -395,41 +395,21 @@ export const getUserTableColumns = (formatUserRole) =>  [
     },
   ];
 
-export const getPromotersEarningsColumns = (handlePayNow) => [
+export const getPromotersEarningsColumns = (handleDetailsClick) => [
   {
     name: "Promoter Code",
     selector: (row) => row.referal_by || "N/A",
     sortable: true,
   },
   {
-    name: "Reference No",
-    selector: (row) => row.ref_no ||  "N/A",
-    sortable: true,
-  },
-  {
-    name: "Email",
-    selector: (row) => row.emailid ||  "N/A",
-    sortable: true,
-  },
-  {
-    name: "Mobile",
-    selector: (row) => row.mobile || "N/A",
-    sortable: true,
-  },
-  {
     name: "Total Earnings",
-    selector: (row) => `₹${row.amount_earned || 0}`,
+    selector: (row) => `₹${row.totalAmount || 0}`,
     sortable: true,
   },
   {
-    name: "Transaction ID",
-    selector: (row) => row.transaction_no || "N/A",
-    sortable: false,
-  },
-  {
-    name: "Txn Date",
-    selector: (row) => row.transaction_date || "N/A",
-    sortable: false,
+    name: "Total Transactions",
+    selector: (row) => row.count || 0,
+    sortable: true,
   },
   {
     name: "Status",
@@ -443,19 +423,17 @@ export const getPromotersEarningsColumns = (handlePayNow) => [
   },
   {
     name: "Action",
-    cell: (row) =>
-      row.status === "pending" ? (
-        <Button
-          variant="contained"
-          color="primary"
-          size="small"
-          onClick={() => handlePayNow(row)}
-        >
-          Pay Now
-        </Button>
-      ) : (
-        "N/A"
-      ),
+    cell: (row) => (
+      <Button
+        variant="contained"
+        color="secondary"
+        size="small"
+        onClick={() => handleDetailsClick(row)}
+        sx={{ textTransform: "capitalize" }}
+      >
+        Details
+      </Button>
+    ),
   },
 ];
 
