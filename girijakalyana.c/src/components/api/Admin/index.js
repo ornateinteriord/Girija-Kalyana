@@ -186,12 +186,25 @@ export const usePromotersEarnings = () => {
         throw new Error(response.message || 'Failed to fetch promoter earnings');
       }
       return {
-        aggregatedEarnings: response.Earnings || [],
-        allRecords: response.allRecords || []
+        aggregatedEarnings: response.Earnings || []
       };
     },
   });
 };
+export const useAllPromotersData = (promoterId, enabled) => {
+  return useQuery({
+    queryKey: ['promoter-transactions', promoterId],
+    queryFn: async () => {
+      const response = await get(`/api/admin/all-promoter-users/${promoterId}`);
+      if (!response.success) {
+        throw new Error(response.message || 'Failed to fetch promoter transactions');
+      }
+      return response.records || [];
+    },
+    enabled: !!promoterId && enabled, 
+  });
+};
+
 
 export const usePromotersTransactions = () => {
   return useQuery({
