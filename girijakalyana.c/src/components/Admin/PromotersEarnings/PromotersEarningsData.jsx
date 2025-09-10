@@ -4,7 +4,6 @@ import {
   Typography,
   TextField,
   InputAdornment,
-  Button,
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 import DataTable from "react-data-table-component";
@@ -23,18 +22,11 @@ const PromotersEarningsData = () => {
   const [selectedPromoter, setSelectedPromoter] = useState(null);
 
   const {
-    data: { aggregatedEarnings = [], allRecords = [] } = {},
+    data: { aggregatedEarnings = [] } = {},
     isLoading,
     isError,
     error,
   } = usePromotersEarnings();
-
-  const filteredTransactions = useMemo(() => {
-    if (!selectedPromoter || !allRecords.length) return [];
-    return allRecords.filter(record => 
-      record.referal_by === selectedPromoter.referal_by
-    );
-  }, [selectedPromoter, allRecords]);
 
   const handleDetailsClick = (row) => {
     setSelectedPromoter(row);
@@ -51,8 +43,8 @@ const PromotersEarningsData = () => {
     return (
       search === "" ||
       data?.referal_by?.toLowerCase().includes(searchTerm) ||
-      data?.emails?.some(email => email?.toLowerCase().includes(searchTerm)) ||
-      data?.mobiles?.some(mobile => mobile?.toLowerCase().includes(searchTerm))
+      data?.emails?.some((email) => email?.toLowerCase().includes(searchTerm)) ||
+      data?.mobiles?.some((mobile) => mobile?.toLowerCase().includes(searchTerm))
     );
   });
 
@@ -113,7 +105,6 @@ const PromotersEarningsData = () => {
       <TransactionDetailsDialog
         open={dialogOpen}
         onClose={handleCloseDialog}
-        transactions={filteredTransactions}
         promoterCode={selectedPromoter?.referal_by}
       />
     </Box>

@@ -481,6 +481,43 @@ export const getPromotersEarningsColumns = (handleDetailsClick) => [
     ),
   },
 ];
+export const getTransactionDetailsDialogColumns = () => [
+            {
+                name: "Ref No",
+                selector: (row) => row.ref_no || "N/A",
+                sortable: true,
+            },
+            {
+                name: "Email",
+                selector: (row) => row.emailid || "N/A",
+                sortable: true,
+            },
+            {
+                name: "Mobile",
+                selector: (row) => row.mobile || "N/A",
+                sortable: true,
+            },
+            {
+                name: "Amount",
+                selector: (row) => `₹${row.amount_earned || 0}`,
+                sortable: true,
+            },
+            {
+                name: "Transaction No",
+                selector: (row) => row.transaction_no || "N/A",
+                sortable: true,
+            },
+            {
+                name: "Transaction Date",
+                selector: (row) => row.transaction_date || "N/A",
+                sortable: true,
+            },
+            {
+                name: "User Type",
+                selector: (row) => row.usertype || "N/A",
+                sortable: true,
+            },
+        ];
 
  export const getPromotersTransactionsColumns = () => [
   {
