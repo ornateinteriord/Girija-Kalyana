@@ -21,44 +21,89 @@ export const customStyles = {
   },
 };
 
-export const getPromoterTableColumns = () => [
+export const getPromoterTableColumns = (handleDetailsClick) => [
     {
       name: "Promoter's Name",
-      selector: row => row.name,
+      selector: row => row.promoter_name,
       sortable: true,
     },
     {
-      name: "Promocode",
-      selector: row => "-",
-    },
-    {
-      name: "Mobile",
-      selector: row => row.phone,
-      sortable: true,
+      name: "Promoter's Code",
+      selector: row => row.promoter_id,
     },
     {
       name: "Free Users",
-      selector: row => "-",
-    },
-    {
-      name: "Premium Users",
-      selector: row => "-",
+      selector: row => row.freeCount,
     },
     {
       name: "Silver Users",
-      selector: row => "-",
+      selector: row => row.silverCount,
+    },
+    {
+      name: "Premium Users",
+      selector: row => row.premiumCount,
     },
     {
       name: "Total Users",
-      selector: row => "-",
+      selector: row => row.totalCount,
     },
     {
       name: "Action",
-      cell: () => (
-        <Button variant="contained" size="small" sx={{ textTransform: 'capitalize' }}>
-          DETAILS
+      cell: (row) => (
+        <Button 
+          disabled={row.totalCount === 0} 
+          onClick={() => {
+            handleDetailsClick(row)
+          }} 
+          variant="contained" 
+          size="small" 
+          sx={{ textTransform: 'capitalize' }}
+        >
+          Details
         </Button>
       ),
+    },
+  ];
+export const getPromoterUserListTable = () => [
+    {
+      name: "Registration No",
+      selector: row => row.registration_no,
+      sortable: true,
+      width : '10%'
+    },
+    {
+      name: "Name",
+      selector: row => `${row.first_name} ${row.last_name}`,
+      sortable: true,
+       width : '20%'
+    },
+    {
+      name: "Email Id",
+      selector: row => row?.username || row?.email_id,
+      sortable: true,
+       width : '30%'
+    },
+    {
+      name: "Gender",
+      selector: row => row?.gender,
+      sortable: true,
+       width : '15%'
+    },
+    {
+      name: "User Type",
+      selector: row => row.type_of_user,
+      sortable: true,
+       width : '15%'
+    },
+    {
+      name: "Status",
+      cell: row => (
+        <Typography color={row.status === "active" ? "green" : "red"}>
+          {row.status}
+        </Typography>
+      ),
+      sortable: true,
+       width : '10%'
     },
   ];
 export const getPendingandSuccessUserDataColumns = () => [

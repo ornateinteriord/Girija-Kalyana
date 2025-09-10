@@ -242,6 +242,34 @@ export const useUpdatePromoterStatus = () => {
   });
 };
 
+export const getPromoterUsersStats = () => {
+  return useQuery({
+    queryKey: ["promoter-user-stats"],
+    queryFn: async () => {
+      const response = await get("/api/admin/promoter-user-stats");
+      if (response.success) {
+        return response.data;
+      } else {
+        throw new Error(response.message);
+      }
+    },
+  });
+};
+
+export const getPromoterUsersList = (promoterId) => {
+  return useQuery({
+    queryKey: ["promoter-users-list",promoterId],
+    queryFn: async () => {
+      const response = await get(`/api/admin/promoter-users/${promoterId}`);
+      if (response.success) {
+        return response.users;
+      } else {
+        throw new Error(response.message);
+      }
+    },
+    enabled: false
+  });
+};
 export const getAllNews = () => {
   return useQuery({
     queryKey: ["news"],

@@ -136,7 +136,7 @@ const App = () => {
               <Route path="resetpass" element={<ResetPassword />} />
               <Route path="pendingdata" element={<PendingData />} />
               <Route path="successdata" element={<SuccessData />} />
-              <Route path="promotersdata" element={<PromotersUsersData />} />
+              {/* <Route path="promotersdata" element={<PromotersUsersData />} /> */}
               <Route path="paytopromoters" element={<PayToPromoterData />} />
               <Route path="promoterearn" element={<PromotersEarningsData />} />
               <Route path="imageverify" element={<ImageVerificationData />} />
