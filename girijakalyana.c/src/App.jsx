@@ -64,12 +64,12 @@ const MyMatches = lazy(() => import('./components/Userprofile/myMatches/MyMatche
 const MyInterest = lazy(() => import('./components/Userprofile/myIntrest/MyIntrest'));
 const ViewAll = lazy(() => import('./components/Userprofile/viewAll/ViewAll'));
 const Search = lazy(() => import('./components/Userprofile/search/Search'));
-const UserDashboard = lazy(() => import('./components/Userprofile/userdDashboard/UserDashboard.jsx'));
+const UserDashboard = lazy(() => import('./components/Userprofile/userdDashboard/UserDashboard'));
 const Profile = lazy(() => import('./components/Userprofile/profile/Profile'));
 
 // Add this new import
-const IncompletePayments = lazy(() => import('./components/admin/IncompletePayments/IncompletePayments.jsx'));
-const PaymentRedirect = lazy(() => import('./components/PaymentRedirect/PaymentRedirect.jsx'));
+const IncompletePayments = lazy(() => import('./components/admin/IncompletePayments/IncompletePayments'));
+const PaymentRedirect = lazy(() => import('./components/PaymentRedirect/PaymentRedirect'));
 
 export const LoadingComponent = () => {
   return (
