@@ -68,7 +68,7 @@ const UserDashboard = lazy(() => import('./components/Userprofile/userdDashboard
 const Profile = lazy(() => import('./components/Userprofile/profile/Profile'));
 
 // Add this new import
-const IncompletePayments = lazy(() => import('./components/Admin/IncompletePayments/IncompletePayments'));
+const IncompletePayments = lazy(() => import('./components/Admin/IncompletePayments/IncompletePayments.jsx'));
 const PaymentRedirect = lazy(() => import('./components/PaymentRedirect/PaymentRedirect'));
 
 export const LoadingComponent = () => {
