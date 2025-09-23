@@ -41,6 +41,7 @@ const Navbar = () => {
   const [forgotPasswordError, setForgotPasswordError] = useState("");
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -475,9 +476,21 @@ const Navbar = () => {
               name="password"
               value={loginData.password}
               onChange={handleChangeLogin}
-              type="password"
+              type={showLoginPassword ? "text" : "password"}
               variant="outlined"
               required
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowLoginPassword(!showLoginPassword)}
+                      edge="end"
+                    >
+                      {showLoginPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
               sx={{
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "5px",

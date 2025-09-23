@@ -319,3 +319,60 @@ export const useAddNews = () => {
     },
   });
 };
+
+// Add these new exports for incomplete payment admin functionality
+export const useAdminIncompletePayments = () => {
+  return useQuery({
+    queryKey: ['admin-incomplete-payments'],
+    queryFn: async ({ page = 1, limit = 10, resolved = null, ticketRaised = null }) => {
+      let url = `/api/admin/incomplete-payments?page=${page}&limit=${limit}`;
+      if (resolved !== null) {
+        url += `&resolved=${resolved}`;
+      }
+      if (ticketRaised !== null) {
+        url += `&ticketRaised=${ticketRaised}`;
+      }
+      const response = await get(url);
+      if (!response.success) {
+        throw new Error(response.message || 'Failed to fetch incomplete payments');
+      }
+      return response;
+    },
+  });
+};
+
+export const useAdminIncompletePayment = (orderId) => {
+  return useQuery({
+    queryKey: ['admin-incomplete-payment', orderId],
+    queryFn: async () => {
+      const response = await get(`/api/admin/incomplete-payment/${orderId}`);
+      if (!response.success) {
+        throw new Error(response.message || 'Failed to fetch incomplete payment');
+      }
+      return response.data;
+    },
+    enabled: !!orderId,
+  });
+};
+
+export const useResolveIncompletePayment = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ orderId, data }) => {
+      const response = await post(`/api/admin/resolve-incomplete-payment/${orderId}`, data);
+      return response;
+    },
+    onSuccess: (response) => {
+      if (response?.success) {
+        toast.success(response.message);
+        queryClient.invalidateQueries({ queryKey: ['admin-incomplete-payments'] });
+      } else {
+        toast.error(response?.message);
+      }
+    },
+    onError: (err) => {
+      const errorMessage = err.response?.data?.message;
+      toast.error(errorMessage);
+    },
+  });
+};

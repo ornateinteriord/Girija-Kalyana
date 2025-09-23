@@ -13,8 +13,11 @@ import {
   Avatar,
   useMediaQuery,
   useTheme,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import rawJsonData from "../Userprofile/profile/eduction/jsondata/data.json";
 import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
@@ -40,6 +43,8 @@ const Register = () => {
 
   const [citySuggestions, setCitySuggestions] = useState(datas.cities || []);
   const [talukSuggestions, setTalukSuggestions] = useState([]);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const getUserRole = () => {
     switch (planType) {
@@ -606,17 +611,41 @@ const Register = () => {
               fullWidth
               label="Password"
               name="password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={formData.password}
               onChange={handleChange}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <TextField
               fullWidth
               label="Confirm Password"
               name="confirmPassword"
-              type="password"
+              type={showConfirmPassword ? "text" : "password"}
               value={formData.confirmPassword}
               onChange={handleChange}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      edge="end"
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
           </Box>
 

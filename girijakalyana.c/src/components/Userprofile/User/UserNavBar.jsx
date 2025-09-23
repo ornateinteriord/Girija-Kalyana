@@ -19,14 +19,17 @@ import {
   DialogActions,
   TextField,
   useMediaQuery,
+  InputAdornment,
 } from "@mui/material";
+import { Visibility, VisibilityOff, Settings, Help } from "@mui/icons-material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import TokenService from "../../token/tokenService";
-import {
-  useChangePassword,
+import { useChangePassword,
   useGetMemberDetails,
 } from "../../api/User";
+import { useRaiseTicket } from "../../api/Payment";
+import IncompletePaymentTicket from "../IncompletePaymentTicket/IncompletePaymentTicket";
 import { toast } from "react-toastify";
 import { LoadingComponent } from "../../../App";
 import SidebarMenu from "../../sidebar/SidebarMenu";
@@ -45,6 +48,8 @@ const UserNavBar = () => {
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
   const [openChangePasswordDialog, setOpenChangePasswordDialog] =
     useState(false);
+  const [openHelpMenu, setOpenHelpMenu] = useState(false);
+  const [helpAnchorEl, setHelpAnchorEl] = useState(null);
   const isLargeScreen = useMediaQuery("(min-width:900px)");
   const location = useLocation();
   const navigation = useNavigate();
@@ -54,6 +59,10 @@ const UserNavBar = () => {
     newPassword: "",
     confirmPassword: "",
   });
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [ticketDialogOpen, setTicketDialogOpen] = useState(false);
 
   const registerNo = TokenService.getRegistrationNo();
 
@@ -63,6 +72,8 @@ const UserNavBar = () => {
     isError,
     error,
   } = useGetMemberDetails(registerNo);
+
+  const { mutate: raiseTicket, isPending: isRaisingTicket } = useRaiseTicket();
 
   const { mutate: changePassword, isPending } = useChangePassword();
 
@@ -97,6 +108,36 @@ const UserNavBar = () => {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleHelpMenuOpen = (event) => {
+    setHelpAnchorEl(event.currentTarget);
+    setOpenHelpMenu(true);
+  };
+
+  const handleHelpMenuClose = () => {
+    setHelpAnchorEl(null);
+    setOpenHelpMenu(false);
+  };
+
+  const handleRaiseTicket = () => {
+    setTicketDialogOpen(true);
+    handleHelpMenuClose();
+  };
+
+  const handleCloseTicketDialog = () => {
+    setTicketDialogOpen(false);
+  };
+
+  const handleTicketSubmit = (orderId, description, images) => {
+    raiseTicket(
+      { orderId, description, images },
+      {
+        onSuccess: () => {
+          handleCloseTicketDialog();
+        },
+      }
+    );
   };
 
   const handleOpenLogoutDialog = () => {
@@ -271,6 +312,11 @@ const UserNavBar = () => {
               </Avatar>
             </IconButton>
 
+            {/* Help/Settings Icon */}
+            <IconButton onClick={handleHelpMenuOpen} sx={{ ml: 1 }}>
+              <Settings sx={{ color: "#fff" }} />
+            </IconButton>
+
             <Menu
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
@@ -293,6 +339,25 @@ const UserNavBar = () => {
                 </Box>
               </MenuItem>
               <MenuItem onClick={handleOpenLogoutDialog}>Logout</MenuItem>
+            </Menu>
+
+            {/* Help Menu */}
+            <Menu
+              anchorEl={helpAnchorEl}
+              open={openHelpMenu}
+              onClose={handleHelpMenuClose}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+            >
+              <MenuItem onClick={handleRaiseTicket}>
+                Raise Ticket
+              </MenuItem>
             </Menu>
           </Toolbar>
         </AppBar>
@@ -422,28 +487,64 @@ const UserNavBar = () => {
               margin="dense"
               name="oldPassword"
               label="Current Password"
-              type="password"
+              type={showOldPassword ? "text" : "password"}
               fullWidth
               value={passwordData.oldPassword}
               onChange={handlePasswordChange}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowOldPassword(!showOldPassword)}
+                      edge="end"
+                    >
+                      {showOldPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <TextField
               margin="dense"
               name="newPassword"
               label="New Password"
-              type="password"
+              type={showNewPassword ? "text" : "password"}
               fullWidth
               value={passwordData.newPassword}
               onChange={handlePasswordChange}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      edge="end"
+                    >
+                      {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <TextField
               margin="dense"
               name="confirmPassword"
               label="Confirm New Password"
-              type="password"
+              type={showConfirmPassword ? "text" : "password"}
               fullWidth
               value={passwordData.confirmPassword}
               onChange={handlePasswordChange}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      edge="end"
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
           </DialogContent>
           <DialogActions>
@@ -481,6 +582,13 @@ const UserNavBar = () => {
 
         {isLoading && <LoadingComponent />}
       </Box>
+      
+      <IncompletePaymentTicket
+        open={ticketDialogOpen}
+        onClose={handleCloseTicketDialog}
+        onSubmit={handleTicketSubmit}
+        isLoading={isRaisingTicket}
+      />
     </ThemeProvider>
   );
 };
