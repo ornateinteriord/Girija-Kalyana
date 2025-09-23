@@ -67,7 +67,6 @@ const Search = lazy(() => import('./components/Userprofile/search/Search'));
 const UserDashboard = lazy(() => import('./components/Userprofile/userdDashboard/UserDashboard'));
 const Profile = lazy(() => import('./components/Userprofile/profile/Profile'));
 
-// Add this new import
 const IncompletePayments = lazy(() => import('./components/Admin/IncompletePayments/IncompletePayments.jsx'));
 const PaymentRedirect = lazy(() => import('./components/PaymentRedirect/PaymentRedirect'));
 
