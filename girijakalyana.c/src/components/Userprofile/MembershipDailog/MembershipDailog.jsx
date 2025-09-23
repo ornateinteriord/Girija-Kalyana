@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -15,14 +15,147 @@ import {
   ListItem,
   useMediaQuery,
   useTheme,
+  CircularProgress,
 } from "@mui/material";
 import { AiOutlineClose } from "react-icons/ai";
 import { CheckCircle } from "@mui/icons-material";
+import { load } from "@cashfreepayments/cashfree-js";
+import { toast } from "react-toastify";
 import { membershipOptions } from "../../../assets/memberShipOptions/MemberShipPlans";
+import { useCreatePaymentOrder } from "../../api/Payment";
+import PromocodeDialog from "./PromocodeDialog";
+import TokenService from "../../token/tokenService";
 
 const MembershipDialog = ({ open, onClose, onSelectPlan }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [selectedPlanForPromocode, setSelectedPlanForPromocode] = useState(null);
+  const [promocodeOpen, setPromocodeOpen] = useState(false);
+  const [appliedPromocode, setAppliedPromocode] = useState(null);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [processingPlanId, setProcessingPlanId] = useState(null);
+  
+  const createOrderMutation = useCreatePaymentOrder();
+  
+  // Reset processing state when dialog is closed
+  useEffect(() => {
+    if (!open) {
+      setIsProcessingPayment(false);
+      setProcessingPlanId(null);
+    }
+  }, [open]);
+  
+  const handlePromocodeApply = (promocodeData) => {
+    setAppliedPromocode({
+      ...promocodeData,
+      planId: selectedPlanForPromocode?.name // Store which plan this promocode is for
+    });
+    setPromocodeOpen(false);
+  };
+  
+  const handlePromocodeClick = useCallback((plan) => {
+    console.log('Promocode click for plan:', plan.name);
+    setSelectedPlanForPromocode(plan);
+    setPromocodeOpen(true);
+  }, []);
+  
+  const calculateFinalAmount = (plan) => {
+    const baseAmount = parseInt(plan.discountedPrice.replace('₹', '').replace(',', ''));
+    // Only apply discount if promocode is for this specific plan
+    if (appliedPromocode && appliedPromocode.isValid && appliedPromocode.planId === plan.name) {
+      return Math.max(baseAmount - appliedPromocode.discount, 0);
+    }
+    return baseAmount;
+  };
+  
+  const isPromocodeAppliedForPlan = (plan) => {
+    return appliedPromocode && appliedPromocode.isValid && appliedPromocode.planId === plan.name;
+  };
+  
+  const handleGetStarted = useCallback(async (plan) => {
+    // Prevent multiple simultaneous payment processes
+    if (isProcessingPayment || processingPlanId) {
+      console.log('Payment already in progress, ignoring click');
+      return;
+    }
+    
+    console.log('Starting payment for plan:', plan.name);
+    
+    if (onSelectPlan) {
+      onSelectPlan(plan);
+    }
+    
+    setIsProcessingPayment(true);
+    setProcessingPlanId(plan.name);
+    
+    try {
+      const userProfile = TokenService.getUser();
+      
+      // Validate user profile data
+      if (!userProfile) {
+        throw new Error('User not authenticated. Please login again.');
+      }
+      
+      if (!userProfile.mobile_no || !userProfile.email_id || !userProfile.first_name) {
+        throw new Error('Incomplete user profile. Please complete your profile first.');
+      }
+      
+      const orderId = "order_" + Date.now();
+      const originalAmount = parseInt(plan.discountedPrice.replace('₹', '').replace(',', ''));
+      const finalAmount = calculateFinalAmount(plan);
+      const planType = plan.name.includes('PREMIUM') ? 'premium' : 'silver';
+      
+      console.log('Payment request data:', {
+        orderId,
+        orderAmount: finalAmount,
+        customerName: userProfile.first_name,
+        customerEmail: userProfile.email_id,
+        customerPhone: userProfile.mobile_no,
+        planType,
+        promocode: appliedPromocode?.promocode || null,
+        originalAmount,
+      });
+      
+      // Create payment order
+      const orderResponse = await createOrderMutation.mutateAsync({
+        orderId,
+        orderAmount: finalAmount,
+        customerName: userProfile.first_name,
+        customerEmail: userProfile.email_id,
+        customerPhone: userProfile.mobile_no,
+        planType,
+        promocode: appliedPromocode?.promocode || null,
+        originalAmount,
+      });
+      
+      if (orderResponse?.payment_session_id) {
+        // Store the order ID and timestamp in localStorage for later verification
+        localStorage.setItem('pendingOrderId', orderId);
+        localStorage.setItem(`orderTimestamp_${orderId}`, Date.now().toString());
+        console.log('Stored pending order ID with timestamp:', orderId);
+        
+        // Initialize Cashfree payment
+        const cashfree = await load({ mode: "sandbox" }); // Change to "production" for live
+        
+        // Start payment process with proper redirect URL
+        cashfree.checkout({
+          paymentSessionId: orderResponse.payment_session_id,
+          redirectTarget: "_self", // Will redirect to return URL after completion
+          returnUrl: `${window.location.origin}/payment-redirect?order_id=${orderId}`
+        });
+        
+        // Don't close dialog immediately - let Cashfree handle the redirect
+      }
+    } catch (error) {
+      console.error("Payment initiation failed:", error);
+      toast.error("Failed to initiate payment. Please try again.");
+    } finally {
+      // Note: We don't reset the processing state here because the user will be redirected
+      // The state will be reset when the component remounts
+      // setIsProcessingPayment(false);
+      // setProcessingPlanId(null);
+    }
+  }, [isProcessingPayment, processingPlanId, onSelectPlan, createOrderMutation, appliedPromocode, onClose]);
 
   return (
     <Dialog
@@ -135,19 +268,57 @@ const MembershipDialog = ({ open, onClose, onSelectPlan }) => {
                   </Typography>
 
                   <Box sx={{ display: "flex", alignItems: "baseline", mb: 2 }}>
-                    <Typography variant="h4" sx={{ fontWeight: 800, mr: 2 }}>
-                      {plan.discountedPrice}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        textDecoration: "line-through",
-                        opacity: 0.8,
-                           color:'#fff'
-                      }}
-                    >
-                      {plan.originalPrice}
-                    </Typography>
+                    {isPromocodeAppliedForPlan(plan) ? (
+                      <>
+                        <Typography 
+                          variant="h4" 
+                          sx={{ 
+                            fontWeight: 800, 
+                            mr: 2,
+                            color: '#4CAF50' // Green color for discounted price
+                          }}
+                        >
+                          ₹{calculateFinalAmount(plan)}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            textDecoration: "line-through",
+                            opacity: 0.8,
+                            color: '#fff',
+                            mr: 1
+                          }}
+                        >
+                          {plan.discountedPrice}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            textDecoration: "line-through",
+                            opacity: 0.6,
+                            color: '#fff'
+                          }}
+                        >
+                          {plan.originalPrice}
+                        </Typography>
+                      </>
+                    ) : (
+                      <>
+                        <Typography variant="h4" sx={{ fontWeight: 800, mr: 2 }}>
+                          {plan.discountedPrice}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            textDecoration: "line-through",
+                            opacity: 0.8,
+                            color:'#fff'
+                          }}
+                        >
+                          {plan.originalPrice}
+                        </Typography>
+                      </>
+                    )}
                   </Box>
 
                   <Divider sx={{ my: 2, bgcolor: "rgba(255,255,255,0.3)", height:'1px' }} />
@@ -165,6 +336,24 @@ const MembershipDialog = ({ open, onClose, onSelectPlan }) => {
                     Validity: {plan.duration}
                   </Typography>
 
+                  {isPromocodeAppliedForPlan(plan) && (
+                    <Box sx={{ 
+                      mt: 1, 
+                      p: 2, 
+                      backgroundColor: "rgba(76, 175, 80, 0.15)", 
+                      borderRadius: 2,
+                      border: "1px solid rgba(76, 175, 80, 0.4)",
+                      mb: 2
+                    }}>
+                      <Typography variant="body2" sx={{ color: '#4CAF50', fontWeight: 600, mb: 1 }}>
+                        ✅ Promocode "{appliedPromocode.promocode}" Applied Successfully!
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: '#4CAF50', fontWeight: 500 }}>
+                        You saved ₹{appliedPromocode.discount}
+                      </Typography>
+                    </Box>
+                  )}
+
                   <Button
                     variant="contained"
                     fullWidth
@@ -180,22 +369,46 @@ const MembershipDialog = ({ open, onClose, onSelectPlan }) => {
                       borderRadius: 2,
                       boxShadow: 2,
                     }}
-                    onClick={() => onSelectPlan(plan)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      console.log('Get Started clicked for:', plan.name);
+                      handleGetStarted(plan);
+                    }}
+                    disabled={isProcessingPayment}
+                    startIcon={processingPlanId === plan.name ? <CircularProgress size={20} /> : null}
                   >
-                    Get Started
+                    {processingPlanId === plan.name ? "Processing..." : "Get Started"}
                   </Button>
 
-                  <Typography
-                    variant="body2"
+                  <Button
+                    variant="text"
                     sx={{
                       mt: 2,
                       textAlign: "center",
                       opacity: 0.8,
-                      color:'#fff'
+                      color: '#fff',
+                      textDecoration: 'underline',
+                      fontSize: '0.875rem',
+                      textTransform: 'none',
+                      '&:hover': {
+                        backgroundColor: 'rgba(255,255,255,0.1)',
+                        textDecoration: 'underline',
+                      }
                     }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      console.log('Promocode clicked for:', plan.name);
+                      handlePromocodeClick(plan);
+                    }}
+                    disabled={isProcessingPayment}
                   >
-                    Have Promocode? Get ₹100 discount
-                  </Typography>
+                    {isPromocodeAppliedForPlan(plan) 
+                      ? "Promocode Applied ✓" 
+                      : "Have Promocode? Get ₹100 discount"
+                    }
+                  </Button>
                 </CardContent>
               </Card>
             </Box>
@@ -221,6 +434,12 @@ const MembershipDialog = ({ open, onClose, onSelectPlan }) => {
     Cancel
   </Button>
       </DialogActions>
+      
+      <PromocodeDialog
+        open={promocodeOpen}
+        onClose={() => setPromocodeOpen(false)}
+        onPromocodeApply={handlePromocodeApply}
+      />
     </Dialog>
   );
 };

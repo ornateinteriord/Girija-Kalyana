@@ -11,9 +11,11 @@ import {
   DialogContent,
   DialogTitle,
   Box,
-  useMediaQuery
+  useMediaQuery,
+  IconButton,
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { getAllUserProfiles, UserResetPassword } from "../../api/Admin";
 import { toast } from "react-toastify";
 import {
@@ -30,6 +32,8 @@ const ResetPassword = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 50 });
   
   // API calls
@@ -193,21 +197,45 @@ const ResetPassword = () => {
         <DialogContent>
           <TextField
             label="New Password"
-            type="password"
+            type={showNewPassword ? "text" : "password"}
             fullWidth
             margin="normal"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             disabled={isResetting}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                    edge="end"
+                  >
+                    {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           <TextField
             label="Confirm Password"
-            type="password"
+            type={showConfirmPassword ? "text" : "password"}
             fullWidth
             margin="normal"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             disabled={isResetting}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    edge="end"
+                  >
+                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
         </DialogContent>
         <DialogActions>

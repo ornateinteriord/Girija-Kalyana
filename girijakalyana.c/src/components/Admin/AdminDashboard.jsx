@@ -139,6 +139,12 @@ const closeAllDropdowns = () => {
     navigate('/admin/notification');
   }
   
+  // Add this new function
+  const navigateIncompletePayments = () => {
+    closeAllDropdowns();
+    navigate('/admin/incomplete-payments');
+  }
+  
   // Check if a path is active
   const isActive = (path) => {
     return activePath === path;
@@ -675,6 +681,26 @@ const handleConfirmLogout = () => {
                 </ListItem>
               </List>
             </Collapse>
+            
+            {/* Add this new section for Incomplete Payments */}
+            <ListItem 
+              button 
+              onClick={navigateIncompletePayments}
+              sx={{ 
+                cursor: 'pointer',
+                padding: '10px',
+                borderRadius:'4px',
+                backgroundColor: isActive('/admin/incomplete-payments') ? '#1976d2' : 'transparent',
+                '&:hover': {
+                  backgroundColor: isActive('/admin/incomplete-payments') ? '#1976d2' : 'rgba(0, 0, 0, 0.04)',
+                  color: 'aqua'
+                }
+              }}
+            >
+              <FaIdBadge />
+              <ListItemText primary="Incomplete Payments" />
+            </ListItem>
+            
             {/* notification */}
             <ListItem 
               button 

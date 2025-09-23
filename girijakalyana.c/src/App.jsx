@@ -67,8 +67,9 @@ const Search = lazy(() => import('./components/Userprofile/search/Search'));
 const UserDashboard = lazy(() => import('./components/Userprofile/userdDashboard/UserDashboard'));
 const Profile = lazy(() => import('./components/Userprofile/profile/Profile'));
 
-
-
+// Add this new import
+const IncompletePayments = lazy(() => import('./components/Admin/IncompletePayments/IncompletePayments.jsx'));
+const PaymentRedirect = lazy(() => import('./components/PaymentRedirect/PaymentRedirect'));
 
 export const LoadingComponent = () => {
   return (
@@ -149,6 +150,8 @@ const App = () => {
               <Route path="renewalreports" element={<RenewalsReportsData />} />
               <Route path="receiptsreports" element={<ReceiptsReportsData />} />
               <Route path="notification" element={<NotificationData />} />
+              {/* Add this new route */}
+              <Route path="incomplete-payments" element={<IncompletePayments />} />
             </Route>
             </Route>
            
@@ -179,13 +182,16 @@ const App = () => {
             </Route>
             </Route>
             
+            {/* Payment Redirect Route */}
+            <Route path="/payment-redirect" element={<PaymentRedirect />} />
+            
             {/* 404 Route */}
             <Route path="activation-pending" element={<ActivationPending />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Router>
       
-        <ToastContainer position="top-right" autoClose={5000} />
+        <ToastContainer position="top-right" autoClose={3000} />
       </Suspense>
     </QueryClientProvider>
 

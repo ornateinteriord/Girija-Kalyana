@@ -59,6 +59,14 @@ class TokenService {
     return decoded?.user_id || null;
 
   }
+
+  static getUser() {
+
+    const decoded = this.decodeToken();
+
+    return decoded || null;
+
+  }
  
   static removeToken() {
 
