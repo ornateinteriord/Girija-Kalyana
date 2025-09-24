@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import PaginationDataTable from "../../common/PaginationDataTable";
 import {
   Box,
@@ -7,43 +7,66 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
-import { customStyles, getRenewalsColumns } from "../../../utils/DataTableColumnsProvider";
-import { getAllUserProfiles } from "../../api/Admin";
+import {
+  customStyles,
+  getRenewalsColumns,
+} from "../../../utils/DataTableColumnsProvider";
+import { getRenewalProfiles } from "../../api/Admin";
 import { toast } from "react-toastify";
 import { LoadingTextSpinner } from "../../../utils/common";
+import UserUpgradeDialog from "../userData/UserUpgradeDialog";
 
 const RenewalsData = () => {
-  const { data, isPending: isLoading, isError, error, mutate: fetchUsers } = getAllUserProfiles();
-  const users = data?.content || [];
-  const [search, setSearch] = useState("");
-  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 50 });
+  const { mutate, isPending: isLoading, isError, error } = getRenewalProfiles();
 
+  const [users, setUsers] = useState([]);
+  const [totalRecords, setTotalRecords] = useState(0);
+
+  const [search, setSearch] = useState("");
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 50,
+  });
+
+  const [renewDialogOpen, setRenewDialogOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  // API errors
   useEffect(() => {
     if (isError) {
       toast.error(error.message);
     }
   }, [isError, error]);
 
-  // Fetch users whenever page or pageSize changes
+  // Fetch data whenever pagination/search changes
   useEffect(() => {
-    fetchUsers({ page: paginationModel.page, pageSize: paginationModel.pageSize });
-  }, [paginationModel.page, paginationModel.pageSize, fetchUsers]);
-
-  // Filter for renewals (pending/inactive/expires, not admin, and search)
-  const filteredRows = users.filter((record) => {
-    const isAdmin = record?.user_role?.toLowerCase() === "admin";
-    const isPending = ["pending", "inactive", "expires"].includes(record?.status?.toLowerCase());
-    return (
-      !isAdmin &&
-      isPending &&
-      [
-        record.registration_no?.toString().toLowerCase(),
-        record.first_name?.toLowerCase(),
-        record.username?.toLowerCase(),
-        record.expiry_date?.toString().toLowerCase(),
-      ].some((field) => field?.includes(search.toLowerCase()))
+    mutate(
+      {
+        page: paginationModel.page,
+        pageSize: paginationModel.pageSize,
+        search,
+      },
+      {
+        onSuccess: (res) => {
+          setUsers(res?.content || []);
+          setTotalRecords(res?.totalRecords || 0);
+        },
+      }
     );
-  });
+  }, [paginationModel.page, paginationModel.pageSize, search, mutate]);
+
+  // Reset page when search changes
+  useEffect(() => {
+    setPaginationModel((prev) => ({ ...prev, page: 0 }));
+  }, [search]);
+
+  // Open dialog
+  const handleRenew = useCallback((row) => {
+    setSelectedUser(row);
+    setRenewDialogOpen(true);
+  }, []);
+
+  const columns = useMemo(() => getRenewalsColumns(handleRenew), [handleRenew]);
 
   return (
     <Box padding={2} marginTop={8}>
@@ -52,12 +75,14 @@ const RenewalsData = () => {
         gutterBottom
         color="#34495e"
         fontWeight={600}
-        fontFamily={"Outfit sans-serif"}
+        fontFamily={"Outfit, sans-serif"}
         sx={{ textAlign: { xs: "center", sm: "left" } }}
       >
         Renewals
       </Typography>
-      <Box display="flex" alignItems="center" gap={2}>
+
+      {/* Search */}
+      <Box display="flex" alignItems="center" gap={2} mb={2}>
         <TextField
           placeholder="Search user"
           label="Search"
@@ -65,7 +90,7 @@ const RenewalsData = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           size="medium"
-          sx={{ width: { xs: '100%', sm: "auto", md: 'auto' } }}
+          sx={{ width: { xs: "100%", sm: "auto", md: "auto" } }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start" style={{ marginRight: "8px" }}>
@@ -75,16 +100,27 @@ const RenewalsData = () => {
           }}
         />
       </Box>
+
+      {/* DataTable */}
       <PaginationDataTable
-        columns={getRenewalsColumns()}
-        data={filteredRows}
+        columns={columns}
+        data={users}
         customStyles={customStyles}
         isLoading={isLoading}
-        totalRows={data?.totalRecords || 0}
+        totalRows={totalRecords}
         paginationModel={paginationModel}
         setPaginationModel={setPaginationModel}
         noDataComponent={<Typography padding={3}>No records found</Typography>}
         progressComponent={<LoadingTextSpinner />}
+      />
+
+      {/* Same dialog as upgrade */}
+      <UserUpgradeDialog
+        open={renewDialogOpen}
+        handleClose={() => setRenewDialogOpen(false)}
+        defaultUserType={selectedUser?.type_of_user}
+        userId={selectedUser?.registration_no}
+        key={`renew-dialog-${selectedUser?.registration_no}`}
       />
     </Box>
   );

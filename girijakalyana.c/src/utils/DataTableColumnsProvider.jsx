@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Typography } from "@mui/material";
+import { Button, Chip, Typography } from "@mui/material";
 import { ModeComment } from "@mui/icons-material";
 import { getRelativeTime } from "./common/date";
 import { ViewImagesComponent } from "../components/Admin/imageVarify/ImageVerificationdata";
@@ -205,43 +205,75 @@ export const getImageVerificationColumns = (upgradeUserMutation,handleStatusUpda
 }
   ];
 
-export const getRenewalsColumns = () => [
-    {
-      name: "Registration No",
-      selector: (row) => row.registration_no,
-      sortable: false,
-    },
-    {
-      name: "Name",
-      selector: (row) => row.first_name,
-      sortable: true,
-    },
-    {
-      name: "Email Id",
-      selector: row => row?.username || row?.email_id,
-      sortable: true,
-    },
-    {
-      name: "Gender",
-      selector: (row) => row.gender,
-      sortable: false,
-    },
-    {
-      name: "Expiry Date",
-      selector: (row) => row.expiry_date,
-      sortable: true,
-    },
-    {
-      name: "Status",
-      cell: (row) => (
-        <span style={{ color: "red", fontWeight: 500 }}>{row.status}</span>
-      ),
-    },
-    {
-      name: "Renewal",
-      selector: () => "-",
-    },
-  ];
+export const getRenewalsColumns = (handleRenew) => [
+  {
+    name: "Registration No",
+    selector: (row) => row.registration_no,
+    sortable: false,
+  },
+  {
+    name: "Name",
+    selector: (row) => row.first_name,
+    sortable: true,
+  },
+  {
+    name: "Email Id",
+    selector: row => row?.username || row?.email_id,
+    sortable: true,
+  },
+  {
+    name: "Gender",
+    selector: (row) => row.gender,
+    sortable: false,
+  },
+  {
+    name: "Expiry Date",
+    selector: (row) => row.expiry_date,
+    sortable: true,
+  },
+{
+  name: "Status",
+  cell: (row) => (
+  <Chip
+  label={(row.status || "").toUpperCase()}
+  sx={{
+    backgroundColor: '#f5f5f5',
+    color: row.status === 'expired'
+      ? '#c62828'
+      : row.status === 'pending'
+        ? '#f57f17'
+        : 'inherit',
+  }}
+  size="small"
+/>
+
+  ),
+},
+ {
+    name: "Renewal",
+    cell: (row) => (
+      <Button
+        variant="contained"
+        size="small"
+        onClick={() => handleRenew(row)}
+        disabled={!row.can_renew || !row.renewal_eligible}
+        sx={{
+          backgroundColor:"#0e870eff",
+          minWidth: '80px',
+          textTransform: 'none',
+          fontWeight: 'bold',
+          boxShadow: 1,
+          '&:hover': {
+            boxShadow: 2,
+            backgroundColor: "#006400"
+          }
+        }}
+      >
+        Renew
+      </Button>
+    ),
+  },
+];
 
 export const getResetPasswordColumns = (handleOpenDialog) =>  [
     {
