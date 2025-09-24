@@ -221,12 +221,7 @@ export const useRaiseTicket = () => {
         throw new Error(response?.message || "Failed to raise ticket");
       }
     },
-    onSuccess: (response) => {
-      toast.success("Ticket raised successfully! Our team will review your issue.");
-    },
-    onError: (error) => {
-      const errorMessage = error?.response?.data?.error || error.message;
-      toast.error(errorMessage || "Failed to raise ticket");
-    },
+    // Remove onSuccess and onError to prevent duplicate notifications
+    // Handle notifications in the component instead
   });
 };
