@@ -238,11 +238,14 @@ export const getRenewalsColumns = (handleRenew) => [
   label={(row.status || "").toUpperCase()}
   sx={{
     backgroundColor: '#f5f5f5',
-    color: row.status === 'expired'
-      ? '#c62828'
-      : row.status === 'pending'
-        ? '#f57f17'
-        : 'inherit',
+    color:
+          row.status === 'expired'
+            ? '#c62828'
+            : row.status === 'inActive'
+            ? '#1976d2'
+            : row.status === 'pending'
+            ? '#f57f17'
+            : '#0288d1', 
   }}
   size="small"
 />

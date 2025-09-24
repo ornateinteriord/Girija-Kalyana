@@ -119,7 +119,6 @@ const ResetPassword = () => {
         password: newPassword,
       }, {
         onSuccess: () => {
-          toast.success("Password reset successfully");
           fetchUsers({ page: paginationModel.page, pageSize: paginationModel.pageSize });
           handleCloseDialog();
         },
