@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Box, 
   Typography, 
@@ -13,7 +13,14 @@ import {
   Paper,
   List,
   ListItem,
-  ListItemIcon
+  ListItemIcon,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  IconButton,
+  CircularProgress
 } from '@mui/material';
 import { 
   CreditCard, 
@@ -24,20 +31,27 @@ import {
   Favorite,
   Lock,
   Public,
-  PhoneAndroid
+  PhoneAndroid,
+  Close as CloseIcon
 } from '@mui/icons-material';
 import Navbar from '../navbar/Navbar';
 import Footer from '../footer/Footer';
 import { membershipOptions } from "../../assets/memberShipOptions/MemberShipPlans";
 import { useNavigate } from 'react-router-dom';
-
-
+import { toast } from 'react-toastify';
+import { post } from '../api/authHooks'; // Assuming this is where your API calls are
+import MembershipUpgradeCards from '../common/MembershipUpgradeCards';
 
 const MembershipPlans = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-    const navigate = useNavigate();
-
+  const navigate = useNavigate();
+  const [promocodeDialogOpen, setPromocodeDialogOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [promocode, setPromocode] = useState(''); // Store applied promocode
+  const [isChecking, setIsChecking] = useState(false);
+  const [isPromoApplied, setIsPromoApplied] = useState(false); // Track if promocode is applied
+  const [appliedPromocodePlan, setAppliedPromocodePlan] = useState(null); // Track which plan the promocode was applied to
 
   const benefits = [
     { icon: <Star color="primary" />, text: 'Premium quality matches' },
@@ -47,17 +61,69 @@ const MembershipPlans = () => {
     { icon: <PhoneAndroid color="success" />, text: 'Dedicated mobile app' }
   ];
 
-const handlePlanSelection = (planName) => {
-  const planRoles = {
-    'PREMIUM MEMBERSHIP': 'PremiumUser',
-    'SILVER MEMBERSHIP': 'SilverUser'
+  const handlePlanSelection = (planName) => {
+    const planRoles = {
+      'PREMIUM MEMBERSHIP': 'PremiumUser',
+      'SILVER MEMBERSHIP': 'SilverUser'
+    };
+
+    const planType = planRoles[planName] || 'FreeUser';
+    // If promocode is applied, include it in the navigation
+    const promocodeParam = isPromoApplied && promocode ? `&promocode=${promocode}` : '';
+    navigate(`/register?type=${planType}${promocodeParam}`);  
+    
+    console.log(`Navigating with plan type: ${planType}`);  
   };
 
-  const planType = planRoles[planName] || 'FreeUser';
-  navigate(`/register?type=${planType}`);  
-  
-  console.log(`Navigating with plan type: ${planType}`);  
-};
+  const handlePromocodeClick = (plan) => {
+    setSelectedPlan(plan);
+    // Clear any existing promocode when opening dialog
+    setPromocode('');
+    setPromocodeDialogOpen(true);
+  };
+
+  const handleApplyPromocode = async () => {
+    if (!promocode.trim()) {
+      toast.error('Please enter a promocode');
+      return;
+    }
+
+    setIsChecking(true);
+    try {
+      const response = await post("/api/promoter/promocheck", {
+        promocode: promocode.trim(),
+      });
+
+      if (response?.success) {
+        toast.success(response.message || "Promocode applied successfully! ₹100 discount applied.");
+        // Store the applied promocode and mark as applied
+        setIsPromoApplied(true);
+        setAppliedPromocodePlan(selectedPlan?.name); // Track which plan the promocode was applied to
+        // Close the dialog and keep the promocode in state
+        // Don't navigate - let the user click "Get Started" to proceed
+        setPromocodeDialogOpen(false);
+      } else {
+        toast.error(response?.message || "Invalid promocode");
+      }
+    } catch (error) {
+      const errorMessage = error?.response?.data?.message || error.message;
+      toast.error(errorMessage || "Invalid promocode");
+    } finally {
+      setIsChecking(false);
+    }
+  };
+
+  const handleCloseDialog = () => {
+    setPromocodeDialogOpen(false);
+    // Don't reset promocode or isPromoApplied state when closing dialog
+    // This allows users to see the applied promocode
+    setSelectedPlan(null);
+  };
+
+  // Handle plan selection from MembershipUpgradeCards
+  const handlePlanSelect = (plan) => {
+    handlePlanSelection(plan.name);
+  };
 
   return (
     <>
@@ -174,194 +240,30 @@ const handlePlanSelection = (planName) => {
      Membership Plans
     </Typography>
 
-    <Box
-      sx={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: 1,
+    <MembershipUpgradeCards
+      onPlanSelect={handlePlanSelect}
+      onPromocodeApply={(promocodeData) => {
+        // Handle promocode apply if needed
+        console.log("Promocode applied:", promocodeData);
       }}
-    >
-      {membershipOptions.map((plan, index) => (
-        <Box
-          key={index}
-          sx={{
-            flex: '1 1 calc(50% - 12px)',
-            minWidth: isMobile ? '100%' : 'auto',
-          }}
-        >
-          <Card
-            sx={{
-                width:isMobile?'100%':'90%',
-              height: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              boxShadow: 4,
-              border: 'none',
-              transition: 'all 0.3s ease',
-              '&:hover': {
-                transform: 'translateY(-5px)',
-                boxShadow: 8,
-              },
-              background: plan.gradient,
-              color: 'white',
-              borderRadius: 3,
-              overflow: 'hidden',
-              position: 'relative',
-              '&:before': {
-                content: '""',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                height: 4,
-                background: 'rgba(255,255,255,0.3)',
-              },
-            }}
-          >
-            <CardContent
-              sx={{
-                flexGrow: 1,
-                position: 'relative',
-                zIndex: 1,
-              }}
-            >
-              <Box
-                sx={{
-                  position: 'absolute',
-                  top:isMobile? 55 : 16,
-                  right: 16,
-                  bgcolor: 'rgba(255,255,255,0.2)',
-                  color: 'white',
-                  px: 1.5,
-                  py: 0.5,
-                  borderRadius: 1,
-                  fontSize: '0.75rem',
-                  fontWeight: 500,
-                }}
-              >
-                {plan.discount}
-              </Box>
-
-              <Typography
-                variant="h5"
-                component="h3"
-                sx={{
-                  fontWeight: 500,
-                  mb: 1,
-                  color: 'white',
-                }}
-              >
-                {plan.name}
-              </Typography>
-
-              <Box sx={{ display: 'flex', alignItems: 'baseline', mb: 2 }}>
-                <Typography
-                  variant="h3"
-                  component="div"
-                  sx={{
-                    fontWeight: 800,
-                    mr: 2,
-                  }}
-                >
-                  {plan.discountedPrice}
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{
-                    textDecoration: 'line-through',
-                    opacity: 0.8,
-                     color:'#fff'
-                  }}
-                >
-                  {plan.originalPrice}
-                </Typography>
-              </Box>
-
-              <Divider
-                sx={{
-                  height:'1px',
-                  my: 2,
-                  bgcolor: 'rgba(255,255,255,0.3)',
-                }}
-              />
-
-              <List
-                dense
-                sx={{
-                  mb: 1,
-                  '& li': {
-                    px: 0,
-                    py: 0.5,
-                  },
-                }}
-              >
-                {plan.features.map((feature, i) => (
-                  <ListItem
-                    key={i}
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                    }}
-                  >
-                    <CheckCircle
-                      sx={{
-                        fontSize: 18,
-                        mr: 1.5,
-                        mt: '2px',
-                      }}
-                    />
-                    <Typography variant="body2" sx={{color:'#fff'}}>{feature}</Typography>
-                  </ListItem>
-                ))}
-              </List>
-
-              <Typography
-                variant="subtitle1"
-                sx={{
-                  fontWeight: 500,
-                  mb: 1,
-                  opacity: 0.9,
-                }}
-              >
-                Validity: {plan.duration}
-              </Typography>
-
-             <Button
-  variant="contained"
-  fullWidth
-  size="large"
-  sx={{
-    bgcolor: 'white',
-    color: plan.color,
-    '&:hover': {
-      bgcolor: 'rgba(255,255,255,0.9)',
-    },
-    py: 1.5,
-    fontWeight: 700,
-    borderRadius: 2,
-    boxShadow: 2,
-  }}
-  onClick={() => handlePlanSelection(plan.name)}
->
-  Get Started
-</Button>
-
-              <Typography
-                variant="body2"
-                sx={{
-                  mt: 2,
-                  textAlign: 'center',
-                  opacity: 0.8,
-                  color:'#fff'
-                }}
-              >
-                Have Promocode? Get ₹100 discount
-              </Typography>
-            </CardContent>
-          </Card>
-        </Box>
-      ))}
-    </Box>
+      appliedPromocode={isPromoApplied ? { promocode, isValid: true, discount: 100, planId: appliedPromocodePlan } : null}
+      setAppliedPromocode={(promocodeData) => {
+        // Update promocode state when applied from MembershipUpgradeCards
+        if (promocodeData && promocodeData.isValid) {
+          setIsPromoApplied(true);
+          setPromocode(promocodeData.promocode);
+          setAppliedPromocodePlan(promocodeData.planId); // Track which plan the promocode was applied to
+        } else {
+          setIsPromoApplied(false);
+          setPromocode('');
+          setAppliedPromocodePlan(null);
+        }
+      }}
+      isProcessingPayment={false}
+      setIsProcessingPayment={() => {}}
+      processingPlanId={null}
+      setProcessingPlanId={() => {}}
+    />
   </Box>
 </Box>
 
@@ -476,6 +378,68 @@ const handlePlanSelection = (planName) => {
         </Box>
       </Box>
       <Footer />
+
+      {/* Promocode Dialog */}
+      <Dialog open={promocodeDialogOpen} onClose={handleCloseDialog} maxWidth="xs" fullWidth>
+        <DialogTitle>
+          Apply Promocode
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseDialog}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body1" sx={{ mb: 2 }}>
+            Enter your promocode for {selectedPlan?.name} to get ₹100 discount
+          </Typography>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Promocode"
+            fullWidth
+            variant="outlined"
+            value={promocode}
+            onChange={(e) => setPromocode(e.target.value)}
+            disabled={isChecking}
+          />
+        </DialogContent>
+        <DialogActions sx={{ justifyContent: "center", p: 3, gap: 2 }}>
+          <Button
+            variant="outlined"
+            onClick={handleCloseDialog}
+            disabled={isChecking}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleApplyPromocode}
+            disabled={!promocode.trim() || isChecking}
+            startIcon={
+              isChecking ? (
+                <CircularProgress size={20} />
+              ) : null
+            }
+            sx={{
+              minWidth: 120,
+              background: "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
+              "&:hover": {
+                background: "linear-gradient(45deg, #1976D2 30%, #0288D1 90%)",
+              },
+            }}
+          >
+            {isChecking ? "Checking..." : "Apply"}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

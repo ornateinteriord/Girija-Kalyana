@@ -60,7 +60,7 @@ const MembershipDialog = ({ open, onClose, onSelectPlan }) => {
   }, []);
   
   const calculateFinalAmount = (plan) => {
-    const baseAmount = parseInt(plan.discountedPrice.replace('₹', '').replace(',', ''));
+    const baseAmount = parseInt(plan.discountedPrice.replace('₹', '').replace(',', '').replace('.', ''));
     // Only apply discount if promocode is for this specific plan
     if (appliedPromocode && appliedPromocode.isValid && appliedPromocode.planId === plan.name) {
       return Math.max(baseAmount - appliedPromocode.discount, 0);
@@ -101,7 +101,7 @@ const MembershipDialog = ({ open, onClose, onSelectPlan }) => {
       }
       
       const orderId = "order_" + Date.now();
-      const originalAmount = parseInt(plan.discountedPrice.replace('₹', '').replace(',', ''));
+      const originalAmount = parseInt(plan.discountedPrice.replace('₹', '').replace(',', '').replace('.', ''));
       const finalAmount = calculateFinalAmount(plan);
       const planType = plan.name.includes('PREMIUM') ? 'premium' : 'silver';
       
@@ -137,11 +137,10 @@ const MembershipDialog = ({ open, onClose, onSelectPlan }) => {
         // Initialize Cashfree payment
         const cashfree = await load({ mode: "sandbox" }); // Change to "production" for live
         
-        // Start payment process with proper redirect URL
+        // Start payment process
         cashfree.checkout({
           paymentSessionId: orderResponse.payment_session_id,
           redirectTarget: "_self", // Will redirect to return URL after completion
-          returnUrl: `${window.location.origin}/payment-redirect?order_id=${orderId}`
         });
         
         // Don't close dialog immediately - let Cashfree handle the redirect

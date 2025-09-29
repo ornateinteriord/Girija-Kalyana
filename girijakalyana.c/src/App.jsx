@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Box, CircularProgress, Dialog, DialogContent, Typography } from '@mui/material';
+import { Box, CircularProgress, Dialog, DialogContent, Typography, ThemeProvider, createTheme } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './App.css';
 import ProfileProvider from './components/usecontext/ProfileProvider';
@@ -29,6 +29,64 @@ import NotFoundPage from './components/notFound/NotFoundPage';
 
 // Create a query client with default options
 const queryClient = new QueryClient();
+
+// Global theme configuration to disable button hover effects
+const globalTheme = createTheme({
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          '&:hover': {
+            backgroundColor: 'transparent',
+            boxShadow: 'none',
+            transform: 'none',
+          },
+          transition: 'none',
+        },
+        contained: {
+          '&:hover': {
+            backgroundColor: 'transparent',
+            boxShadow: 'none',
+          },
+        },
+        outlined: {
+          '&:hover': {
+            backgroundColor: 'transparent',
+            borderColor: 'inherit',
+          },
+        },
+        text: {
+          '&:hover': {
+            backgroundColor: 'transparent',
+          },
+        },
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          '&:hover': {
+            backgroundColor: 'transparent',
+          },
+          transition: 'none',
+        },
+      },
+    },
+    MuiFab: {
+      styleOverrides: {
+        root: {
+          '&:hover': {
+            backgroundColor: 'transparent',
+          },
+          transition: 'none',
+        },
+      },
+    },
+  },
+  typography: {
+    fontFamily: 'Outfit, sans-serif',
+  },
+});
 
 // Lazy loading components
 const HeroSlider = lazy(() => import('./components/hero/HeroSlider'));
@@ -66,6 +124,7 @@ const ViewAll = lazy(() => import('./components/Userprofile/viewAll/ViewAll'));
 const Search = lazy(() => import('./components/Userprofile/search/Search'));
 const UserDashboard = lazy(() => import('./components/Userprofile/userdDashboard/UserDashboard'));
 const Profile = lazy(() => import('./components/Userprofile/profile/Profile'));
+const TestPlanSelection = lazy(() => import('./components/TestPlanSelection'));
 
 const IncompletePayments = lazy(() => import('./components/Admin/IncompletePayments/IncompletePayments.jsx'));
 const PaymentRedirect = lazy(() => import('./components/PaymentRedirect/PaymentRedirect'));
@@ -107,6 +166,7 @@ export const LoadingComponent = () => {
 
 const App = () => {
   return (
+    <ThemeProvider theme={globalTheme}>
     <ProfileProvider>
     <QueryClientProvider client={queryClient}>
       <Suspense fallback={
@@ -124,6 +184,7 @@ const App = () => {
             <Route path="/privacy-policy" element={<Privacy />} />
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/test-plan" element={<TestPlanSelection />} />
              <Route path="/membership" element={<MembershipPlan />} />
 
             {/* Admin Routes */}
@@ -196,6 +257,7 @@ const App = () => {
 
     {/* <ProfileViewer /> */}
     </ProfileProvider>
+    </ThemeProvider>
   );
 };
 

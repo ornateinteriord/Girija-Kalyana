@@ -41,16 +41,17 @@ import {
   Notifications,
   Email
 } from '@mui/icons-material';
-import { useLoginMutation } from '../../api/Auth';
-import { usePromoters } from '../../api/Admin';
-
+import TokenService from '../../token/tokenService';
 
 const DashboardContent = ({ sidebarData }) => {
   const theme = useTheme();
-  const { data: promoter, isLoading, error } = useLoginMutation();
-
-
-  console.log("promoter user",promoter)
+  
+  // Get current promoter data from token
+  const currentUser = TokenService.getUser();
+  const promoter = currentUser?.promoter || null;
+  
+  console.log("Current user from token:", currentUser);
+  console.log("Promoter data:", promoter);
 
   const getIconComponent = (iconName, props = {}) => {
     const iconComponents = {
@@ -103,7 +104,7 @@ const DashboardContent = ({ sidebarData }) => {
           mb: 3
         }}
       >
-        Welcome {promoter?.promoter_name}
+        Welcome {promoter?.promoter_name || currentUser?.promoter_name || 'Promoter'}
       </Typography>
       
       <Divider sx={{ height:'1px',my:2 }} />
@@ -149,7 +150,7 @@ const DashboardContent = ({ sidebarData }) => {
               Promo Code
             </Typography>
             <Typography variant="h5" sx={{ color: '#2e7d32', fontWeight: 'bold' }}>
-              KCPL2019
+              {promoter?.promocode || 'KCPL2019'}
             </Typography>
           </CardContent>
         </Card>
@@ -188,7 +189,7 @@ const DashboardContent = ({ sidebarData }) => {
               }}
             >
               <Chip
-                label="Registered: 07-05-2019"
+                label={`Registered: ${promoter?.createdAt ? new Date(promoter.createdAt).toLocaleDateString() : '07-05-2019'}`}
                 color="primary"
                 variant="outlined"
                 sx={{
@@ -198,7 +199,7 @@ const DashboardContent = ({ sidebarData }) => {
                 }}
               />
               <Chip
-                label="Expires: Aug 18, 2019"
+                label={`Expires: ${promoter?.expiry_date ? new Date(promoter.expiry_date).toLocaleDateString() : 'Aug 18, 2019'}`}
                 color="secondary"
                 variant="outlined"
                 sx={{

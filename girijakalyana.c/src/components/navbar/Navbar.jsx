@@ -1,30 +1,30 @@
 import React, { useEffect, useState } from "react";
 import "./Navbar.scss";
 import {
-  Button,
-  Dialog,
-  TextField,
-  Typography,
   Box,
-  CircularProgress,
+  Typography,
+  Button,
   IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  useTheme,
+  useMediaQuery,
   Drawer,
   List,
   ListItem,
   ListItemText,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   InputAdornment,
-  useMediaQuery,
-  useTheme,
+  CircularProgress,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useLoginMutation, useResetpassword } from "../api/Auth";
+import { useLoginMutation, useResetPasswordMutation } from "../api/Auth";
 import useAuth from "../hook/UseAuth";
 import TokenService from "../token/tokenService";
 
@@ -51,7 +51,7 @@ const Navbar = () => {
   const { openDialog } = location.state || {};
 
   const { mutate: login, isPending: isLoginPending } = useLoginMutation();
-  const { mutate: resetPassword, isPending: isResettingPassword } = useResetpassword();
+  const { mutate: resetPassword, isPending: isResettingPassword } = useResetPasswordMutation();
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -119,7 +119,7 @@ const Navbar = () => {
     }
     setForgotPasswordError("");
     
-    resetPassword({ email }, {
+    resetPassword({ username: email }, {
       onSuccess: (response) => {
         if (response.success) {
           setOtpSent(true);
@@ -143,9 +143,9 @@ const Navbar = () => {
     }
     
     resetPassword({ 
-      email, 
+      username: email, 
       otp, 
-      password: newPassword, 
+      newPassword, 
     }, {
       onSuccess: () => {
         toast.success("Password reset successfully");
