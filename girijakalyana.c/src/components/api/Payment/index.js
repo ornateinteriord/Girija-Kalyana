@@ -190,3 +190,29 @@ export const useCheckPromocode = () => {
     // Components will handle their own toast messages
   });
 };
+
+// Hook for raising tickets/support requests
+export const useRaiseTicket = () => {
+  return useMutation({
+    mutationFn: async ({ orderId, description, images }) => {
+      const response = await post("/api/payment/raise-ticket", {
+        orderId,
+        description,
+        images
+      });
+      
+      if (response?.success) {
+        return response;
+      } else {
+        throw new Error(response?.message || "Failed to raise ticket");
+      }
+    },
+    onSuccess: (response) => {
+      toast.success("Ticket raised successfully. Our team will review it.");
+    },
+    onError: (error) => {
+      const errorMessage = error?.response?.data?.error || error.message;
+      toast.error(`Failed to raise ticket: ${errorMessage}`);
+    }
+  });
+};

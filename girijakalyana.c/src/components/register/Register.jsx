@@ -28,6 +28,7 @@ import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
 import { toast } from "react-toastify";
 import { useSignupMutation, useCheckPromocode } from "../api/Auth";
+
 import { useLocation, useNavigate } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
