@@ -3,6 +3,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import TokenService from "../../token/tokenService";
 import { get, post } from "../authHooks";
+import { useCheckPromocode } from "../Payment";
 
 export const useSignupMutation = ()=>{
   const navigate = useNavigate();
@@ -12,10 +13,19 @@ export const useSignupMutation = ()=>{
       },
       onSuccess: (response) => {
         if (response.success) {
-          TokenService.setToken(response.token);
-       window.dispatchEvent(new Event("storage")); 
-          toast.success(response.message);
-          navigate("/activation-pending");
+          // For premium users, don't automatically set token or navigate
+          // They will be redirected to payment and then to activation pending
+          if (response.user?.type_of_user === "PremiumUser" || response.user?.type_of_user === "SilverUser") {
+            // Token might not be set for premium users as they need to complete payment first
+            // Navigation will be handled by the payment flow
+            toast.success("Registration successful. Please complete payment to activate your account.");
+          } else {
+            // For free users, proceed with normal flow
+            TokenService.setToken(response.token);
+            window.dispatchEvent(new Event("storage")); 
+            toast.success(response.message);
+            navigate("/activation-pending");
+          }
         } else {
           console.error(response.message);
         }
@@ -25,6 +35,7 @@ export const useSignupMutation = ()=>{
       },
     });
 }
+
 export const useLoginMutation = () => {
   const navigate = useNavigate();
 
@@ -41,80 +52,62 @@ export const useLoginMutation = () => {
         const userStatus = response?.user?.status;
         const role = TokenService.getRole();
 
-        if (userStatus !== "active") {
-          toast.info(response.message || "Your account is not yet active");
-        navigate("/activation-pending");
-          return;
+        if (role === "promoter") {
+          navigate("/promoter/dashboard");
+        } else if (userStatus === "active") {
+          navigate("/user/userDashboard");
+        } else {
+          navigate("/activation-pending");
         }
-
-        toast.success(response.message );
-
-        switch (role) {
-          case "FreeUser":
-          case "PremiumUser":
-          case "SilverUser":
-          case "Assistance":
-            navigate("/user/userDashboard");
-            break;
-          case "Admin":
-            navigate("/admin/dashboard");
-            break;
-          case "promoter":
-            navigate("/PromotAdmin");
-            break;
-          default:
-            localStorage.clear();
-            toast.error("Invalid user role");
-        }
-      } else {
+      } else if (response?.success === false) {
         toast.error(response?.message);
-        console.error("Login failed:", response?.message);
       }
     },
-
     onError: (error) => {
-      toast.error(error?.message);
-      console.error("Login error:", error);
-    }
+      toast.error(error?.response?.data?.message || "An error occurred during login");
+    },
   });
 };
 
-
-export const useResetpassword = () => {
+export const useResetPasswordMutation = () => {
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: async (data) => {
-      const response = await post("/api/auth/reset-password", data);
-      if (!response.success) {
-        throw new Error(response.message);
-      }
-      return response;
+      return await post("/api/auth/reset-password", data);
     },
     onSuccess: (response) => {
-      toast.success(response.message);
+      if (response.success) {
+        toast.success(response.message);
+        navigate("/login");
+      } else {
+        toast.error(response.message);
+      }
     },
-   onError: (error) => {
-  const errorMessage =
-    error?.response?.data?.message || "Something went wrong";
-  toast.error(errorMessage);
-}
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Failed to reset password");
+    },
   });
 };
 
 export const useGetDashboardStats = () => {
   return useQuery({
-    queryKey: ["dashboardstats"],
+    queryKey: ["dashboard-stats"],
     queryFn: async () => {
-      const data = await get("/api/auth/dashboardstats")
-      return data;
+      const response = await get("/api/auth/dashboardstats");
+      return response.stats;
     },
   });
 };
+
 export const useGetRecentRegisters = () => {
   return useQuery({
-    queryKey: ["recentregisters"],
+    queryKey: ["recent-registers"],
     queryFn: async () => {
-      const data = await get("/api/auth/recentregisters")
-      return data;
+      const response = await get("/api/auth/recentregisters");
+      return response;
     },
   });
 };
+
+// Export the promocode hook
+export { useCheckPromocode };

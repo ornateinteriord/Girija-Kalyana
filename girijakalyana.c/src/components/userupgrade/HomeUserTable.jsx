@@ -9,22 +9,22 @@ import {
   Container,
   useMediaQuery,
   useTheme,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton,
 } from "@mui/material";
-import MembershipDialog from "../Userprofile/MembershipDailog/MembershipDailog";
+import { AiOutlineClose } from "react-icons/ai";
+import MembershipUpgradeCards from "../common/MembershipUpgradeCards";
 
 const HomeUserTable = () => {
-  const [selectedPlan, setSelectedPlan] = useState(null);
   const [open, setOpen] = useState(false);
   const [currentMembership, ] = useState(null);
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleUpgrade = () => {
-    const dummyPlan = {
-      type: "Premium",
-      price: "₹999",
-    };
-    setSelectedPlan(dummyPlan);
     setOpen(true);
   };
 
@@ -161,11 +161,67 @@ const HomeUserTable = () => {
         </Grid>
       </Container>
 
-      <MembershipDialog
+      <Dialog
         open={open}
         onClose={handleClose}
-        selectedPlan={selectedPlan}
-      />
+        maxWidth="md"
+        fullWidth
+        fullScreen={isSmallScreen}
+      >
+        <DialogTitle
+          sx={{
+            fontSize: isSmallScreen ? "1.25rem" : "1.5rem",
+            fontWeight: 700,
+            textAlign: "center",
+            p: isSmallScreen ? 2 : 3,
+          }}
+        >
+          Membership Plans
+          <IconButton
+            sx={{
+              position: "absolute",
+              right: isSmallScreen ? 8 : 15,
+              top: isSmallScreen ? 8 : 15,
+            }}
+            onClick={handleClose}
+          >
+            <AiOutlineClose size={isSmallScreen ? 20 : 24} />
+          </IconButton>
+        </DialogTitle>
+
+        <DialogContent dividers sx={{ p: isSmallScreen ? 2 : 3 }}>
+          <MembershipUpgradeCards
+            onPlanSelect={(plan) => {
+              // Handle plan selection
+              console.log("Selected plan:", plan);
+              // Add your logic here for handling plan selection
+            }}
+            isProcessingPayment={false}
+            setIsProcessingPayment={() => {}}
+            processingPlanId={null}
+            setProcessingPlanId={() => {}}
+          />
+        </DialogContent>
+
+        <DialogActions sx={{ justifyContent: "center", p: 2 }}>
+          <Button
+            variant="outlined"
+            onClick={handleClose}
+            sx={{
+              color: "#333",
+              borderColor: "#ccc",
+              fontWeight: "bold",
+              textTransform: "capitalize",
+              "&:hover": {
+                backgroundColor: "rgba(0, 0, 0, 0.08)", 
+                borderColor: "#bbb",
+              },
+            }}
+          >
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

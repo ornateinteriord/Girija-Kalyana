@@ -15,6 +15,11 @@ import {
   useTheme,
   InputAdornment,
   IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  CircularProgress,
 } from "@mui/material";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -22,31 +27,50 @@ import rawJsonData from "../Userprofile/profile/eduction/jsondata/data.json";
 import Navbar from "../navbar/Navbar";
 import Footer from "../footer/Footer";
 import { toast } from "react-toastify";
-import { useSignupMutation } from "../api/Auth";
-import { useLocation } from "react-router-dom";
+import { useSignupMutation, useCheckPromocode } from "../api/Auth";
+
+import { useLocation, useNavigate } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { LoadingComponent } from "../../App";
 import CustomAutocomplete from "../Autocomplete/CustomAutocomplete";
+import { load } from "@cashfreepayments/cashfree-js";
+import { post } from "../api/authHooks";
+import { membershipOptions } from "../../assets/memberShipOptions/MemberShipPlans";
 
 const datas = rawJsonData.reduce((acc, curr) => ({ ...acc, ...curr }), {});
 
 const Register = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { mutate, isPending } = useSignupMutation();
   const searchParams = new URLSearchParams(location.search);
-  const planType = searchParams.get("type");
+  const planType = searchParams.get("type"); // Changed from "plan" to "type" to match the navigation URL
+  
+  console.log("Location search:", location.search);
+  console.log("Plan type from URL:", planType);
+  console.log("All URL params:", Object.fromEntries(searchParams));
+  
+  // Promo code state
+  const [promocode, setPromocode] = useState(searchParams.get("promocode") || "");
+  const [isPromoApplied, setIsPromoApplied] = useState(!!searchParams.get("promocode"));
+  const [promoDialogOpen, setPromoDialogOpen] = useState(false);
+  
+  const checkPromocodeMutation = useCheckPromocode();
 
   const [citySuggestions, setCitySuggestions] = useState(datas.cities || []);
   const [talukSuggestions, setTalukSuggestions] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
 
   const getUserRole = () => {
+    console.log("getUserRole called with planType:", planType);
     switch (planType) {
       case "PremiumUser":
         return "PremiumUser";
@@ -85,9 +109,36 @@ const Register = () => {
     confirmPassword: "",
   };
 
-  const [formData, setFormData] = useState(initialFormState);
+  const [formData, setFormData] = useState(() => ({
+    user_role: getUserRole(),
+    marital_status: "",
+    profilefor: "",
+    gender: "",
+    date_of_birth: "",
+    age: "",
+    educational_qualification: "",
+    occupation: "",
+    income_per_month: "",
+    country: "",
+    mother_tongue: "",
+    name_of_parent: "",
+    parent_name: "",
+    religion: "Hindu",
+    caste: "",
+    address: "",
+    occupation_country: "",
+    state: "",
+    city: "",
+    first_name: "",
+    last_name: "",
+    username: "",
+    mobile_no: "",
+    password: "",
+    confirmPassword: "",
+  }));
 
   useEffect(() => {
+    console.log("planType changed to:", planType);
     setFormData((prev) => ({
       ...prev,
       user_role: getUserRole(),
@@ -161,7 +212,7 @@ const Register = () => {
     setFormData(initialFormState);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!/^[0-9]{10}$/.test(formData.mobile_no)) {
@@ -173,19 +224,152 @@ const Register = () => {
       toast.error("Passwords do not match");
       return;
     }
+
+    // For premium users, show payment dialog instead of direct registration
+    if (planType === "PremiumUser" || planType === "SilverUser") {
+      setPaymentDialogOpen(true);
+    } else {
+      // For free users, proceed with normal registration
+      try {
+        mutate(formData, {
+          onSuccess: () => {
+            toast.success("Registration successful");
+          },
+        });
+      } catch (error) {
+        console.error("Registration error:", error);
+      }
+    }
+  };
+
+  const handlePaymentConfirm = async () => {
+    setIsProcessingPayment(true);
+    setPaymentDialogOpen(false);
+
     try {
-      mutate(formData, {
-        onSuccess: () => {
-          toast.success(formData.message);
-        },
+      // First, register the user with inactive status
+      const registrationResponse = await post("/api/auth/signup", {
+        ...formData,
+        status: "inactive" // Set status to inactive initially
       });
-    } catch (error) {}
+
+      if (registrationResponse.success) {
+        // Create payment order using membershipOptions
+        const orderId = "order_" + Date.now();
+        const planName = planType === "PremiumUser" ? "PREMIUM MEMBERSHIP" : "SILVER MEMBERSHIP";
+        const plan = membershipOptions.find(p => p.name === planName);
+        
+        const originalAmount = parseInt(plan.discountedPrice.replace('₹', '').replace(',', ''));
+        const finalAmount = promocode ? Math.max(originalAmount - 100, 0) : originalAmount;
+        const planTypeCode = planType === "PremiumUser" ? 'premium' : 'silver';
+
+        const orderResponse = await post("/api/payment/create-order", {
+          orderId,
+          orderAmount: finalAmount,
+          customerName: formData.first_name + " " + formData.last_name,
+          customerEmail: formData.username,
+          customerPhone: formData.mobile_no,
+          planType: planTypeCode,
+          promocode: promocode || null,
+          originalAmount,
+          // Add context to indicate this is a registration
+          context: "registration"
+        });
+
+        if (orderResponse?.payment_session_id) {
+          // Store the order ID and timestamp in localStorage for later verification
+          localStorage.setItem('pendingOrderId', orderId);
+          localStorage.setItem(`orderTimestamp_${orderId}`, Date.now().toString());
+          
+          // Initialize Cashfree payment in the same tab
+          const cashfree = await load({ mode: "sandbox" }); // Change to "production" for live
+          
+          // Start payment process in the same tab
+          cashfree.checkout({
+            paymentSessionId: orderResponse.payment_session_id,
+            redirectTarget: "_self" // Open in same tab
+            // Removed returnUrl as it's set in the backend
+          });
+        } else {
+          throw new Error("Failed to create payment order");
+        }
+      } else {
+        throw new Error(registrationResponse.message || "Registration failed");
+      }
+    } catch (error) {
+      console.error("Payment initiation failed:", error);
+      toast.error(error.message || "Failed to initiate payment. Please try again.");
+      setIsProcessingPayment(false);
+    }
   };
 
   const isValidAge = (value) => {
     if (value === "") return true; // Allow empty field
     return /^\d+$/.test(value); // Check if it's only digits
   };
+
+  // Calculate plan amounts for display using membershipOptions
+  const getPlanDetails = () => {
+    if (planType === "PremiumUser") {
+      const plan = membershipOptions.find(p => p.name === 'PREMIUM MEMBERSHIP');
+      const originalPrice = parseInt(plan.discountedPrice.replace('₹', '').replace(',', ''));
+      const discountedPrice = isPromoApplied ? Math.max(originalPrice - 100, 0) : originalPrice;
+      return { originalPrice, discountedPrice, displayPrice: plan.discountedPrice };
+    } else if (planType === "SilverUser") {
+      const plan = membershipOptions.find(p => p.name === 'SILVER MEMBERSHIP');
+      const originalPrice = parseInt(plan.discountedPrice.replace('₹', '').replace(',', ''));
+      const discountedPrice = isPromoApplied ? Math.max(originalPrice - 100, 0) : originalPrice;
+      return { originalPrice, discountedPrice, displayPrice: plan.discountedPrice };
+    }
+    return { originalPrice: 0, discountedPrice: 0, displayPrice: '₹0' };
+  };
+
+  const { originalPrice, discountedPrice } = getPlanDetails();
+
+  // Handle promocode application
+  const handleApplyPromocode = () => {
+    if (!promocode.trim()) {
+      return;
+    }
+
+    checkPromocodeMutation.mutate(
+      { promocode: promocode.trim() },
+      {
+        onSuccess: (response) => {
+          setIsPromoApplied(true);
+          // Update URL with promocode without reloading the page
+          const newSearchParams = new URLSearchParams(location.search);
+          newSearchParams.set("promocode", promocode.trim());
+          navigate(`${location.pathname}?${newSearchParams.toString()}`, { replace: true });
+          setPromoDialogOpen(false);
+          toast.success("Promocode applied successfully! ₹100 discount applied.");
+        },
+        onError: (error) => {
+          toast.error(error?.response?.data?.message || "Invalid promocode");
+          setIsPromoApplied(false);
+        }
+      }
+    );
+  };
+
+  const handleRemovePromocode = () => {
+    setPromocode("");
+    setIsPromoApplied(false);
+    // Remove promocode from URL
+    const newSearchParams = new URLSearchParams(location.search);
+    newSearchParams.delete("promocode");
+    navigate(`${location.pathname}?${newSearchParams.toString()}`, { replace: true });
+  };
+
+  const handleOpenPromoDialog = () => {
+    setPromoDialogOpen(true);
+  };
+
+  const handleClosePromoDialog = () => {
+    setPromoDialogOpen(false);
+  };
+
+
 
   return (
     <>
@@ -264,6 +448,130 @@ const Register = () => {
               </Box>
             </Box>
           </Box>
+
+          {/* Promo code display with visual feedback */}
+          {planType && (planType === "PremiumUser" || planType === "SilverUser") && (
+            <Box
+              sx={{
+                mb: 3,
+                p: 2,
+                borderRadius: 2,
+                backgroundColor: isPromoApplied ? "#e8f5e8" : "#f5f5f5",
+                border: isPromoApplied ? "1px solid #4caf50" : "1px solid #e0e0e0",
+                textAlign: "center",
+                position: "relative",
+              }}
+            >
+              <Typography variant="h6" sx={{ mb: 1 }}>
+                {planType === "PremiumUser" ? "Premium" : "Silver"} Membership
+              </Typography>
+              <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 1 }}>
+                {isPromoApplied ? (
+                  <>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        textDecoration: "line-through",
+                        color: "text.secondary",
+                      }}
+                    >
+                      {getPlanDetails().displayPrice}
+                    </Typography>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        color: "#4caf50",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      ₹{discountedPrice}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: "#4caf50",
+                        fontWeight: "bold",
+                        ml: 1,
+                      }}
+                    >
+                      (Promo Applied)
+                    </Typography>
+                    <Button 
+                      size="small" 
+                      onClick={handleRemovePromocode}
+                      sx={{ 
+                        ml: 2,
+                        color: "#f44336",
+                        minWidth: "auto",
+                        padding: "2px 8px",
+                        fontSize: "0.75rem"
+                      }}
+                    >
+                      Remove
+                    </Button>
+                  </>
+                ) : (
+                  <Typography variant="h6">{getPlanDetails().displayPrice}</Typography>
+                )}
+              </Box>
+              {!isPromoApplied && (
+                <Button 
+                  size="small" 
+                  onClick={handleOpenPromoDialog}
+                  sx={{ 
+                  mt: 2,
+                  color: "primary.main",
+                  border: "1px solid",
+                  borderColor: "primary.main",
+                  minWidth: "auto",
+                  padding: "4px 12px",
+                  fontSize: "0.875rem",
+                  textTransform: "none",
+                  mr : 2,
+                  '&:hover': {
+                    backgroundColor: 'primary.main',
+                    color: 'white'
+                  }
+                }}
+                >
+                  Have a promocode? Apply here
+                </Button>
+              )}
+              
+              <Button 
+                size="small" 
+                onClick={() => {
+                  // Reset all plan-related states
+                  setIsPromoApplied(false);
+                  setPromocode("");
+                  
+                  // Remove plan and promocode from URL
+                  const newSearchParams = new URLSearchParams(location.search);
+                  newSearchParams.delete("plan");
+                  newSearchParams.delete("promocode");
+                  
+                  // Navigate to clean register page
+                  navigate(`/register`, { replace: true });
+                }}
+                sx={{ 
+                  mt: 2,
+                  color: "error.main",
+                  border: "1px solid",
+                  borderColor: "error.main",
+                  minWidth: "auto",
+                  padding: "4px 12px",
+                  fontSize: "0.875rem",
+                  textTransform: "none",
+                  '&:hover': {
+                    backgroundColor: 'error.main',
+                    color: 'white'
+                  }
+                }}
+              >
+                Remove Plan & Register as FreeUser
+              </Button>
+            </Box>
+          )}
 
           <Divider sx={{ height: "1px", mb: isMobile ? 1 : 2 }} />
 
@@ -682,7 +990,7 @@ const Register = () => {
               type="submit"
               variant="contained"
               size="large"
-              disabled={isPending}
+              disabled={isPending || isProcessingPayment}
               sx={{
                 backgroundColor: "#27ae60",
                 "&:hover": { backgroundColor: "#1e8449" },
@@ -691,12 +999,85 @@ const Register = () => {
                 textTransform: "capitalize",
               }}
             >
-              Submit
+              {isProcessingPayment ? <CircularProgress size={24} /> : "Submit"}
             </Button>
           </Box>
         </Box>
       </Box>
       <Footer />
+
+      {/* Payment Confirmation Dialog */}
+      <Dialog open={paymentDialogOpen} onClose={() => setPaymentDialogOpen(false)}>
+        <DialogTitle>Confirm Payment</DialogTitle>
+        <DialogContent>
+          <Typography>
+            You have selected {planType === "PremiumUser" ? "Premium" : "Silver"} membership.
+            After submitting your details, you will be redirected to the payment gateway.
+            Your account will be activated after successful payment and admin verification.
+          </Typography>
+          {promocode && (
+            <Typography sx={{ mt: 2, color: 'success.main' }}>
+              Promocode applied: {promocode} (₹100 discount)
+            </Typography>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setPaymentDialogOpen(false)}>Cancel</Button>
+          <Button onClick={handlePaymentConfirm} variant="contained" color="primary">
+            Proceed to Payment
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Promocode Dialog */}
+      <Dialog open={promoDialogOpen} onClose={handleClosePromoDialog} maxWidth="xs" fullWidth>
+        <DialogTitle>
+          Apply Promocode
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body1" sx={{ mb: 2 }}>
+            Enter your promocode to get ₹100 discount on your membership plan.
+          </Typography>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Promocode"
+            fullWidth
+            variant="outlined"
+            value={promocode}
+            onChange={(e) => setPromocode(e.target.value)}
+            disabled={checkPromocodeMutation.isPending}
+          />
+        </DialogContent>
+        <DialogActions sx={{ justifyContent: "center", p: 3, gap: 2 }}>
+          <Button
+            variant="outlined"
+            onClick={handleClosePromoDialog}
+            disabled={checkPromocodeMutation.isPending}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleApplyPromocode}
+            disabled={!promocode.trim() || checkPromocodeMutation.isPending}
+            startIcon={
+              checkPromocodeMutation.isPending ? (
+                <CircularProgress size={20} />
+              ) : null
+            }
+            sx={{
+              minWidth: 120,
+              background: "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
+              "&:hover": {
+                background: "linear-gradient(45deg, #1976D2 30%, #0288D1 90%)",
+              },
+            }}
+          >
+            {checkPromocodeMutation.isPending ? "Checking..." : "Apply"}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

@@ -1,14 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Box, Typography, Button, Paper, Avatar, Fade, Stack, useMediaQuery, useTheme, Link } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { CheckCircleOutline, HourglassEmpty, MailOutline, Upgrade } from "@mui/icons-material";
 import TokenService from "../token/tokenService";
 
-
 const ActivationPending = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [isRegistrationSuccess, setIsRegistrationSuccess] = useState(false);
 
   useEffect(() => {
     const handleBackNavigation = () => {
@@ -20,6 +21,15 @@ const ActivationPending = () => {
       window.removeEventListener("popstate", handleBackNavigation);
     };
   }, []);
+
+  useEffect(() => {
+    // Check if this is coming from a successful registration
+    const searchParams = new URLSearchParams(location.search);
+    const registrationSuccess = searchParams.get("registration_success");
+    if (registrationSuccess === "true") {
+      setIsRegistrationSuccess(true);
+    }
+  }, [location.search]);
 
   const handleLogout = () => {
     TokenService.removeToken();
@@ -84,7 +94,7 @@ const ActivationPending = () => {
               fontSize: isMobile ? '1.25rem' : '1.5rem'
             }}
           >
-            Welcome to GirijaKalyana!
+            {isRegistrationSuccess ? "Registration Successful!" : "Welcome to GirijaKalyana!"}
           </Typography>
 
           <Typography
@@ -96,56 +106,112 @@ const ActivationPending = () => {
               fontSize: isMobile ? '0.875rem' : '1rem'
             }}
           >
-            Your account is under verification
+            {isRegistrationSuccess 
+              ? "Your payment is being processed" 
+              : "Your account is under verification"}
           </Typography>
 
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "flex-start",
-              mb: 2,
-              p: isMobile ? 1 : 1.5,
-              bgcolor: "#f5f7fa",
-              borderRadius: 1.5,
-              textAlign: "left",
-            }}
-          >
-            <CheckCircleOutline
-              color="primary"
-              sx={{
-                mr: 1.5,
-                mt: 0.5,
-                fontSize: isMobile ? "0.875rem" : "1rem"
-              }}
-            />
-            <Typography variant="body2" sx={{ fontSize: isMobile ? '0.8125rem' : '0.875rem' }}>
-              Thank you for registering! We're reviewing your application.
-            </Typography>
-          </Box>
+          {isRegistrationSuccess ? (
+            <>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  mb: 2,
+                  p: isMobile ? 1 : 1.5,
+                  bgcolor: "#f5f7fa",
+                  borderRadius: 1.5,
+                  textAlign: "left",
+                }}
+              >
+                <CheckCircleOutline
+                  color="primary"
+                  sx={{
+                    mr: 1.5,
+                    mt: 0.5,
+                    fontSize: isMobile ? "0.875rem" : "1rem"
+                  }}
+                />
+                <Typography variant="body2" sx={{ fontSize: isMobile ? '0.8125rem' : '0.875rem' }}>
+                  Thank you for registering! Your payment is being processed in a new tab.
+                </Typography>
+              </Box>
 
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "flex-start",
-              mb: 3,
-              p: isMobile ? 1 : 1.5,
-              bgcolor: "#f5f7fa",
-              borderRadius: 1.5,
-              textAlign: "left",
-            }}
-          >
-            <MailOutline
-              color="primary"
-              sx={{
-                mr: 1.5,
-                mt: 0.5,
-                fontSize: isMobile ? "0.875rem" : "1rem"
-              }}
-            />
-            <Typography variant="body2" sx={{ fontSize: isMobile ? '0.8125rem' : '0.875rem' }}>
-              You'll receive an email once your account is activated (1-2 business days).
-            </Typography>
-          </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  mb: 3,
+                  p: isMobile ? 1 : 1.5,
+                  bgcolor: "#f5f7fa",
+                  borderRadius: 1.5,
+                  textAlign: "left",
+                }}
+              >
+                <MailOutline
+                  color="primary"
+                  sx={{
+                    mr: 1.5,
+                    mt: 0.5,
+                    fontSize: isMobile ? "0.875rem" : "1rem"
+                  }}
+                />
+                <Typography variant="body2" sx={{ fontSize: isMobile ? '0.8125rem' : '0.875rem' }}>
+                  Once payment is confirmed, your account will be activated by admin (1-2 business days).
+                </Typography>
+              </Box>
+            </>
+          ) : (
+            <>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  mb: 2,
+                  p: isMobile ? 1 : 1.5,
+                  bgcolor: "#f5f7fa",
+                  borderRadius: 1.5,
+                  textAlign: "left",
+                }}
+              >
+                <CheckCircleOutline
+                  color="primary"
+                  sx={{
+                    mr: 1.5,
+                    mt: 0.5,
+                    fontSize: isMobile ? "0.875rem" : "1rem"
+                  }}
+                />
+                <Typography variant="body2" sx={{ fontSize: isMobile ? '0.8125rem' : '0.875rem' }}>
+                  Thank you for registering! We're reviewing your application.
+                </Typography>
+              </Box>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  mb: 3,
+                  p: isMobile ? 1 : 1.5,
+                  bgcolor: "#f5f7fa",
+                  borderRadius: 1.5,
+                  textAlign: "left",
+                }}
+              >
+                <MailOutline
+                  color="primary"
+                  sx={{
+                    mr: 1.5,
+                    mt: 0.5,
+                    fontSize: isMobile ? "0.875rem" : "1rem"
+                  }}
+                />
+                <Typography variant="body2" sx={{ fontSize: isMobile ? '0.8125rem' : '0.875rem' }}>
+                  You'll receive an email once your account is activated (1-2 business days).
+                </Typography>
+              </Box>
+            </>
+          )}
 
           <Stack direction="column" spacing={2} sx={{ mt: 2 }}>
             <Button

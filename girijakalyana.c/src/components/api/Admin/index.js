@@ -188,7 +188,6 @@ export const useOnlineTransactions = () => {
         );
       }
 
-      console.log("API response:", response);
       return response.data; // This should be your array of transactions
     },
   });

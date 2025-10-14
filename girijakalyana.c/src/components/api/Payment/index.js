@@ -186,33 +186,19 @@ export const useCheckPromocode = () => {
         throw new Error(response?.message || "Invalid promocode");
       }
     },
-    onSuccess: (response) => {
-      toast.success(response.message || "Promocode applied successfully! ₹100 discount applied.");
-    },
-    onError: (error) => {
-      const errorMessage = error?.response?.data?.message || error.message;
-      toast.error(errorMessage || "Invalid promocode");
-    },
+    // Remove toast notifications from the hook to prevent duplicates
+    // Components will handle their own toast messages
   });
 };
 
-// Hook for raising incomplete payment tickets
+// Hook for raising tickets/support requests
 export const useRaiseTicket = () => {
   return useMutation({
     mutationFn: async ({ orderId, description, images }) => {
-      const formData = new FormData();
-      formData.append('description', description);
-      
-      if (images && images.length > 0) {
-        images.forEach((image) => {
-          formData.append('images', image);
-        });
-      }
-      
-      const response = await post(`/api/incomplete-payment/raise-ticket/${orderId}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+      const response = await post("/api/payment/raise-ticket", {
+        orderId,
+        description,
+        images
       });
       
       if (response?.success) {
@@ -221,7 +207,12 @@ export const useRaiseTicket = () => {
         throw new Error(response?.message || "Failed to raise ticket");
       }
     },
-    // Remove onSuccess and onError to prevent duplicate notifications
-    // Handle notifications in the component instead
+    onSuccess: (response) => {
+      toast.success("Ticket raised successfully. Our team will review it.");
+    },
+    onError: (error) => {
+      const errorMessage = error?.response?.data?.error || error.message;
+      toast.error(`Failed to raise ticket: ${errorMessage}`);
+    }
   });
 };
