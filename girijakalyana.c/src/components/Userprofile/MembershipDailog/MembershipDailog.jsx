@@ -21,7 +21,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { CheckCircle } from "@mui/icons-material";
 import { load } from "@cashfreepayments/cashfree-js";
 import { toast } from "react-toastify";
-import { membershipOptions } from "../../../assets/memberShipOptions/MemberShipPlans";
+import { membershipOptions, PROMOCODE_DISCOUNT } from "../../../assets/memberShipOptions/MemberShipPlans";
 import { useCreatePaymentOrder } from "../../api/Payment";
 import PromocodeDialog from "./PromocodeDialog";
 import TokenService from "../../token/tokenService";
@@ -60,10 +60,11 @@ const MembershipDialog = ({ open, onClose, onSelectPlan }) => {
   }, []);
   
   const calculateFinalAmount = (plan) => {
-    const baseAmount = parseInt(plan.discountedPrice.replace('₹', '').replace(',', '').replace('.', ''));
+    // Use numeric value directly from centralized config
+    const baseAmount = plan.discountedPriceNum;
     // Only apply discount if promocode is for this specific plan
     if (appliedPromocode && appliedPromocode.isValid && appliedPromocode.planId === plan.name) {
-      return Math.max(baseAmount - appliedPromocode.discount, 0);
+      return Math.max(baseAmount - PROMOCODE_DISCOUNT, 0);
     }
     return baseAmount;
   };
@@ -101,9 +102,10 @@ const MembershipDialog = ({ open, onClose, onSelectPlan }) => {
       }
       
       const orderId = "order_" + Date.now();
-      const originalAmount = parseInt(plan.discountedPrice.replace('₹', '').replace(',', '').replace('.', ''));
+      // Use numeric values directly from centralized config
+      const originalAmount = plan.discountedPriceNum;
       const finalAmount = calculateFinalAmount(plan);
-      const planType = plan.name.includes('PREMIUM') ? 'premium' : 'silver';
+      const planType = plan.planType || (plan.name.includes('PREMIUM') ? 'premium' : 'silver');
       
       console.log('Payment request data:', {
         orderId,
@@ -133,16 +135,20 @@ const MembershipDialog = ({ open, onClose, onSelectPlan }) => {
         localStorage.setItem('pendingOrderId', orderId);
         localStorage.setItem(`orderTimestamp_${orderId}`, Date.now().toString());
         console.log('Stored pending order ID with timestamp:', orderId);
-        
-        // Initialize Cashfree payment
-        const cashfree = await load({ mode: "sandbox" }); // Change to "production" for live
-        
+
+        // Use cashfree_env from backend to ensure environment consistency
+        const cashfreeEnv = orderResponse.cashfree_env || "sandbox";
+        console.log('🔄 Using Cashfree environment from backend:', cashfreeEnv);
+
+        // Initialize Cashfree payment with environment from backend
+        const cashfree = await load({ mode: cashfreeEnv });
+
         // Start payment process
         cashfree.checkout({
           paymentSessionId: orderResponse.payment_session_id,
           redirectTarget: "_self", // Will redirect to return URL after completion
         });
-        
+
         // Don't close dialog immediately - let Cashfree handle the redirect
       }
     } catch (error) {

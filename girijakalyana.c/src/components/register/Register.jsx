@@ -38,7 +38,7 @@ import { LoadingComponent } from "../../App";
 import CustomAutocomplete from "../Autocomplete/CustomAutocomplete";
 import { load } from "@cashfreepayments/cashfree-js";
 import { post } from "../api/authHooks";
-import { membershipOptions } from "../../assets/memberShipOptions/MemberShipPlans";
+import { membershipOptions, PROMOCODE_DISCOUNT } from "../../assets/memberShipOptions/MemberShipPlans";
 
 const datas = rawJsonData.reduce((acc, curr) => ({ ...acc, ...curr }), {});
 
@@ -254,14 +254,15 @@ const Register = () => {
       });
 
       if (registrationResponse.success) {
-        // Create payment order using membershipOptions
+        // Create payment order using membershipOptions (centralized pricing)
         const orderId = "order_" + Date.now();
         const planName = planType === "PremiumUser" ? "PREMIUM MEMBERSHIP" : "SILVER MEMBERSHIP";
         const plan = membershipOptions.find(p => p.name === planName);
-        
-        const originalAmount = parseInt(plan.discountedPrice.replace('₹', '').replace(',', ''));
-        const finalAmount = promocode ? Math.max(originalAmount - 100, 0) : originalAmount;
-        const planTypeCode = planType === "PremiumUser" ? 'premium' : 'silver';
+
+        // Use numeric values directly from centralized config
+        const originalAmount = plan.discountedPriceNum;
+        const finalAmount = promocode ? Math.max(originalAmount - PROMOCODE_DISCOUNT, 0) : originalAmount;
+        const planTypeCode = plan.planType || (planType === "PremiumUser" ? 'premium' : 'silver');
 
         const orderResponse = await post("/api/payment/create-order", {
           orderId,
@@ -280,15 +281,18 @@ const Register = () => {
           // Store the order ID and timestamp in localStorage for later verification
           localStorage.setItem('pendingOrderId', orderId);
           localStorage.setItem(`orderTimestamp_${orderId}`, Date.now().toString());
-          
-          // Initialize Cashfree payment in the same tab
-          const cashfree = await load({ mode: "sandbox" }); // Change to "production" for live
-          
+
+          // Use cashfree_env from backend to ensure environment consistency
+          const cashfreeEnv = orderResponse.cashfree_env || "sandbox";
+          console.log('🔄 Using Cashfree environment from backend:', cashfreeEnv);
+
+          // Initialize Cashfree payment with environment from backend
+          const cashfree = await load({ mode: cashfreeEnv });
+
           // Start payment process in the same tab
           cashfree.checkout({
             paymentSessionId: orderResponse.payment_session_id,
             redirectTarget: "_self" // Open in same tab
-            // Removed returnUrl as it's set in the backend
           });
         } else {
           throw new Error("Failed to create payment order");

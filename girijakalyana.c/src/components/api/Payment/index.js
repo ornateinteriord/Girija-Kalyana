@@ -5,7 +5,7 @@ import { post } from "../authHooks";
 // Hook for creating payment order
 export const useCreatePaymentOrder = () => {
   return useMutation({
-    mutationFn: async ({ orderId, orderAmount, customerName, customerEmail, customerPhone, planType, promocode, originalAmount }) => {
+    mutationFn: async ({ orderId, orderAmount, customerName, customerEmail, customerPhone, planType, promocode, originalAmount, context }) => {
       const response = await post("/api/payment/create-order", {
         orderId,
         orderAmount,
@@ -15,10 +15,16 @@ export const useCreatePaymentOrder = () => {
         planType,
         promocode,
         originalAmount,
+        context,
       });
-      
+
       if (response?.payment_session_id) {
-        return response;
+        // Return response with cashfree_env for frontend SDK initialization
+        return {
+          ...response,
+          // Ensure cashfree_env is available, default to sandbox if not provided
+          cashfree_env: response.cashfree_env || "sandbox"
+        };
       } else {
         throw new Error(response?.message || "Failed to create payment order");
       }
