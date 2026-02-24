@@ -461,12 +461,12 @@ const Navbar = () => {
               mb: 0.5,
             }}
           >
-            <Favorite sx={{ color: "#fff", fontSize: 28 }} />
+            <Favorite sx={{ color: "#fff", fontSize: 20 }} />
           </Box>
-          <Typography variant="h5" sx={{ color: "#fff", fontWeight: 700, letterSpacing: 0.5 }}>
+          {/* <Typography variant="h5" sx={{ color: "#fff", fontWeight: 700, letterSpacing: 0.5 }}>
             Welcome Back
-          </Typography>
-          <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.8)" }}>
+          </Typography> */}
+          <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.8)",fontSize:"1rem" }}>
             Sign in to your Girija❤️Kalyana account
           </Typography>
         </Box>
