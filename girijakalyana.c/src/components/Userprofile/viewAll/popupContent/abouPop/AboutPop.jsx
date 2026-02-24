@@ -12,7 +12,7 @@ import {
   Button,
 } from "@mui/material";
 import MembershipDialog from "../../../MembershipDailog/MembershipDailog";
-import {membershipOptions} from '../../../MembershipDailog/MemberShipPlans'
+import {membershipOptions} from '../../../../../../assets/memberShipOptions/MemberShipPlans'
 
 
 const PremiumButton = ({ onClick }) => (
