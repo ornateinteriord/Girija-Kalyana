@@ -1,0 +1,79 @@
+
+.hero-slider {
+    position: relative;
+    margin: 0px  !important;
+    width: 100% !important;
+    max-width: 100% !important;
+     padding-top: 70px !important; /* Adjust based on navbar height */
+    height: 100vh;
+    overflow: hidden !important;
+    font-family: "Outfit sans-serif";
+  }
+  .btn-getstart:hover{
+background: #344 !important;
+  }
+  // .hero-main-container{
+  //   width: 100vw !important;
+  // }
+  
+  .slide {
+    position: absolute;
+    width:100% !important;
+    
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+  }
+  
+  .slide.active {
+    opacity: 1;
+    z-index: 1;
+  }
+  
+  .slider-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+    z-index: 2;
+    
+  }
+  
+  .slider-text h1 {
+    color: black;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    background-image: linear-gradient(45deg, #1d51de 0%, #d314c6 86%, #d71220 100%);
+    background-clip: text; 
+    color: transparent;
+  }
+  
+  .slider-text p {
+    color: black;
+    font-size: 2.0rem;
+    font-weight: bold;
+  }
+  .achievements{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 40px;
+    margin-right: 40px;
+  }
+  hr{
+    margin-top: 25px;
+    height: 90px;
+    margin-bottom: 25px;
+  }
+  .register-members{
+    font-size: 25px;
+  }
+  .members,.register-members{
+    background-image: linear-gradient(45deg, #1d51de 0%, #d314c6 86%, #d71220 100%);
+   background-clip: text; 
+   color: transparent;
+}

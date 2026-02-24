@@ -1,0 +1,51 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+     font-family: 'Outfit', sans-serif !important;
+   
+}
+body{
+    font-family: 'Outfit', sans-serif;
+    background-color: #fff;
+    color: #fff;
+   
+}
+button:hover{
+    background-color:transparent ;
+}
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden; /* Hides the scrollbar */
+  }
+  
+  ::-webkit-scrollbar {
+    display: none; /* Hide the scrollbar */
+  }
+
+ * {
+   margin: 0 !important;
+   padding: 0 !important;
+   box-sizing: border-box !important;
+ }
+
+ button:hover {
+   background-color: transparent;
+ }
+
+html, body {
+  
+
+   width: 100% !important;
+   height: 100%;
+   overflow: hidden !important;
+   background-color: #fff;
+   color: #fff;
+ }
+
+::-webkit-scrollbar {
+  display: none;
+}
+

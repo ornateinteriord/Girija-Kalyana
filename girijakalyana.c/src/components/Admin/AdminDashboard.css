@@ -1,0 +1,114 @@
+/* Navbar Styles */
+.nav-right{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ 
+}
+
+.Dash-app-container {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  height: 75px;
+  background: #1a4f72;
+  color: white;
+  z-index: 1001;
+  font-family: 'Outfit sans-serif';
+}
+
+.Dashnavbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 20px;
+}
+
+
+.Dashnavbar .Dashmenu{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+.Dashmenu .navtxt{
+  font-size: 26px;
+}
+
+
+.navbar-title {
+  margin: 0;
+}
+
+.menu-toggle {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.sidebar {
+  background: #1a4f72;
+  color: white;
+  width: 290px !important;
+  position: fixed; 
+  top: 75.5px; 
+  left: 0;
+  height: calc(100vh - 70px); 
+  padding: 10px;
+  overflow-y: auto; 
+  overflow: hidden; 
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1000;
+  
+}
+.sidebar.open {
+  transform: translateX(0);
+
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+  background: #f9fafc;
+ 
+}
+
+.content h2 {
+  margin-top: 0;
+}
+
+/* Sidebar Dropdown Styles */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin-top:10px ;
+ 
+}
+ .dashboard-item{
+  font-size: 50px;
+}
+
+.sidebar li {
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  font-size: 20px;
+  gap: 15px;
+  cursor: pointer;
+ 
+}
+
+@media (max-width: 500px) {
+  .navtxt {
+    font-size: 20px !important;
+  }
+}
+
+
