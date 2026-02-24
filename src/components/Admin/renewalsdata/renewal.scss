@@ -1,0 +1,96 @@
+.renewal-user {
+    padding: 20px;
+    margin-top: 70px;
+    padding-left: 45px;
+  
+    .renewal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+  
+      .controls {
+        display: flex;
+        gap: 20px;
+      }
+  
+      .rows-per-page,
+      .search-bar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+  
+      input {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 300px;
+        font-size: 17px;
+        height: 38px;
+        margin-left: 10px;
+      }
+    }
+
+    .renewal-header h3{
+      
+      color:#34495e;
+    }
+  
+    .table-container {
+      overflow-x: auto;
+  
+      .renewal-table {
+        width: 100%;
+        border-collapse: collapse;
+  
+        th, td {
+          border: 1px solid #ddd;
+          padding: 10px;
+          text-align: left;
+        }
+  
+        th {
+          background-color: #f4f4f4;
+        }
+  
+        .status {
+          padding: 5px 10px;
+          border-radius: 5px;
+  
+          &.pending {
+            background-color: #ffefcc;
+            color: #b35b00;
+          }
+        }
+      }
+    }
+  
+    .pagination-container {
+      display: flex;
+      // justify-content: space-between;
+      justify-self: end;
+      align-items: center;
+      margin-top: 20px;
+  
+      button {
+        padding: 8px 16px;
+        margin: 0 5px;
+        border: 1px solid #ddd;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        cursor: pointer;
+  
+        &.active {
+          background-color: #007bff;
+          color: #fff;
+        }
+  
+        &:disabled {
+          cursor: not-allowed;
+          opacity: 0.6;
+        }
+      }
+    }
+  }
+  
