@@ -125,6 +125,7 @@ const HeroSlider = () => {
             }}
           >
             Join the most trusted platform and start your journey towards a lifetime of happiness.
+            1234567890
           </Typography>
           <Box
             sx={{
